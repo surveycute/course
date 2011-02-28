@@ -112,6 +112,10 @@ h2 {
 	}
 * html #body { height: 1%; }
 
+#contents {
+	margin-bottom: 40px;
+	}
+
 #l, 
 #l {
 	width: 480px;
