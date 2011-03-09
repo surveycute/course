@@ -1,0 +1,160 @@
+Content-Type: multipart/related; start=<op.mhtml.1299634642414.1fee8d22466efcee@192.168.1.3>; boundary=----------wvO3zqEGSz2oEvX8Ub4N1F
+Content-Location: http://www.glenmccl.com/perf_001.htm
+Subject: =?utf-8?Q?Handling=20a=20Common=20strcmp()=20Case?=
+MIME-Version: 1.0
+
+------------wvO3zqEGSz2oEvX8Ub4N1F
+Content-Disposition: inline; filename=perf_001.htm
+Content-Type: text/html; name=perf_001.htm
+Content-ID: <op.mhtml.1299634642414.1fee8d22466efcee@192.168.1.3>
+Content-Location: http://www.glenmccl.com/perf_001.htm
+Content-Transfer-Encoding: 8bit
+
+<html>
+<head>
+<title>Handling a Common strcmp() Case</title>
+</head>
+<body background="./bg.jpg" bgcolor="#ffffff" text="#0000df" link="#ff0000" vlink="#000000">
+<h1>Handling a Common strcmp() Case</h1>
+<p>
+In this section of the newsletter we will present some practical
+performance tips for improving code speed and reducing memory usage.
+Some of these tips will be useful only for C++ code and some will be
+more general and applicable to C or other languages.
+<br>
+<p>
+As a first example, consider an application using C-style strings and
+functions such as strcmp().  A recent experience with this sort of
+application involved a function that does word stemming, that is,
+takes words such as "motoring" and reduces them to their root stem, in
+this case "motor".
+<br>
+<p>
+In profiling this function, it was observed that much of the overall
+time was being spent in the strcmp() function.  For the C++ compiler
+in question (Borland 3.1), this function is written in assembly
+language and is quite fast, and attempts to speed it up by unrolling
+the equivalent code locally at the point of function call will
+typically result in slowing things down.
+<br>
+<p>
+But it's still the case that calling a function, even one implemented
+in assembly language, has some overhead, which comes from saving
+registers, manipulating stack frames, actual transfer of control, and
+so on.  So it might be worth trying to exploit a common case -- the
+case where you can determine the relationship of the strings by
+looking only at the first character.
+<br>
+<p>
+So we might use an inline function in C++ to encapsulate this logic:
+<br>
+<pre>
+        inline int local_strcmp(const char* s, const char* t)
+        {
+                return (*s != *t ? *s - *t : strcmp(s, t));
+        }
+</pre>
+<p>
+If the first characters of each string do not match, there's no need
+to go further by calling strcmp(); we already know the answer.
+<br>
+<p>
+Another way to implement the same idea is via a C macro:
+<br>
+<pre>
+        #define local_strcmp(s, t) ((s)[0] != (t)[0] ? (s)[0] - (t)[0] : \
+                strcmp((s), (t)))
+</pre>
+<p>
+This approach has a couple of disadvantages, however.  Macros are hard
+to get right because of the need to parenthesize arguments so as to
+avoid subtly wrong semantics.  Writing local_strcmp() as a real
+function is more natural.
+<br>
+<p>
+And macros are less likely to be understood by development tools such
+as browsers or debuggers.  Inline functions are also a source of
+problems for such tools, but they at least are part of the C++
+language proper, and many C++ compilers have a way of disabling
+inlining to help address this problem.
+<br>
+<p>
+How much speedup is this approach good for?  In the word stemming
+program, for input of about 65000 words, the times in seconds were:
+<br>
+<pre>
+        strcmp()                9.7
+
+        inline local_strcmp()   7.5
+
+        #define local_strcmp()  7.5
+</pre>
+<p>
+or a savings of about 23%.  Obviously, this figure will vary with the
+compiler and the application.
+<br>
+<p>
+This particular speedup is achieved by exploiting a common case -- the
+case where the first letters of two strings are different.  For
+applications involving English words, this is often a good
+assumption.  For some other types of strings, it may not be.
+<br>
+<br>
+<a href="./brochure.htm">Our Services</a><br><br>
+<a href="./index.htm">Back to Home Page</a>
+</body>
+</html>
+
+------------wvO3zqEGSz2oEvX8Ub4N1F
+Content-Disposition: inline; filename=bg.jpg
+Content-Type: image/jpeg; name=bg.jpg
+Content-Location: http://www.glenmccl.com/bg.jpg
+Content-Transfer-Encoding: Base64
+
+/9j/4AAQSkZJRgABAQEAZABkAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEj
+JR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/wAALCAH0
+ASwBAREA/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgED
+AwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2Jy
+ggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1
+dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJ
+ytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oACAEBAAA/APQKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKK//Z
+
+------------wvO3zqEGSz2oEvX8Ub4N1F--

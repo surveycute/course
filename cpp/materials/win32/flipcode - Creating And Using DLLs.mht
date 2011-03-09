@@ -1,0 +1,612 @@
+Content-Type: multipart/related; start=<op.mhtml.1299621698500.a5dc541e6455bd07@192.168.1.3>; boundary=----------BHKVfzDUGpkqwWBIEyccoW
+Content-Location: http://www.flipcode.com/archives/Creating_And_Using_DLLs.shtml
+Subject: =?utf-8?Q?flipcode=20-=20Creating=20And=20Using=20DLLs?=
+MIME-Version: 1.0
+
+------------BHKVfzDUGpkqwWBIEyccoW
+Content-Disposition: inline; filename=Creating_And_Using_DLLs.shtml
+Content-Type: text/html; charset=UTF-8; name=Creating_And_Using_DLLs.shtml
+Content-ID: <op.mhtml.1299621698500.a5dc541e6455bd07@192.168.1.3>
+Content-Location: http://www.flipcode.com/archives/Creating_And_Using_DLLs.shtml
+Content-Transfer-Encoding: 8bit
+
+<html>
+<head><title>flipcode - Creating And Using DLLs</title>
+<style type="text/css">
+
+
+a.menulink:link    {color: #b9ffd0; }
+a.menulink:visited {color: #b9ffd0; }
+a.menulink:active  {color: #b9ffd0; }
+
+a.menulinkempty:link    {color: #b9ffd0; }
+a.menulinkempty:visited {color: #b9ffd0; }
+a.menulinkempty:active  {color: #b9ffd0; }
+a.menulinkempty:link, a.menulinkempty:visited, a.menulinkempty:active {text-decoration: none}
+
+a.orangelink:link    { color:#FFAB04; }
+a.orangelink:visited { color:#FFAB04; }
+a.orangelink:active  { color:#FFAB04; }
+
+a.palegreen:link    {color: #b9ffd0; }
+a.palegreen:visited {color: #b9ffd0; }
+a.palegreen:active  {color: #b9ffd0; }
+
+a.bluelink:link    { color:#03F0FF; }
+a.bluelink:visited { color:#03F0FF; }
+a.bluelink:active  { color:#03F0FF; }
+
+a.softyellow:link     { color:#FFFCA9; }
+a.softyellow:visited  { color:#FFFCA9; }
+a.softyellow:active   { color:#FFFCA9; }
+
+a.nounderline:link        {color: #FFFCA9; }
+a.nounderline:visited     {color: #FFFCA9; }
+a.nounderline:active      {color: #FFFCA9; }
+a.nounderline:link, a.nounderline:visited, a.nounderline:active {text-decoration: none}
+
+<!--
+#code_comment { font-family:Courier,Courier New; font-size:12px; color:#007f00; }
+#code_text    { font-family:Courier,Courier New; font-size:12px; color:#000000; }
+#code_keyword { font-family:Courier,Courier New; font-size:12px; color:#0000FF; }
+-->
+
+</style>
+</head>
+<body bgcolor="#000000" text="#ffffff" link="#FFFCA9" vlink="#FFFCA9" alink="#FFFCA9">
+<center>
+<script type="text/javascript"><!--
+google_ad_client = "pub-3512250068614659";
+//728x90, created 1/8/08
+google_ad_slot = "8394943283";
+google_ad_width = 728;
+google_ad_height = 90;
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+<br>
+
+<br><center><table cellspacing=0 cellpadding=2 border=0 width="80%"><tr><td background="comments_bar2.jpg" bgcolor="#333333" width="100" valign="center"><font size=1>&nbsp;</font></td></tr></table></center><br>
+<center>
+<table width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td>
+<font size=3 face="Verdana, Helvetica" color="#ffffff"><b>Creating And Using DLLs</b><br>
+<font size=2>by <!--GO AWAY SPAM!!!--><script language="javascript">document.write('<a href=\"mailto:' + ''    
++''    
++ '' + '' + ''    
++''    
++''    
++''    
++ 'kurt' +  '@' + 'flipcode' + ''    
++''    
++''    
++ '.' + ''    
++ 'com\">' + 'Kurt Miller' + '</a>')</script> (09 January 1999)</font>
+</font>
+<br><br><br>
+</td>
+<td align="right" valign="top"><font face="Verdana, Helvetica" size=2><a href="articles.shtml">Return to The Archives</a>
+</td>
+</tr></table>
+</center><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Introduction
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+So you're interested in making an oh-so-fashionable DLL?   Well look no further.
+Creating a DLL is a lot easier than you probably think.   DLLs (Dynamic Link Libraries) are very useful
+when you're writing windows programs.   A good example use would be if you create a number of programs
+that all use common functions.  In such a case, you can create a library that they all call functions from.  Another interesting
+use would be to create <i>plug-ins</i> for your application.   For example, a particular program I was
+working on in the past had plug-in renderers that were compiled as DLLs and loaded when the actual program ran. 
+This document will attempt to show you how to create a basic DLL and how to use it (with import library
+linking and without).   This document will not get into things such as sharing data, thread precautions,
+or resource libraries.   We're just sticking to basic dll uses -- the rest you can experiment with on your own.
+Again, MSVC6 and the ide.   Hopefully you shouldn't have too many problems w/conversions.  Let's roll.</font></td></tr></table>
+</center><br><br><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Creating The DLL
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+Creating a dll is nothing too far out.  Basically, you write your functions then compile
+them almost like you would any other library.  If you're using MSVC, create a new project and set the 
+target as a <i>Win32 Dynamic-Link Library</i>.   That way when you compile your code, it should produce
+a dll, an import library (.lib), and an export library (.exp).   Here's some sample code that shows 
+how the sample DLL included with this tutorial is put together:<br><br><i><b>Header File (dlltest.h):</b></i><br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+ <font color="#0000ff">#ifndef</font> _DLLTEST_H_
+ <font color="#0000ff">#define</font> _DLLTEST_H_<br><br> <font color="#0000ff">#include</font> &lt;iostream.h>
+ <font color="#0000ff">#include</font> &lt;stdio.h>
+ <font color="#0000ff">#include</font> &lt;windows.h><br><br> <font color="#0000ff">extern</font> "C" <font color="#0000ff">__declspec</font>(<font color="#0000ff">dllexport</font>) <font color="#0000ff">void</font> NumberList();
+ <font color="#0000ff">extern</font> "C" <font color="#0000ff">__declspec</font>(<font color="#0000ff">dllexport</font>) <font color="#0000ff">void</font> LetterList();<br><br>
+ <font color="#0000ff">#endif</font>
+ </font></pre></td></tr></table></div></center><br><br><i><b>Source File (dlltest.cpp):</b></i><br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+ <font color="#0000ff">#include</font> "dlltest.h"<br><br> <font color="#0000ff">#define</font> MAXMODULE 50<br><br> <font color="#0000ff">char</font> module[MAXMODULE];<br><br>
+ <font color="#0000ff">extern</font> "C" <font color="#0000ff">__declspec</font>(<font color="#0000ff">dllexport</font>)<br><br> <font color="#0000ff">void</font> NumberList() {<br><br>       GetModuleFileName(NULL, (LPTSTR)module, MAXMODULE);<br><br>       cout &lt;&lt; "\n\nThis function was called from "
+            &lt;&lt; module 
+            &lt;&lt; endl &lt;&lt; endl;<br><br>       cout &lt;&lt; "NumberList(): ";<br><br>
+       <font color="#0000ff">for</font>(<font color="#0000ff">int</font> i=0;  i&lt;10; i++) {<br><br>            cout &lt;&lt; i &lt;&lt; " ";
+       }<br><br>       cout &lt;&lt; endl &lt;&lt; endl;
+ }<br><br><br><br> <font color="#0000ff">extern</font> "C" <font color="#0000ff">__declspec</font>(<font color="#0000ff">dllexport</font>)<br><br> <font color="#0000ff">void</font> LetterList() {<br><br>       GetModuleFileName(NULL, (LPTSTR)module, MAXMODULE);<br><br>       cout &lt;&lt; "\n\nThis function was called from "
+            &lt;&lt; module 
+            &lt;&lt; endl &lt;&lt; endl;<br><br>       cout &lt;&lt; "LetterList(): ";<br><br>
+       <font color="#0000ff">for</font>(<font color="#0000ff">int</font> i=0;  i&lt;26; i++) {<br><br>            cout &lt;&lt; <font color="#0000ff">char</font>(97 + i) &lt;&lt; " ";
+       }<br><br>       cout &lt;&lt; endl &lt;&lt; endl;
+ }
+ </font></pre></td></tr></table></div></center><br><br>Basically, there's nothing too special about the code above.   The sample application is a console app, so
+I just wrote up two simple functions that display some text and tell you where they're being called from.
+The <i>extern "C" __declspec(dllexport)</i> means that we want to allow these
+functions to be used by our actual program.   When you compile this thing, it should create the libraries.
+Now lets see how we actually use them.</font></td></tr></table>
+</center><br><br><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Using the DLL (With an Import Library)
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+First lets look at how to use our DLL using the import library (dlltest.lib) that 
+was one of the resulting files from compiling the DLL above.   This method is the easiest because
+all you really have to do is include the header file, then include the import library when you're
+linking your objects.   That's it.  Here's an example:<br><br><i><b>DLL Test Source File (dllrun01.cpp) - Win32 Console Application:</b></i><br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+ <font color="#0000ff">#include</font> &lt;conio.h>
+ <font color="#0000ff">#include</font> &lt;dlltest.h>
+ 
+ <font color="#0000ff">void</font> main() {<br><br>       NumberList();
+       LetterList();
+ 
+       getch();
+ }
+ </font></pre></td></tr></table></div></center><br><br>The code above will work fine <i>if</i> you have your <i>dlltest.h</i> header file
+in your compiler's header path, and the <i>dlltest.lib</i> import library in the lib path.  You also
+need to link your import library with your other modules when linking.   Be
+warned though, when you run the resulting executable, the DLL must be in the
+path or in the same directory as the executable otherwise it will have an error.   That's the whole
+point.   But if you had 10 programs that use the same DLL, you can put one copy
+of the DLL in a common directory.<br><br><i><b>dllrun01.exe Output:</b></i><br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+ This function was called from C:\DLLTEST\DLLRUN01.EXE<br><br> NumberList(): 0 1 2 3 4 5 6 7 8 9<br><br><br><br> This function was called from C:\DLLTEST\DLLRUN01.EXE
+ 
+ LetterList(): a b c d e f g h i j k l m n o p q r s t u v w x y z
+ </font></pre></td></tr></table></div></center></font></td></tr></table>
+</center><br><br><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Using the DLL (Without an Import Library)
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+Now we'll look at how to load the DLL on the fly.   This is useful for things
+such as 
+if you don't know what the dll is called before-hand (for example the plug-in system I mentioned
+earlier).<br><br>Here's the example code:<br><br><i><b>DLL Test Source File (dllrun02.cpp) - Win32 Console Application:</b></i><br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+ <font color="#0000ff">#include</font> &lt;windows.h>
+ <font color="#0000ff">#include</font> &lt;iostream.h>
+ <font color="#0000ff">#include</font> &lt;stdio.h>
+ <font color="#0000ff">#include</font> &lt;conio.h><br><br> <font color="#0000ff">#define</font> MAXMODULE 50<br><br> <font color="#0000ff">typedef</font> <font color="#0000ff">void</font> (WINAPI*cfunc)();<br><br> cfunc NumberList;
+ cfunc LetterList;<br><br> <font color="#0000ff">void</font> main() {
+   
+       HINSTANCE hLib=LoadLibrary("DLLTEST.DLL");<br><br>
+       <font color="#0000ff">if</font>(hLib==NULL) {<br><br>            cout &lt;&lt; "Unable to load library!" &lt;&lt; endl;
+            getch();
+            <font color="#0000ff">return</font>;
+       }<br><br>       <font color="#0000ff">char</font> mod[MAXMODULE];<br><br>       GetModuleFileName((HMODULE)hLib, (LPTSTR)mod, MAXMODULE);
+       cout &lt;&lt; "Library loaded: " &lt;&lt; mod &lt;&lt; endl;<br><br>
+       NumberList=(cfunc)GetProcAddress((HMODULE)hLib, "NumberList");
+       LetterList=(cfunc)GetProcAddress((HMODULE)hLib, "LetterList");<br><br>       <font color="#0000ff">if</font>((NumberList==NULL) || (LetterList==NULL)) {<br><br>            cout &lt;&lt; "Unable to load function(s)." &lt;&lt; endl;
+            FreeLibrary((HMODULE)hLib);
+            <font color="#0000ff">return</font>;
+       }<br><br>       NumberList();
+       LetterList();<br><br>       FreeLibrary((HMODULE)hLib);<br><br>       getch();
+ }
+ </font></pre></td></tr></table></div></center><br><br>The code should load our library (assuming its in the path), then get the
+addresses of the two functions that we want to call.   I'd recommend that you
+be careful when calling functions from dlls without import libraries.
+There's a lot more code to write (loading each function/library), and a lot more
+room for errors if your dll isn't correct.  So if you
+don't need to do it this way, I wouldn't.   That's up to you.<br><br><i><b>dllrun02.exe Output:</b></i><br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+ Library loaded: C:\DLLTEST\DLLTEST.DLL<br><br>
+ This function was called from C:\DLLTEST\DLLRUN02.EXE<br><br> NumberList(): 0 1 2 3 4 5 6 7 8 9<br><br><br><br> This function was called from C:\DLLTEST\DLLRUN02.EXE<br><br> LetterList(): a b c d e f g h i j k l m n o p q r s t u v w x y z
+ </font></pre></td></tr></table></div></center></font></td></tr></table>
+</center><br><br><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Closing
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+Hopefully you learned how to get started on working with dynamic-link libraries.   Please
+let me know what you think of this document.  There are many other uses
+and many more advanced topics in DLL management that you can explore on your own.   Also,
+although the sample program is a Win32 console application, it works just the same for 'normal'
+Windows programs. </font></td></tr></table>
+</center><br><br><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Downloads
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+<li><a href="article_exe_creatingdlls.zip">Download the Sample Application</a> (48k)<br>
+<li><a href="article_src_creatingdlls.zip">Download the Sample Application + Source Code</a> (50k)</font></td></tr></table>
+</center><center>
+<table width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td>
+<font size=2 face="Verdana" color="#ffffff">
+<br>
+
+
+</font>
+</td>
+</tr>
+</table>
+</center>
+<center><table cellspacing=0 cellpadding=2 border=0 width="80%"><tr><td background="comments_bar2.jpg" bgcolor="#333333" width="100" valign="center"><font size=1>&nbsp;</font></td></tr></table></center><br>
+<center><font face="Arial, Helvetica" size=1><font face="Helvetica,Tahoma,Verdana" size=1>Copyright 1999-2008 (C) FLIPCODE.COM and/or the original content author(s).  All rights reserved.</font> <center><font face="Helvetica,Tahoma,Verdana" size=1>Please read our <a href="terms.shtml">Terms</a>, <a href="terms.shtml">Conditions</a>, and <a href="terms.shtml">Privacy information</a>.</font></center></font></center>
+<br>
+</body>
+</html>
+
+
+------------BHKVfzDUGpkqwWBIEyccoW
+Content-Disposition: inline; filename=show_ads.js
+Content-Type: text/javascript; charset=UTF-8; name=show_ads.js
+Content-Location: http://pagead2.googlesyndication.com/pagead/show_ads.js
+Content-Transfer-Encoding: Quoted-Printable
+
+
+(function(){var g=3Dtrue,h=3Dnull,i=3Dfalse,j=3D(new Date).getTime();var=
+ k=3Dthis,aa=3Dfunction(a,b,c){a=3Da.split(".");c=3Dc||k;!(a[0]in c)&&c.=
+execScript&&c.execScript("var "+a[0]);for(var d;a.length&&(d=3Da.shift()=
+);)if(!a.length&&b!=3D=3Dundefined)c[d]=3Db;else c=3Dc[d]?c[d]:c[d]=3D{}=
+},ba=3Dfunction(a){return a.call.apply(a.bind,arguments)},ca=3Dfunction(=
+a,b){var c=3Db||k;if(arguments.length>2){var d=3DArray.prototype.slice.c=
+all(arguments,2);return function(){var f=3DArray.prototype.slice.call(ar=
+guments);Array.prototype.unshift.apply(f,d);return a.apply(c,f)}}else re=
+turn function(){return a.apply(c,
+arguments)}},l=3Dfunction(){l=3DFunction.prototype.bind&&Function.protot=
+ype.bind.toString().indexOf("native code")!=3D-1?ba:ca;return l.apply(h,=
+arguments)};var da=3D/&/g,ea=3D/</g,fa=3D/>/g,ga=3D/\"/g,m=3D{"\u0000":"=
+\\0","\u0008":"\\b","\u000c":"\\f","\n":"\\n","\r":"\\r","\t":"\\t","\u0=
+00b":"\\x0B",'"':'\\"',"\\":"\\\\"},p=3D{"'":"\\'"},t=3Dfunction(a,b){if=
+(a<b)return-1;else if(a>b)return 1;return 0};var u,v,w,z,B=3Dfunction(){=
+return k.navigator?k.navigator.userAgent:h};z=3Dw=3Dv=3Du=3Di;var C;if(C=
+=3DB()){var ha=3Dk.navigator;u=3DC.indexOf("Opera")=3D=3D0;v=3D!u&&C.ind=
+exOf("MSIE")!=3D-1;w=3D!u&&C.indexOf("WebKit")!=3D-1;z=3D!u&&!w&&ha.prod=
+uct=3D=3D"Gecko"}var D=3Dv,F=3Dz,ja=3Dw,G;
+a:{var H=3D"",I;if(u&&k.opera){var J=3Dk.opera.version;H=3Dtypeof J=3D=3D=
+"function"?J():J}else{if(F)I=3D/rv\:([^\);]+)(\)|;)/;else if(D)I=3D/MSIE=
+\s+([^\);]+)(\)|;)/;else if(ja)I=3D/WebKit\/(\S+)/;if(I){var ka=3DI.exec=
+(B());H=3Dka?ka[1]:""}}if(D){var K,la=3Dk.document;K=3Dla?la.documentMod=
+e:undefined;if(K>parseFloat(H)){G=3DString(K);break a}}G=3DH}
+var ma=3DG,na=3D{},L=3Dfunction(a){var b;if(!(b=3Dna[a])){b=3D0;for(var =
+c=3DString(ma).replace(/^[\s\xa0]+|[\s\xa0]+$/g,"").split("."),d=3DStrin=
+g(a).replace(/^[\s\xa0]+|[\s\xa0]+$/g,"").split("."),f=3DMath.max(c.leng=
+th,d.length),e=3D0;b=3D=3D0&&e<f;e++){var ta=3Dc[e]||"",s=3Dd[e]||"",n=3D=
+RegExp("(\\d*)(\\D*)","g"),A=3DRegExp("(\\d*)(\\D*)","g");do{var q=3Dn.e=
+xec(ta)||["","",""],o=3DA.exec(s)||["","",""];if(q[0].length=3D=3D0&&o[0=
+].length=3D=3D0)break;b=3Dt(q[1].length=3D=3D0?0:parseInt(q[1],10),o[1].=
+length=3D=3D0?0:parseInt(o[1],10))||t(q[2].length=3D=3D
+0,o[2].length=3D=3D0)||t(q[2],o[2])}while(b=3D=3D0)}b=3Dna[a]=3Db>=3D0}r=
+eturn b};var M,N;N=3DM=3Di;var O=3DB();if(O)if(O.indexOf("Firefox")!=3D-=
+1)M=3Dg;else if(O.indexOf("Camino")=3D=3D-1)if(!(O.indexOf("iPhone")!=3D=
+-1||O.indexOf("iPod")!=3D-1))if(O.indexOf("iPad")=3D=3D-1)if(O.indexOf("=
+Android")=3D=3D-1)if(O.indexOf("Chrome")!=3D-1)N=3Dg;var oa=3DM,pa=3DN;v=
+ar qa=3Ddocument,P=3Dwindow;var Q=3Dfunction(a){a=3DparseFloat(a);return=
+ isNaN(a)||a>1||a<0?0:a},ra=3Dfunction(a){if(a=3D=3D"true")return g;retu=
+rn i},sa=3D/^([\w-]+\.)*([\w-]{2,})(\:[0-9]+)?$/,ua=3Dfunction(a){if(!a)=
+return"pagead2.googlesyndication.com";return(a=3Da.match(sa))?a[0]:"page=
+ad2.googlesyndication.com"};var va=3DQ("0"),wa=3DQ("0"),xa=3DQ("0"),ya=3D=
+Q("0.2");var za=3Dra("false"),Aa=3Dra("false"),Ba=3Dra("false");var Ca=3D=
+function(){return ua("")};!D||L("9");!F&&!D||D&&L("9")||F&&L("1.9.1");D&=
+&L("9");ua("");var R=3Dfunction(a){return!!a&&typeof a=3D=3D"function"&&=
+!!a.call},Da=3Dfunction(a){if(!(arguments.length<2))for(var b=3D1,c=3Dar=
+guments.length;b<c;++b)a.push(arguments[b])};function S(a){return typeof=
+ encodeURIComponent=3D=3D"function"?encodeURIComponent(a):escape(a)}func=
+tion Ea(a,b){if(a.attachEvent)a.attachEvent("onload",b);else a.addEventL=
+istener&&a.addEventListener("load",b,i)}
+function Fa(a,b){if(!(Math.random()<1.0E-4)){var c=3DMath.random();if(c<=
+b)return a[Math.floor(c/b*a.length)]}return""};aa("google_protectAndRun"=
+,function(a,b,c){a=3Dl(b,k,a);b=3Dwindow.onerror;window.onerror=3Da;try{=
+c()}catch(d){c=3Dd.toString();var f=3D"";if(d.fileName)f=3Dd.fileName;va=
+r e=3D-1;if(d.lineNumber)e=3Dd.lineNumber;if(!a(c,f,e))throw d;}window.o=
+nerror=3Db},void 0);
+aa("google_handleError",function(a,b,c,d){if(Math.random()<0.01){a=3D["h=
+ttp://",Ca(),"/pagead/gen_204","?id=3Djserror","&jscb=3D",za?1:0,"&jscd=3D=
+",Aa?1:0,"&context=3D",S(a),"&msg=3D",S(b),"&file=3D",S(c),"&line=3D",S(=
+d.toString()),"&url=3D",S(qa.URL.substring(0,512)),"&ref=3D",S(qa.referr=
+er.substring(0,512))];a.push(["&client=3D",S(P.google_ad_client),"&forma=
+t=3D",S(P.google_ad_format),"&slotname=3D",S(P.google_ad_slot),"&output=3D=
+",S(P.google_ad_output),"&ad_type=3D",S(P.google_ad_type)].join(""));a=3D=
+a.join("");P.google_image_requests||
+(P.google_image_requests=3D[]);b=3Dnew Image;b.src=3Da;P.google_image_re=
+quests.push(b)}return!Ba},void 0);var Ha=3Dfunction(a){try{var b=3Da.goo=
+gle_test;a.google_test=3D!b;if(a.google_test=3D=3D=3D!b){a.google_test=3D=
+b;return g}}catch(c){}return i},Ia=3Dh,Ja=3Dfunction(){if(!Ia){for(var a=
+=3Dwindow;a!=3Da.parent&&Ha(a.parent);)a=3Da.parent;Ia=3Da}return Ia};va=
+r T,U=3Dfunction(a){this.d=3D[];this.b=3Da||window;this.a=3D0;this.c=3Dh=
+},Ka=3Dfunction(a,b){this.j=3Da;this.o=3Db};U.prototype.i=3Dfunction(a,b=
+){if(this.a=3D=3D0&&this.d.length=3D=3D0&&(!b||b=3D=3Dwindow)){this.a=3D=
+2;this.h(new Ka(a,window))}else this.f(a,b)};U.prototype.f=3Dfunction(a,=
+b){this.d.push(new Ka(a,b||this.b));La(this)};U.prototype.k=3Dfunction(a=
+){this.a=3D1;if(a)this.c=3Dthis.b.setTimeout(l(this.g,this),a)};U.protot=
+ype.g=3Dfunction(){if(this.a=3D=3D1){if(this.c!=3Dh){this.b.clearTimeout=
+(this.c);this.c=3Dh}this.a=3D0}La(this)};
+U.prototype.m=3Dfunction(){return g};U.prototype.nq=3DU.prototype.i;U.pr=
+ototype.nqa=3DU.prototype.f;U.prototype.al=3DU.prototype.k;U.prototype.r=
+l=3DU.prototype.g;U.prototype.sz=3DU.prototype.m;var La=3Dfunction(a){a.=
+b.setTimeout(l(a.n,a),0)};U.prototype.n=3Dfunction(){if(this.a=3D=3D0&&t=
+his.d.length){var a=3Dthis.d.shift();this.a=3D2;a.o.setTimeout(l(this.h,=
+this,a),0);La(this)}};U.prototype.h=3Dfunction(a){this.a=3D0;a.j()};
+var Ma=3Dfunction(a){try{return a.sz()}catch(b){return i}},Na=3Dfunction=
+(a){return!!a&&(typeof a=3D=3D"object"||typeof a=3D=3D"function")&&Ma(a)=
+&&R(a.nq)&&R(a.nqa)&&R(a.al)&&R(a.rl)},Oa=3Dfunction(){if(T&&Ma(T))retur=
+n T;var a=3DJa(),b=3Da.google_jobrunner;if(Na(b))return T=3Db;return a.g=
+oogle_jobrunner=3DT=3Dnew U(a)},Pa=3Dfunction(a,b){Oa().nq(a,b)},Qa=3Dfu=
+nction(a,b){Oa().nqa(a,b)};var Ra=3Dfunction(a,b,c){var d=3D["<iframe"],=
+f;for(f in a)a.hasOwnProperty(f)&&Da(d,f+"=3D"+a[f]);d.push('style=3D"le=
+ft:0;position:absolute;top:0;"');d.push("></iframe>");b=3D"border:none;h=
+eight:"+c+"px;margin:0;padding:0;position:relative;visibility:visible;wi=
+dth:"+b+"px";return['<ins style=3D"display:inline-table;',b,'"><ins id=3D=
+"',a.id+"_anchor",'" style=3D"display:block;',b,'">',d.join(" "),"</ins>=
+</ins>"].join("")};var Sa=3Dfunction(){},Ua=3Dfunction(a,b,c){switch(typ=
+eof b){case "string":Ta(a,b,c);break;case "number":c.push(isFinite(b)&&!=
+isNaN(b)?b:"null");break;case "boolean":c.push(b);break;case "undefined"=
+:c.push("null");break;case "object":if(b=3D=3Dh){c.push("null");break}if=
+(b instanceof Array){var d=3Db.length;c.push("[");for(var f=3D"",e=3D0;e=
+<d;e++){c.push(f);Ua(a,b[e],c);f=3D","}c.push("]");break}c.push("{");d=3D=
+"";for(f in b)if(b.hasOwnProperty(f)){e=3Db[f];if(typeof e!=3D"function"=
+){c.push(d);Ta(a,f,c);c.push(":");Ua(a,
+e,c);d=3D","}}c.push("}");break;case "function":break;default:throw Erro=
+r("Unknown type: "+typeof b);}},Va=3D{'"':'\\"',"\\":"\\\\","/":"\\/","\=
+u0008":"\\b","\u000c":"\\f","\n":"\\n","\r":"\\r","\t":"\\t","\u000b":"\=
+\u000b"},Wa=3D/\uffff/.test("\uffff")?/[\\\"\x00-\x1f\x7f-\uffff]/g:/[\\=
+\"\x00-\x1f\x7f-\xff]/g,Ta=3Dfunction(a,b,c){c.push('"');c.push(b.replac=
+e(Wa,function(d){if(d in Va)return Va[d];var f=3Dd.charCodeAt(0),e=3D"\\=
+u";if(f<16)e+=3D"000";else if(f<256)e+=3D"00";else if(f<4096)e+=3D"0";re=
+turn Va[d]=3De+f.toString(16)}));
+c.push('"')};var V=3D["google_ad_block","google_ad_channel","google_ad_c=
+lient","google_ad_format","google_ad_height","google_ad_host","google_ad=
+_host_channel","google_ad_host_tier_id","google_ad_output","google_ad_ov=
+erride","google_ad_region","google_ad_section","google_ad_slot","google_=
+ad_type","google_ad_width","google_adtest","google_allow_expandable_ads"=
+,"google_alternate_ad_url","google_alternate_color","google_analytics_do=
+main_name","google_analytics_uacct","google_bid","google_city","google_c=
+olor_bg","google_color_border",
+"google_color_line","google_color_link","google_color_text","google_colo=
+r_url","google_container_id","google_contents","google_country","google_=
+cpm","google_ctr_threshold","google_cust_age","google_cust_ch","google_c=
+ust_gender","google_cust_id","google_cust_interests","google_cust_job","=
+google_cust_l","google_cust_lh","google_cust_u_url","google_disable_vide=
+o_autoplay","google_ed","google_eids","google_enable_osd","google_encodi=
+ng","google_font_face","google_font_size","google_frame_id","google_gl",=
+
+"google_hints","google_image_size","google_kw","google_kw_type","google_=
+language","google_max_num_ads","google_max_radlink_len","google_num_radl=
+inks","google_num_radlinks_per_unit","google_num_slots_to_rotate","googl=
+e_only_ads_with_video","google_only_pyv_ads","google_only_userchoice_ads=
+","google_override_format","google_page_url","google_referrer_url","goog=
+le_region","google_reuse_colors","google_rl_dest_url","google_rl_filteri=
+ng","google_rl_mode","google_rt","google_safe","google_skip","google_tag=
+_info",
+"google_targeting","google_ui_features","google_ui_version","google_vide=
+o_doc_id","google_video_product_type","google_with_pyv_ads"];var Xa=3Dfu=
+nction(a){this.b=3Da;a.google_iframe_oncopy||(a.google_iframe_oncopy=3D{=
+handlers:{},log:[],img:Math.random()<0.01?[]:h});this.e=3Da.google_ifram=
+e_oncopy;a.setTimeout(l(this.l,this),3E4)},Ya;var W=3D"var i=3Dthis.id,s=
+=3Dwindow.google_iframe_oncopy,H=3Ds&&s.handlers,h=3DH&&H[i],w=3Dthis.co=
+ntentWindow,d;try{d=3Dw.document}catch(e){}if(h&&d&&(!d.body||!d.body.fi=
+rstChild)){if(h.call){i+=3D'.call';setTimeout(h,0)}else if(h.match){i+=3D=
+'.nav';w.location.replace(h)}s.log&&s.log.push(i)}";
+if(/[&<>\"]/.test(W)){if(W.indexOf("&")!=3D-1)W=3DW.replace(da,"&amp;");=
+if(W.indexOf("<")!=3D-1)W=3DW.replace(ea,"&lt;");if(W.indexOf(">")!=3D-1=
+)W=3DW.replace(fa,"&gt;");if(W.indexOf('"')!=3D-1)W=3DW.replace(ga,"&quo=
+t;")}Ya=3DW;Xa.prototype.set=3Dfunction(a,b){this.e.handlers[a]=3Db};
+Xa.prototype.l=3Dfunction(){if(this.e.img){var a=3Dthis.e.log,b=3Dthis.b=
+.document;if(a.length){b=3D["http://",Ca(),"/pagead/gen_204?id=3Diframec=
+opy&log=3D",S(a.join("-")),"&url=3D",S(b.URL.substring(0,512)),"&ref=3D"=
+,S(b.referrer.substring(0,512))].join("");a.length=3D0;a=3Dnew Image;thi=
+s.e.img.push(a);a.src=3Db}}};var Za=3Dfunction(){var a=3D"script";return=
+["<",a,' src=3D"http://',ua(""),'/pagead/js/r20101117/r20110307/show_ads=
+_impl.js"></',a,">"].join("")},$a=3Dfunction(a,b,c,d){return function(){=
+var f=3Di;d&&Oa().al(3E4);try{var e;try{e=3D!!a.document.getElementById(=
+b).contentWindow.document}catch(ta){e=3Di}if(e){var s=3Da.document.getEl=
+ementById(b).contentWindow,
+n=3Ds.document;if(!(n.body&&n.body.firstChild)){n.open();s.google_async_=
+iframe_close=3Dg;n.write(c)}}else{var A=3Da.document.getElementById(b).c=
+ontentWindow,q;e=3Dc;e=3DString(e);if(e.quote)q=3De.quote();else{s=3D['"=
+'];for(n=3D0;n<e.length;n++){var o=3De.charAt(n),Ga=3Do.charCodeAt(0),ob=
+=3Ds,pb=3Dn+1,ia;if(!(ia=3Dm[o])){var E;if(Ga>31&&Ga<127)E=3Do;else{var =
+r=3Do;if(r in p)E=3Dp[r];else if(r in m)E=3Dp[r]=3Dm[r];else{var x=3Dr,y=
+=3Dr.charCodeAt(0);if(y>31&&y<127)x=3Dr;else{if(y<256){x=3D"\\x";if(y<16=
+||y>256)x+=3D"0"}else{x=3D"\\u";if(y<4096)x+=3D
+"0"}x+=3Dy.toString(16).toUpperCase()}E=3Dp[r]=3Dx}}ia=3DE}ob[pb]=3Dia}s=
+.push('"');q=3Ds.join("")}A.location.replace("javascript:"+q)}f=3Dg}catc=
+h(vb){A=3DJa().google_jobrunner;Na(A)&&A.rl()}f&&(new Xa(a)).set(b,$a(a,=
+b,c,i))}},ab=3Dfunction(){return va&&wa/va||typeof window.google_hash_ra=
+tio=3D=3D"number"&&window.google_hash_ratio||h};window.google_loader_use=
+d=3Dg;(function(a){if(!("google_onload_fired"in a)){a.google_onload_fire=
+d=3Di;Ea(a,function(){a.google_onload_fired=3Dg})}})(window);if(!window.=
+google_loader_experiment)window.google_loader_experiment=3DFa(["async1_a=
+ll","block1"],ya)||Fa(["launch"],xa)||"none";var bb,cb=3Dwindow.google_l=
+oader_experiment;
+if(bb=3Dwindow.google_enable_async=3D=3D=3Dg||cb=3D=3D"launch"||cb=3D=3D=
+"async1_all")bb=3Dwindow.google_enable_async=3D=3D=3Di?i:(D&&/MSIE 8/.te=
+st(navigator.userAgent)||pa||oa&&!!window.document.body)&&!window.google=
+_container_id&&(!window.google_ad_output||window.google_ad_output=3D=3D"=
+html");
+if(bb){var db=3Dwindow;if(db.google_unique_id)++db.google_unique_id;else=
+ db.google_unique_id=3D1;for(var X=3Dwindow,_script$$inline_211=3D"scrip=
+t",Y,Z=3D{allowtransparency:'"true"',frameborder:'"0"',height:'"'+X.goog=
+le_ad_height+'"',hspace:'"0"',marginwidth:'"0"',marginheight:'"0"',onloa=
+d:'"'+Ya+'"',scrolling:'"no"',vspace:'"0"',width:'"'+X.google_ad_width+'=
+"'},eb=3DX.document,$=3DZ.id,fb=3D0;!$||X.document.getElementById($);)$=3D=
+"aswift_"+fb++;Z.id=3D$;Z.name=3D$;eb.write(Ra(Z,X.google_ad_width,X.goo=
+gle_ad_height));Y=3D
+$;var gb;if(X.google_page_url)X.google_page_url=3DString(X.google_page_u=
+rl);for(var hb=3D[],ib=3D0,jb=3DV.length;ib<jb;ib++){var kb=3DV[ib];if(X=
+[kb]!=3Dh){var lb;try{var mb=3D[];Ua(new Sa,X[kb],mb);lb=3Dmb.join("")}c=
+atch(nb){}lb&&Da(hb,kb,"=3D",lb,";")}}gb=3Dhb.join("");for(var qb=3D0,rb=
+=3DV.length;qb<rb;qb++)X[V[qb]]=3Dh;var sb=3D(new Date).getTime(),tb=3Da=
+b(),ub=3Dwindow.google_loader_experiment,wb=3D["<!doctype html><html><bo=
+dy><",_script$$inline_211,">",gb,"google_show_ads_impl=3Dtrue;google_uni=
+que_id=3D",X.google_unique_id,';google_async_iframe_id=3D"',
+Y,'";google_start_time=3D',j,";",tb?"google_hash_ratio=3D"+tb+";":"",ub?=
+'google_loader_experiment=3D"'+ub+'";':"","google_bpp=3D",sb>j?sb-j:1,";=
+</",_script$$inline_211,">",Za(),"</body></html>"].join("");(X.document.=
+getElementById(Y)?Pa:Qa)($a(X,Y,wb,g))}else{window.google_start_time=3Dj=
+;window.google_hash_ratio=3Dab();document.write(Za())};})();
+
+------------BHKVfzDUGpkqwWBIEyccoW
+Content-Disposition: inline; filename=comments_bar2.jpg
+Content-Type: image/jpeg; name=comments_bar2.jpg
+Content-Location: http://www.flipcode.com/archives/comments_bar2.jpg
+Content-Transfer-Encoding: Base64
+
+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
+V/6j5N4H7P79Z6D/2Q==
+
+------------BHKVfzDUGpkqwWBIEyccoW
+Content-Disposition: inline; filename=line_grey.png
+Content-Type: image/png; name=line_grey.png
+Content-Location: http://www.flipcode.com/archives/line_grey.png
+Content-Transfer-Encoding: Base64
+
+iVBORw0KGgoAAAANSUhEUgAAAgAAAAABCAIAAAAn2YEhAAAAa0lEQVR42r2TSxbA
+IAgD5Yzc/yzpzkWtNQk82conGSQyc2wCwBBjV0K2WtMARIRXzuuXCg2Pn76MEa+n
+Y5OJ7h8jKY+nxGR6zOtkJpAKfJLkMY3pU5nVuAhVknQmhoYLW1A/VeN1VM5NcvEA
+ihzeJh4lSqAAAAAASUVORK5CYII=
+
+------------BHKVfzDUGpkqwWBIEyccoW--

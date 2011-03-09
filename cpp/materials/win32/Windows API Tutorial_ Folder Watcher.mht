@@ -1,0 +1,1316 @@
+Content-Type: multipart/related; start=<op.mhtml.1299625212100.55a4431e7c46c407@192.168.1.3>; boundary=----------UOTwRfajBSGThKuQbzU1U3
+Content-Location: http://www.relisoft.com/win32/watcher.html
+Subject: =?utf-8?Q?Windows=20API=20Tutorial:=20Folder=20Watcher?=
+MIME-Version: 1.0
+
+------------UOTwRfajBSGThKuQbzU1U3
+Content-Disposition: inline; filename=watcher.html
+Content-Type: text/html; charset=iso-8859-1; name=watcher.html
+Content-ID: <op.mhtml.1299625212100.55a4431e7c46c407@192.168.1.3>
+Content-Location: http://www.relisoft.com/win32/watcher.html
+Content-Transfer-Encoding: 8bit
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<script language="JavaScript" src="../Style/menu.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript">
+	SetRootPath ("../");
+</script>
+
+<title>Windows API Tutorial: Folder Watcher</title>
+<style type="text/css"> 
+@import url("../style/rs.css"); @import url("../style/c.css");
+</style>
+</head>
+<body>
+<div id="c_container">
+<div id="rswl_wrap">
+  <div id="heading"> <img src="../Images/LogoRoman.jpg" alt="Reliable Software Logo" width="428" height="78" /> 
+  <em class="head_nav">
+  <script language="javascript" type="text/javascript"> 
+		<!--
+			Heading ();
+		-->
+		</script>  
+  </em> </div>
+  <ul id="mainnav">
+    <li class="nav_form"><a href="../index.htm" class="nav_home">Home</a></li>
+    <li class="nav_form"><a href="../co_op/index.htm" class="nav_coop">Code Co-op</a></li>
+    <li class="selected"><a href="../cpp.html" class="home">C++ Resources</a></li>
+    <li class="nav_form"><a href="../Freeware/index.htm" class="nav_other">Freeware</a></li>
+    <li class="nav_form"><a href="../science/index.htm" class="nav_other">Science</a></li>
+    <li class="nav_form"><a href="../blog.html" class="nav_other">Blog</a></li>
+    <li class="search">
+      <form name='Search' action='../Query.asp' method='get'>
+        <input type='text' name='InputString' size='12' maxlength='50' value='Search' />
+        <input type='submit' name='Action' value='GO' />
+      </form>
+    </li>
+  </ul>
+  <div class="path"><a href="../index.htm" class="c_path">Home</a>  &gt;<a href="../cpp.html" class="c_path">C++ Resources</a> &gt; <a href="index.htm" class="c_path">Windows API Tutorial</a>&nbsp;  &gt; &nbsp; Folder Watcher   </div>
+  
+  <div id="sub_body" class="clearfix">
+  	<div id="sub_container">
+		<div class="sub_content">
+			<h1>When Folders Change</h1>
+			<p class="first"><b>Have you ever wondered</b> how the Explorer knows that it should update its display because a file has been added or removed from a folder by some external application? Wonder no more because, with the use of our Active Object, we can do the same and more. There are a few simple API calls that you can make to ask the file system to selectively notify you about changes to files and folders. Once you set up such a watch, your thread can go to sleep waiting on an event. The file system will set the event as soon as it detects the kind of change that you're watching for.</p>
+
+		  <div class="code_hilite">
+			<table>
+			  <tr>
+				<td><a href="source/watcher.zip"><img src="Images/download.gif" alt="Download source code" width="20" hspace="5" border="0" /></a></td>
+				<td>Download the source of a sample application, <a href="source/watcher.zip" >FolderWatcher</a> (zipped 11K). </td>
+			  </tr>
+			</table>
+
+			<a href="source/watcher.zip"></a></div>
+			<p>Without further ado, let's derive a FolderWatcher from ActiveObject. We'll give it a notification source: an event; and a notification sink: a handle to a window that will respond to the notification. The source event is set up in the constructor of FolderWatcher. It is also important to start the captive thread at the end of the constructor.</p>
+
+<pre>
+class <span class="pink"><b>FolderWatcher</b></span> : public <span class="pink"><b>ActiveObject</b></span>
+{
+public:
+    FolderWatcher (char const * folder, HWND hwnd)
+        : _notifySource (folder),
+          _hwndNotifySink (hwnd)
+    {
+        strcpy (_folder, folder);
+        _thread.Resume ();
+    }
+    ~FolderWatcher ()
+    {
+        Kill ();
+    }
+
+private:
+    void InitThread () {}
+    void Loop ();
+    void FlushThread () {}
+
+    FolderChangeEvent _notifySource;
+    HWND _hwndNotifySink;
+    char _folder [MAX_PATH];
+};
+</pre>
+
+<p>The action in the ActiveObject happens inside the Loop method. Here we set up an &quot;infinite&quot; loop in which we let the thread wait for the event. When the event happens, we check for the _isDying flag (as usual) and post a special message WM_FOLDER_CHANGE to the window that deals with notifications. This is not one of the predefined Windows messages, it's a message defined by us for the special purpose of passing folder notification information from one thread to another.</p>
+<p>Two thing happen now: the captive thread makes another API call to let the file system know that it wants more notifications. It then goes back to watchful sleep. Concurrently, Windows retrieves our WM_FOLDER_CHANGE message from the message queue and sends it to the Windows Procedure of the sink window. More about that in a moment.</p>
+
+<pre>
+UINT const WM_FOLDER_CHANGE = <span class="green">WM_USER</span>;
+
+void <span class="pink"><b>FolderWatcher::Loop</b></span> ()
+{
+    for (;;)
+    {
+        // Wait for change notification
+        DWORD waitStatus = <span class="pink"><b>WaitForSingleObject</b></span> (_notifySource, <span class="green">INFINITE</span>);
+        if (<span class="green">WAIT_OBJECT_0</span> == waitStatus)
+        {
+            // If folder changed
+            if (_isDying)
+                return;
+
+            <span class="blue"><b>PostMessage</b></span> (_hwndNotifySink,
+                          WM_FOLDER_CHANGE,
+                          0,
+                          (LPARAM) _folder);
+
+            // Continue change notification
+            if (!_notifySource.ContinueNotification ())
+            {
+                // Error: Continuation failed
+                return;
+            }
+        }
+        else
+        {
+            // Error: Wait failed
+            return;
+        }
+    }
+}
+</pre>
+
+<p>So here what happens in the Windows Procedure in response to our special message: we call the Controller's method OnFolderChange. This method can do anything we want. In the Explorer it refreshes the display of the folder we are watching. In our example it just pops up a simple message box. Notice how we are passing the name of the changed folder as LPARAM. It is totally up to us to define what goes into WPARAM and LPARAM of a user-defined message.</p>
+<p>By the way, the Folder Watcher is just a part of the Controller.</p>
+
+<pre>
+    case WM_FOLDER_CHANGE:
+        pCtrl-&gt;OnFolderChange (hwnd, (char const *) lParam);
+        return 0;
+
+
+void <span class="pink"><b>Controller::OnFolderChange</b></span> (HWND hwnd, char const * folder)
+{
+    <span class="blue"><b>MessageBox</b></span> (hwnd, &quot;Change Detected&quot;, &quot;Folder Watcher&quot;,
+                 <span class="green">MB_SETFOREGROUND</span> | <span class="green">MB_ICONEXCLAMATION</span> | <span class="green">MB_OK</span>);
+}
+
+class <span class="pink"><b>Controller</b></span>
+{
+public:
+    Controller(HWND hwnd, <span class="green">CREATESTRUCT</span> * pCreate);
+    ~Controller ();
+    void    OnFolderChange (HWND hwnd, char const *folder);
+
+private:
+    FolderWatcher _folderWatcher;
+};
+</pre>
+
+<p>Now that we know how to deal with notification, let's have a look at their sources, the File Change Events. An event object is created by the file system in response to FindFirstChangeNotification. A handle to that event is returned from the call. We remember this handle and use it later to either renew or abandon our interest in further notifications. Notice that we can set the watch to be recursive, i.e., watching a given folder and all its subfolders and sub-subfolders. We can also express interest in particular types of changes by passing a bitwise OR of any combination of the following flags:</p>
+<ul >
+<li>FILE_NOTIFY_CHANGE_FILE_NAME (renaming, creating, or deleting a file)</li>
+<li>FILE_NOTIFY_CHANGE_DIR_NAME	(creating or deleting a directory)</li>
+<li>FILE_NOTIFY_CHANGE_ATTRIBUTES</li>
+<li>FILE_NOTIFY_CHANGE_SIZE</li>
+<li>FILE_NOTIFY_CHANGE_LAST_WRITE (saving a file)</li>
+<li>FILE_NOTIFY_CHANGE_SECURITY</li>
+</ul>
+<p>For convenience we have defined a few subclasses of FileChangeEvent that correspond to some useful combinations of these flags. One of them is the FolderChangeEvent that we used in our FolderWatcher.</p>
+<pre>
+class <span class="pink"><b>FileChangeEvent</b></span>
+{
+public:
+    FileChangeEvent (char const * folder, BOOL recursive, DWORD notifyFlags)
+    {
+        _handle = <span class="blue"><b>FindFirstChangeNotification</b></span> (folder, recursive, 
+		                             notifyFlags);
+        if (<span class="green">INVALID_HANDLE_VALUE</span> == _handle)
+            throw WinException (&quot;Cannot create change notification handle&quot;);
+    }
+    ~FileChangeEvent ()
+    {
+        if (<span class="green">INVALID_HANDLE_VALUE</span> != _handle)
+            <span class="blue"><b>FindCloseChangeNotification</b></span> (_handle);
+    }
+
+    operator <span class="green">HANDLE</span> () const { return _handle; }
+    BOOL ContinueNotification ()
+    {
+        return <span class="blue"><b>FindNextChangeNotification</b></span> (_handle);
+    }
+
+private:
+    <span class="green">HANDLE</span> _handle;
+};
+
+class <span class="pink"><b>FolderChangeEvent</b></span> : public <span class="pink"><b>FileChangeEvent</b></span>
+{
+public:
+    FolderChangeEvent (char const * folder)
+        : FileChangeEvent (folder, FALSE, <span class="green">FILE_NOTIFY_CHANGE_FILE_NAME</span>)
+    {}
+};
+
+class <span class="pink"><b>TreeChangeEvent</b></span> : public <span class="pink"><b>FileChangeEvent</b></span>
+{
+public:
+    TreeChangeEvent (char const * root)
+        : FileChangeEvent (root, TRUE,
+                           <span class="green">FILE_NOTIFY_CHANGE_FILE_NAME</span>
+                         | <span class="green">FILE_NOTIFY_CHANGE_DIR_NAME</span>)
+    {}
+};
+</pre>
+
+<p>It should be easy now to generalize this example to do some really useful work in your programs. Remember to look up the API's that we use in these tutorials in the online help that comes with your compiler.</p>
+<p>How about some OLE or COM programming <b>without MFC</b>? Go to the <a href="shell.html" >next page</a></p>
+
+
+
+</div>
+    <div id="footer">
+  <script language="javascript" type="text/javascript">
+  	<!--
+  		FooterNav ()
+	-->
+  </script>
+  </div>
+  <div id="copyright">
+  	<script language="javascript" type="text/javascript">
+	<!--
+		Copyright ();
+	-->
+	</script>
+	
+  </div>
+	  </div>
+  	<div id="navigation">
+      <ul id="nav_list">
+	  	<li><strong><a href="index.htm" class="cnav">Windows API Tutorial </a></strong></li>
+        <li><a href="winnie.html" class="cnav">Winnie</a></li>
+        <li><a href="generic.html" class="cnav">Generic</a></li>
+        <li><a href="controls.html" class="cnav">Controls</a></li>
+        <li><a href="windlg.html" class="cnav">Dialog-based App</a><br />
+        </li>
+        <li><a href="dialog.html" class="cnav">Generic Dialog</a> </li>
+        <li><a href="canvas.html" class="cnav">Canvas</a></li>
+        <li><a href="pens.html" class="cnav">Pens/Brushes </a></li>
+        <li><a href="gdileaks.html" class="cnav">GDI Leaks </a></li>
+        <li><a href="active.html" class="cnav">Threads</a></li>
+        <li><a href="watcher.html" class="cnav">Folder Watcher </a></li>
+        <li><a href="shell.html" class="cnav">Shell API</a></li>
+        <li><a href="olerant.html" class="cnav">OLE/COM</a></li>
+		<li><a href="ole.html" class="cnav">Smart OLE</a></li>
+		<li><a href="auto.html" class="cnav">OLE Automation</a></li>
+		<li><a href="splitter.html" class="cnav">Splitter Bar</a></li>
+		<li><a href="bitmap.html" class="cnav">Bitmaps</a></li>
+		<li><a href="direct.html" class="cnav">Direct Draw</a></li>
+      </ul>
+    </div>
+  </div>
+
+  
+</div>
+</div>
+</body>
+</html>
+
+------------UOTwRfajBSGThKuQbzU1U3
+Content-Disposition: inline; filename=menu.js
+Content-Type: application/x-javascript; charset=iso-8859-1; name=menu.js
+Content-Location: http://www.relisoft.com/Style/menu.js
+Content-Transfer-Encoding: Base64
+
+Ly8gR2xvYmFsIFZhcmlhYmxlcw0KLy8gQ2FsbCBTZXRSb290UGF0aCBmaXJzdCB0
+byBpbml0aWFsaXplIHRoZW0NCg0KdmFyIFJvb3RQYXRoOwkvLyB0aGUgcGF0aCB0
+byByb290DQoNCmZ1bmN0aW9uIFNldFJvb3RQYXRoIChyb290UGF0aCkNCnsNCglS
+b290UGF0aCA9IHJvb3RQYXRoOw0KfQ0KDQpmdW5jdGlvbiBIZWFkaW5nICgpDQp7
+DQoJZG9jdW1lbnQud3JpdGUgKCI8YSBocmVmPSciICsgUm9vdFBhdGggKyAiZm9y
+dW1zL2luZGV4LnBocCcgY2xhc3M9J2hlYWRsaW5rJz5GT1JVTTwvYT4gfCA8YSBo
+cmVmPSciICsgUm9vdFBhdGggKyAiYWJvdXQuaHRtbCcgY2xhc3M9J2hlYWRsaW5r
+Jz5BQk9VVDwvYT4gfCA8YSBocmVmPSciICsgUm9vdFBhdGggKyAiY29udGFjdC5o
+dG1sJyBjbGFzcz0naGVhZGxpbmsnPkNPTlRBQ1Q8L2E+ICIpOw0KfQ0KDQpmdW5j
+dGlvbiBGb290ZXJOYXYgKCkNCnsNCmRvY3VtZW50LndyaXRlICgnPGEgaHJlZj0i
+JyArIFJvb3RQYXRoICsgJ2luZGV4Lmh0bSIgY2xhc3M9ImZvb3RlciI+SG9tZTwv
+YT4gIHwgIDxhIGhyZWY9IicgKyBSb290UGF0aCArICdmb3J1bXMvaW5kZXgucGhw
+IiBjbGFzcz0iZm9vdGVyIj5Gb3J1bXM8L2E+ICB8ICA8YSBocmVmPSInICsgUm9v
+dFBhdGggKyAnY29fb3AvaW5kZXguaHRtIiBjbGFzcz0iZm9vdGVyIj5Db2RlIENv
+LW9wPC9hPiAgfCAgPGEgaHJlZj0iJyArIFJvb3RQYXRoICsgJ2NwcC5odG1sIiBj
+bGFzcz0iZm9vdGVyIj5DKysgUmVzb3VyY2VzPC9hPiAgfCAgPGEgaHJlZj0iJyAr
+IFJvb3RQYXRoICsgJ2ZyZWV3YXJlL2luZGV4Lmh0bSIgY2xhc3M9ImZvb3RlciI+
+RnJlZXdhcmU8L2E+ICB8ICA8YSBocmVmPSInICsgUm9vdFBhdGggKyAnc2NpZW5j
+ZS9pbmRleC5odG0iIGNsYXNzPSJmb290ZXIiPlNjaWVuY2U8L2E+ICB8IDxhIGhy
+ZWY9IicgKyBSb290UGF0aCArICdibG9nLmh0bWwiIGNsYXNzPSJmb290ZXIiPkJs
+b2c8L2E+Jm5ic3A7Jm5ic3A7Jm5ic3A7PGEgdHlwZT0iYXBwbGljYXRpb24vcnNz
+K3htbCIgaHJlZj0iJyArIFJvb3RQYXRoICsgJ2ZlZWQueG1sIj48aW1nIGJvcmRl
+cj0iMCIgc3JjPSInICsgUm9vdFBhdGggKyAnaW1hZ2VzL3htbC5naWYiIHdpZHRo
+PSIzNiIgaGVpZ2h0PSIxNCIgYWxpZ249ImFic21pZGRsZSIgLz48aW1nIGJvcmRl
+cj0iMCIgc3JjPSInICsgUm9vdFBhdGggKyAnaW1hZ2VzL3Jzcy5wbmciIHdpZHRo
+PSIzNiIgaGVpZ2h0PSIxNCIgYWxpZ249ImFic21pZGRsZSIgLz48L2E+PC9wPiA8
+cD48YSBocmVmPSJodHRwOi8vdmFsaWRhdG9yLnczLm9yZy9jaGVjaz91cmk9cmVm
+ZXJlciI+PGltZyBzcmM9Imh0dHA6Ly93d3cudzMub3JnL0ljb25zL3ZhbGlkLXho
+dG1sMTAiIGFsdD0iVmFsaWQgWEhUTUwgMS4wIFRyYW5zaXRpb25hbCIgd2lkdGg9
+Ijg4IiBoZWlnaHQ9IjMxIiB2c3BhY2U9IjEwIiBib3JkZXI9IjAiIC8+PC9hPjwv
+cD4nKTsNCgkNCn0NCmZ1bmN0aW9uIEZvb3Rlck5hdl9TZWN1cmUgKCkNCnsNCmRv
+Y3VtZW50LndyaXRlICgnPGEgaHJlZj0iJyArIFJvb3RQYXRoICsgJ2luZGV4Lmh0
+bSIgY2xhc3M9ImZvb3RlciI+SG9tZTwvYT4gIHwgIDxhIGhyZWY9IicgKyBSb290
+UGF0aCArICdmb3J1bXMvaW5kZXgucGhwIiBjbGFzcz0iZm9vdGVyIj5Gb3J1bXM8
+L2E+ICB8ICA8YSBocmVmPSInICsgUm9vdFBhdGggKyAnY29fb3AvaW5kZXguaHRt
+IiBjbGFzcz0iZm9vdGVyIj5Db2RlIENvLW9wPC9hPiAgfCAgPGEgaHJlZj0iJyAr
+IFJvb3RQYXRoICsgJ2NwcC5odG1sIiBjbGFzcz0iZm9vdGVyIj5DKysgUmVzb3Vy
+Y2VzPC9hPiAgfCAgPGEgaHJlZj0iJyArIFJvb3RQYXRoICsgJ2ZyZWV3YXJlL2lu
+ZGV4Lmh0bSIgY2xhc3M9ImZvb3RlciI+RnJlZXdhcmU8L2E+ICB8ICA8YSBocmVm
+PSInICsgUm9vdFBhdGggKyAnc2NpZW5jZS9pbmRleC5odG0iIGNsYXNzPSJmb290
+ZXIiPlNjaWVuY2U8L2E+ICB8IDxhIGhyZWY9IicgKyBSb290UGF0aCArICdibG9n
+Lmh0bWwiIGNsYXNzPSJmb290ZXIiPkJsb2c8L2E+Jm5ic3A7Jm5ic3A7Jm5ic3A7
+PGEgdHlwZT0iYXBwbGljYXRpb24vcnNzK3htbCIgaHJlZj0iJyArIFJvb3RQYXRo
+ICsgJ2ZlZWQueG1sIj48aW1nIGJvcmRlcj0iMCIgc3JjPSInICsgUm9vdFBhdGgg
+KyAnaW1hZ2VzL3htbC5naWYiIHdpZHRoPSIzNiIgaGVpZ2h0PSIxNCIgYWxpZ249
+ImFic21pZGRsZSIgLz48aW1nIGJvcmRlcj0iMCIgc3JjPSInICsgUm9vdFBhdGgg
+KyAnaW1hZ2VzL3Jzcy5wbmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIxNCIgYWxpZ249
+ImFic21pZGRsZSIgLz48L2E+PC9wPicpOw0KCQ0KfQ0KLy9lbmNvZGUgZW1haWwg
+YWRkcmVzc2VzDQoNCmZ1bmN0aW9uIGNyeXB0aWMoZW1hbixuYWltb2QsdHhlLG5v
+bWFpbHRvKQ0Kew0KCXNtYWxsbSA9IDEwOTsgc21hbGxvID0gMTExOw0KCWlmIChu
+YWltb2QgPT0gbnVsbCkNCgkJbmFpbW9kID0gJ3JlbGlzb2Z0JzsNCglpZiAodHhl
+ID09IG51bGwpDQoJCXR4ZSA9IFN0cmluZy5mcm9tQ2hhckNvZGUoNDYsIDk5LCBz
+bWFsbG8sIHNtYWxsbSk7DQoJdGEgPSBTdHJpbmcuZnJvbUNoYXJDb2RlKDY0KTsN
+Cgl5YWxwc2lkID0gZW1hbiArIHRhICsgbmFpbW9kICsgdHhlOw0KCWlmIChub21h
+aWx0byAhPSBudWxsKQ0KCQlkb2N1bWVudC53cml0ZSAoeWFscHNpZCk7DQoJZWxz
+ZQ0KCXsNCgkJb3RsaWFtID0gU3RyaW5nLmZyb21DaGFyQ29kZShzbWFsbG0sIDk3
+LCAxMDUsIDEwOCwgMTE2LCBzbWFsbG8sIDU4KTsNCgkJZG9jdW1lbnQud3JpdGUo
+eWFscHNpZC5saW5rKG90bGlhbSArIHlhbHBzaWQpKTsNCgl9DQp9DQogZnVuY3Rp
+b24gQ29weXJpZ2h0KCkNCiB7DQogCWRvY3VtZW50LndyaXRlICgiPHNtYWxsPiZj
+b3B5OyAyMDA2IFJlbGlhYmxlIFNvZnR3YXJlLCBMTEMuIEFsbCBSaWdodHMgcmVz
+ZXJ2ZWQuIDxBIGhyZWY9JyIgKyBSb290UGF0aCArICJpbmRleC5odG0nPnd3dy5y
+ZWxpc29mdC5jb208L0E+IDxicj4gPGEgaHJlZj0nIiArIFJvb3RQYXRoICsgInBy
+aXZhY3kuaHRtbCc+UHJpdmFjeSBQb2xpY3k8L2E+PC9zbWFsbD4iKTsNCiB9IA0K
+DQpmdW5jdGlvbiBCdXlOb3cgKCkNCnsNCglkb2N1bWVudC53cml0ZSAoIjxhIGhy
+ZWY9J2h0dHBzOi8vd3d3LnJlbGlzb2Z0LmNvbS9zZWN1cmUvJyAgY2xhc3M9J2Nv
+b3BfbmF2Jz5CdXkgZm9yICQxNDk8L2E+Iik7DQp9DQoNCi8vbGF1bmNoZXMgc21h
+bGwgZGVzY3JpcHRvciB3aW5kb3c7IHVzZWQgb24gdmNzX2JyZWFrZG93biBwYWdl
+IHRvIGRlZmluZSBjb21wZXRpdGl2ZSBwcm9kdWN0cw0KCQ0KZnVuY3Rpb24gcG9w
+aXR1cCh1cmwpDQp7DQoJbmV3d2luZG93PXdpbmRvdy5vcGVuKHVybCwnbmFtZScs
+J2hlaWdodD00MDAsd2lkdGg9NTAwLCByZXNpemFibGU9MSwgc2Nyb2xsYmFycz0x
+Jyk7DQoJaWYgKHdpbmRvdy5mb2N1cykge25ld3dpbmRvdy5mb2N1cygpfQ0KCXJl
+dHVybiBmYWxzZTsNCn0NCg0KZnVuY3Rpb24gdmlld2ltYWdlKHVybCkNCnsNCglu
+ZXd3aW5kb3c9d2luZG93Lm9wZW4odXJsLCduYW1lJywnaGVpZ2h0PTUwMCwgd2lk
+dGg9ODAwLCByZXNpemFibGU9MSwgc2Nyb2xsYmFycz0xJyk7DQoJaWYgKHdpbmRv
+dy5mb2N1cykge25ld3dpbmRvdy5mb2N1cygpfQ0KCXJldHVybiBmYWxzZTsNCn0N
+Cg0KLy9vbm1vdXNlb3ZlciAgZm9yIG90aGVyIHNlcXVlbmNlIG5hdmlnYXRpb24N
+Cg0KZnVuY3Rpb24gTU1fcHJlbG9hZEltYWdlcygpIHsgLy92My4wDQogIHZhciBk
+PWRvY3VtZW50OyBpZihkLmltYWdlcyl7IGlmKCFkLk1NX3ApIGQuTU1fcD1uZXcg
+QXJyYXkoKTsNCiAgICB2YXIgaSxqPWQuTU1fcC5sZW5ndGgsYT1NTV9wcmVsb2Fk
+SW1hZ2VzLmFyZ3VtZW50czsgZm9yKGk9MDsgaTxhLmxlbmd0aDsgaSsrKQ0KICAg
+IGlmIChhW2ldLmluZGV4T2YoIiMiKSE9MCl7IGQuTU1fcFtqXT1uZXcgSW1hZ2U7
+IGQuTU1fcFtqKytdLnNyYz1hW2ldO319DQp9DQoNCmZ1bmN0aW9uIE1NX3N3YXBJ
+bWdSZXN0b3JlKCkgeyAvL3YzLjANCiAgdmFyIGkseCxhPWRvY3VtZW50Lk1NX3Ny
+OyBmb3IoaT0wO2EmJmk8YS5sZW5ndGgmJih4PWFbaV0pJiZ4Lm9TcmM7aSsrKSB4
+LnNyYz14Lm9TcmM7DQp9DQoNCmZ1bmN0aW9uIE1NX2ZpbmRPYmoobiwgZCkgeyAv
+L3Y0LjAxDQogIHZhciBwLGkseDsgIGlmKCFkKSBkPWRvY3VtZW50OyBpZigocD1u
+LmluZGV4T2YoIj8iKSk+MCYmcGFyZW50LmZyYW1lcy5sZW5ndGgpIHsNCiAgICBk
+PXBhcmVudC5mcmFtZXNbbi5zdWJzdHJpbmcocCsxKV0uZG9jdW1lbnQ7IG49bi5z
+dWJzdHJpbmcoMCxwKTt9DQogIGlmKCEoeD1kW25dKSYmZC5hbGwpIHg9ZC5hbGxb
+bl07IGZvciAoaT0wOyF4JiZpPGQuZm9ybXMubGVuZ3RoO2krKykgeD1kLmZvcm1z
+W2ldW25dOw0KICBmb3IoaT0wOyF4JiZkLmxheWVycyYmaTxkLmxheWVycy5sZW5n
+dGg7aSsrKSB4PU1NX2ZpbmRPYmoobixkLmxheWVyc1tpXS5kb2N1bWVudCk7DQog
+IGlmKCF4ICYmIGQuZ2V0RWxlbWVudEJ5SWQpIHg9ZC5nZXRFbGVtZW50QnlJZChu
+KTsgcmV0dXJuIHg7DQp9DQoNCmZ1bmN0aW9uIE1NX3N3YXBJbWFnZSgpIHsgLy92
+My4wDQogIHZhciBpLGo9MCx4LGE9TU1fc3dhcEltYWdlLmFyZ3VtZW50czsgZG9j
+dW1lbnQuTU1fc3I9bmV3IEFycmF5OyBmb3IoaT0wO2k8KGEubGVuZ3RoLTIpO2kr
+PTMpDQogICBpZiAoKHg9TU1fZmluZE9iaihhW2ldKSkhPW51bGwpe2RvY3VtZW50
+Lk1NX3NyW2orK109eDsgaWYoIXgub1NyYykgeC5vU3JjPXguc3JjOyB4LnNyYz1h
+W2krMl07fQ0KfQ0K
+
+------------UOTwRfajBSGThKuQbzU1U3
+Content-Disposition: inline
+Content-Type: text/css; charset=iso-8859-1
+Content-Location: http://www.relisoft.com/style/rs.css
+Content-Transfer-Encoding: 8bit
+
+body
+{
+	background-color:#CCCCCC;
+	margin: 0 auto;
+	width: 848px;
+	padding: 0px;
+}
+
+/* adjustment for IE5 */
+
+body {
+	font-size: small; /* IE5 Win */
+  	voice-family: "\"}\""; 
+  	voice-family: inherit;
+  	font-size: small;
+	font-family: Arial, Helvetica, sans-serif;
+	}
+
+html>body { /* be nice to Opera */
+}
+h1, h2, h3, h4
+{
+	margin: 0px;
+	color:#000000;
+}
+
+h1
+{
+	font-size: 170%;
+}
+h2
+{
+	font-size: 120%;
+}
+h3
+{
+	font-size: 100%;
+
+}
+
+ul
+{
+	margin:0px 0px 0px 15px;
+	padding: 5px;
+	list-style: outside disc;
+}
+
+hr
+{
+margin:0px;
+padding:0px;
+}
+
+.heading_spacer /* to add margin when heading appears within body text */
+{
+	margin-top: 10px;
+}
+
+p
+{
+	text-indent: 1em;
+	margin: 0px;
+}
+
+dl, dd, dt
+{
+	margin: 0px;
+	padding: 0px;
+}
+
+dl
+{
+	margin-bottom: 5px;
+}
+	
+.first
+{
+	text-indent: 0em;
+}
+
+.padding
+{
+	padding: 10px 8px 8px 8px;
+}
+
+.right
+{
+	float: right;
+}
+
+.left
+{
+	float: left;
+}
+small
+{
+	font-size: 80%;
+}
+.sub_link
+{
+	text-align: center;
+	padding: 2px 0px 5px 0px;
+	margin-top: 8px;
+}
+.caption
+{
+	font-size: 85%;
+	font-family:"Courier New", Courier, mono;
+	text-indent: 0px;
+}
+.center
+{
+	text-align: center;
+	padding: 3px;
+}
+
+/* fix for faux collumns with background image */
+	
+		.clearfix:after {
+		  content: ".";
+		  clear: both;
+		  height: 0;
+		  visibility: hidden;
+		  display: block;
+		}
+		.clearfix {
+		  display: inline-block; /* Fixes IE/Mac */
+		}
+		/* Hides from IE-mac \*/
+		* html .clearfix {height: 1%;}
+		.clearfix {display: block;}
+		/* End hide from IE-mac */	
+		/* main heading and navigation styling */
+		
+		
+/* heading and navigation formatting */
+
+#heading
+{
+width: 100%;
+margin: 0;
+background-color:#E4C872;
+border: 1px #000000 solid;
+}
+
+#mainnav
+{
+	border-bottom-color: #000000;
+	background-color:#FFFFFF;
+}
+.head_nav
+{
+	margin: 35px 0 0 220px;
+	position:absolute;
+}
+
+a.headlink:link
+{
+	font-style: normal;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 85%;
+	font-weight: normal;
+	text-decoration: none;
+	color:#000000;
+}
+a.headlink:visited
+{
+	font-style: normal;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 85%;
+	font-weight: normal;
+	color:#666666;
+	text-decoration: none;
+}
+a.headlink:hover
+{
+	font-family:Arial, Helvetica, sans-serif;
+	text-decoration: underline;
+	font-style: normal;
+	font-size: 85%;
+	font-weight: normal;
+}
+
+#mainnav
+{
+	float: left;
+	list-style: none;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 110%;
+	font-weight: bold;
+	padding: 0px;
+	margin: 0px;
+	border-left: 1px #000 solid;
+	border-right: 1px #000 solid;
+	border-bottom-width: thick;
+	border-bottom-style: solid;
+	border-bottom-color:#000000;
+	width: 100%;
+	position: relative;
+}
+.nav_form
+{
+	margin: 0px;
+	float:left;
+	padding: 4px 8px;
+	display:block;
+	border-right:#000000 1px solid;
+	border-bottom:#000000 1px solid;
+	font-size: 100%;
+}
+
+.selected
+{
+	margin: 0;
+	float:left;
+	padding: 4px 8px;
+	display: block;
+	color:#FFFFFF;
+	background-color:#000000;
+	font-size: 100%;
+	border-bottom:#000000 1px solid;
+}
+
+/* formatting for Home link on home */
+a.home:link, a.home:visited
+{
+	text-decoration: none;
+	color:#FFFFFF;
+}
+a.home:hover
+{
+	text-decoration: underline;
+}
+
+/* formatting for Home link from subpages */
+
+	a.nav_home:link, a.nav_home:visited
+	{
+		padding: 0px;
+		color:#000000;
+		text-decoration: none;
+	}
+	a.nav_home:hover, a.nav_home:hover
+	{
+		padding: 0px;
+		color:#666666;
+		text-decoration: underline;
+	}
+
+/* Main navigation link formatting */
+	
+	a.nav_coop:link, a.nav_coop:visited
+	{
+		display: block;
+		color:#CC6600;
+		text-decoration: none;
+	}
+	a.nav_coop:hover
+	{
+		display: block;
+		color:#993300;
+		text-decoration: underline;
+	}
+	a.nav_c:link, a.nav_c:visited
+	{
+		display: block;
+		color:#5D855D;
+		text-decoration: none;
+	}
+	a.nav_c:hover
+	{
+		display: block;
+		color:#003300;
+		text-decoration: underline;
+	}
+	a.nav_other:link, a.nav_other:visited
+	{
+		display: block;
+		color:#508CD4;
+		text-decoration: none;
+	}
+	a.nav_other:hover
+	{
+		display: block;
+		color:#000066;
+		text-decoration: underline;
+	}
+
+.search
+{
+	padding: 0px;
+	margin: 0;
+	float: right;
+}
+
+form#search, input
+{
+	padding: 0;
+	margin: 0;
+	display: inline;
+ }
+ 
+form { margin: 0 }
+
+/* end main navigation formating */
+
+/* Footer formatting */
+
+#footer
+{
+	font-family: Arial, Helvetica, sans-serif;
+	clear: both;
+	text-align: center;
+	padding: 15px 0px;
+}
+a.footer:link
+{
+	font-size: 80%;
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+a.footer:visited
+{
+	color:#333333;
+	font-size: 80%;
+	text-decoration: none;
+}
+a.footer:hover
+{
+	text-decoration: underline;
+	color:#666666;
+	font-size: 80%;
+}
+	
+#copyright
+{
+	font-family: Arial, Helvetica, sans-serif;
+	text-align: center;
+	font-size:80%;
+}
+
+/* URL path guide formatting */
+
+.path
+{
+	clear: both;
+	font-family:Arial, Helvetica, sans-serif;
+	padding: 10px 0px 0px 10px;
+	margin: 0px;
+	font-size: 85%;
+}
+
+a.path:link
+{
+	color:#000000;
+	font-size:100%;
+}
+
+/* subpage main layout formatting */
+
+#sub_body
+{
+	margin: 0px;
+	padding: 5px 10px 5px 0px;
+}
+.sub_content, .sub_content_min
+{
+	margin: 0px;
+	padding: 10px;
+	background-color:#FFFFFF;
+	border:#336033 2px solid;
+	margin-bottom: 5px;
+}
+
+/* to set minimum height to pages where the content is small */
+
+.sub_content_min
+{
+	min-height:550px; 
+	height:auto;
+}
+
+/* for setting min-height in Internet Explorer */
+/*\*/
+* html .sub_content_min {
+height: 550px;
+}
+/**/
+
+#navigation
+{
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	width: 210px;
+	padding-top: 22px;
+}
+#nav_list
+{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 105%;
+	list-style: none;
+	text-align: right;
+	margin: 0px;
+	padding-right: 5px;
+	line-height:220%;
+}
+
+.sub_content h1
+{
+	font-size: 170%;
+}
+
+
+#graphic
+{
+	float: left;
+}
+
+.sub_content dl
+{
+	margin: 0px;
+	padding-top: 0px;
+}
+	
+.intro /* large text for intro text like on cpp.html */
+{
+	font-size: 115%;
+	font-style: normal;
+}
+/* two collumn formating for subpages */
+
+#sub_container
+{
+	float: right;
+	width: 615px;
+	padding: 5px;
+}
+
+/* Code samples formatting */
+
+pre
+{
+	font-family : "Courier New", Courier, monospace;
+	font-size: small;
+	padding: 5px;
+	margin: 5px 15px 10px 15px;
+	background-color:#B0C2A3;
+}
+
+.green
+{
+	color:#009933;
+	font-style: normal;
+
+}
+.blue
+{
+	color: #003399;
+	font-style: normal;
+	font-weight: bold;
+}
+.pink
+{
+	color:#CC0000;
+	font-style: normal;
+}
+.code_hilite
+{
+	padding: 5px;
+	margin: 10px 15px 10px 15px;
+	background-color:#FFFFCC;
+	border:#006600 1px solid;
+}
+
+/* formatting for solo pages in home directory. */
+
+.solo_container
+{
+	margin: 0px;
+	padding: 30px;
+}
+.inner /*formatting for highest level non-categorized pages like about.html, contact.html */
+{
+	width: 700px;
+	background-color:#FFFFFF;
+	padding: 10px;
+	margin-bottom:5px;
+}
+
+/*float fixes */
+
+.floatfix
+{
+	display:inline-block;
+}
+
+.floatfix:after {
+  content: ".";
+  clear: both;
+  height: 0;
+  visibility: hidden;
+  display: block;
+}
+
+.download
+{
+	margin: 10px;
+}
+
+/* Teaser on Co-op main page and C++ in Action Main page */
+.teaser, .teaser_end
+{
+	margin: 0px;
+	padding:0px 5px;
+	width: 184px;
+	float:left;
+}
+.teaser
+{
+	border-right: #000000 1px solid;
+}
+.teaser_end
+{
+	padding-left: 10px;
+}
+
+.teaser dt, .teaser_end dt
+{
+	color:#000000;
+	background-color:#FFFFFF;
+	font-weight: normal;
+	font-size:120%;
+	padding-bottom: 5px;
+}
+
+#tease_wrap
+{
+	clear:both;
+	display:inline-block;
+}
+#tease_wrap:after 
+{
+  content: ".";
+  clear: both;
+  height: 0;
+  visibility: hidden;
+  display: block;
+}
+
+/* formating for ads */
+
+.ad
+{
+	margin-top: 30px;
+	float:right;
+	padding-right: 5px;
+	width: 165px;
+}
+.ad_horiz
+{
+	width: 500px;
+	margin: 0 auto;
+}
+
+.ad .padding, .ad_horiz .padding
+{
+	border: solid #000 1px;
+	background-color: #FFFFFF;
+}
+.ad small, .ad_horiz small
+{
+	padding: 2px;
+	color: #FF0000;
+	
+}
+
+.ad p, .ad_horiz p
+{
+	text-indent: 0em;
+	font-size:85%;
+}
+.ad table, .ad_horiz table
+{
+	margin: 2px;
+	margin: 0 auto;
+}
+
+
+------------UOTwRfajBSGThKuQbzU1U3
+Content-Disposition: inline
+Content-Type: text/css; charset=iso-8859-1
+Content-Location: http://www.relisoft.com/style/c.css
+Content-Transfer-Encoding: 8bit
+
+/* CSS Document */
+
+#c_container
+{
+	background: #4C754C url(../Images/gradient_c.jpg) repeat-y top left;
+	color:#000000;
+}
+
+#c_container
+{
+	margin:0px;
+	padding: 0px 0px 20px 0px;
+}
+
+/*heading navigation*/
+#c_wrap .nav_form
+{
+	background-color:#FFFFFF;
+	color:#000000;
+}
+#c_container .selected
+{
+	background-color:#658B65;
+	color:#FFFFFF;
+	border-bottom:#658B65 1px solid;
+}
+
+#c_container #mainnav
+{
+		border-bottom-color: #658B65;
+}
+
+/* hyperlink formatting */
+
+
+.sub_content a:link, .sub_content_min a:link, .c_bkgrnd a:link, #home_c .padding a:link, .solo_container a:link, a.cresource:link
+{
+	background-color:inherit;
+	color: #002B00;
+	text-decoration:none;
+}
+.sub_content a:visited, .sub_content_min a:visited, .c_bkgrnd a:visited, #home_c .padding a:visited, .solo_container a:visited, a.cresource:visited 
+{
+	background-color:inherit;
+	color: #5D855D;
+	text-decoration:none;
+}
+.sub_content a:hover, .sub_content_min a:hover, .c_bkgrnd a:hover, #home_c .padding a:hover, .solo_container a:hover, a.cresource:hover 
+{
+	background-color:inherit;
+	color: #666666;
+	text-decoration: underline;
+}
+/* underline links in body text */
+
+.c_bkgrnd p a:link, .sub_content p a:link, .sub_content_min p a:link, #home_c p .padding a:link, p a.cresource:link, .solo_container a:link, .sub_content li a:link
+{
+	text-decoration:underline;
+}
+.sub_content p a:visited, .sub_content_min p a:visited, .c_bkgrnd p a:visited, #home_c p .padding a:visited, p a.cresource:visited, .solo_container a:visited
+{
+	text-decoration:underline;
+}
+
+/* formatting for c resource navigation links */
+#nav_list
+{
+	line-height:100%;
+}
+
+.cnav
+{
+	line-height:220%;
+}
+.sub_nav
+{
+	line-height: 100%;
+}
+
+a.cnav:link, a.sub_nav:link
+{
+	background-color:inherit;
+	color: #003300;
+	text-decoration: none;
+}
+
+a.cnav:visited, a.sub_nav:visited
+{
+	background-color:inherit;
+	color: #333333;
+	text-decoration: none;
+}
+
+a.cnav:hover, a.sub_nav:hover
+{
+	background-color:inherit;
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+
+
+/* formatting for path links on c pages */
+
+a.c_path
+{
+	background-color:inherit;
+	color: #000;
+	padding: 0px 5px;
+}
+a.c_path:hover
+{
+	background-color:inherit;
+	color:#006600;
+}
+
+/* formatting for sub categroy boxes on c resource main page */
+
+.c_subcontainer
+{
+	color:#000000;
+	float: left;
+	width: 300px;
+	background-color:#FFFFFF;
+	border-left: #006600 2px solid;
+	border-right: #006600 2px solid;
+	border-top: #006600 2px solid;
+	margin: 0px 5px 5px 0px;
+}
+
+.c_subcontainer_right
+{
+	color:#000000;
+	background-color:inherit;
+	float: left;
+	width: 300px;
+	margin-right: 0px;
+	background-color:#FFFFFF;
+	border: #006600 2px solid;
+	border-bottom: none;
+}
+
+h2.home_head
+{
+	background-color:#336033;
+	color:#FFFFFF;
+	font-size: 120%;
+	margin-bottom: 0px;
+	padding: 5px;
+}
+
+
+.c_bkgrnd /* faux collumn technique for sub categories */
+{
+	clear: both;
+	background: url(../Images/c_subbkgrnd.gif) no-repeat bottom left;
+	display: inline-block;
+	margin-bottom: 10px;
+	padding-bottom: 2px;
+	width:100%;
+}
+.c_bkgrnd:after {
+  content: ".";
+  clear: both;
+  height: 0;
+  visibility: hidden;
+  display: block;
+}
+
+.c_subheading  /* Relicodia heading */
+{
+	padding: 0px;
+	margin: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size:120%;
+	text-align: right;
+	float:left;
+	width: 180px;
+	margin-top: 10px;
+}
+
+.c_subcontainer_right dd img
+{
+	float: right;
+	padding-bottom: 10px;
+}
+#text_left
+{
+	margin: 0px;
+	text-align: right;
+}
+
+#c_wrap dl
+{
+	padding: 0px;
+	margin: 0px;
+	padding-top: 15px;
+}
+
+
+------------UOTwRfajBSGThKuQbzU1U3
+Content-Disposition: inline
+Content-Type: image/jpeg
+Content-Location: http://www.relisoft.com/Images/gradient_c.jpg
+Content-Transfer-Encoding: Base64
+
+/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAcEBAQFBAcFBQcKBwUHCgwJBwcJDA0L
+CwwLCw0RDQ0NDQ0NEQ0PEBEQDw0UFBYWFBQeHR0dHiIiIiIiIiIiIiL/2wBDAQgH
+Bw0MDRgQEBgaFREVGiAgICAgICAgICAgICAhICAgICAgISEhICAgISEhISEhISEi
+IiIiIiIiIiIiIiIiIiL/wAARCAACA1IDAREAAhEBAxEB/8QAGAABAQEBAQAAAAAA
+AAAAAAAAAQIAAwf/xAAWEAEBAQAAAAAAAAAAAAAAAAAAAQL/xAAYAQEBAQEBAAAA
+AAAAAAAAAAAAAQIEBv/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/
+APdXmXc1BGlRFVEVURVRFVEURFVE1Uc6qJqoiqiNKJqsuehE1RFVEVURVRzqsigm
+gFQAmgmqgoAAABIAAAAAKIygAAASAEAABQFBgSDAKAEAAAoAFAUBRE0BQFAUBVAI
+AAABQYAIAAABQTQFAUGAAAAgoMABIBQUQAAACgAAAGoCiAAoAAJAAAAAAI//2Q==
+
+------------UOTwRfajBSGThKuQbzU1U3
+Content-Disposition: inline; filename=LogoRoman.jpg
+Content-Type: image/jpeg; name=LogoRoman.jpg
+Content-Location: http://www.relisoft.com/Images/LogoRoman.jpg
+Content-Transfer-Encoding: Base64
+
+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
+FAlAIBB//9k=
+
+------------UOTwRfajBSGThKuQbzU1U3
+Content-Disposition: inline; filename=download.gif
+Content-Type: image/gif; name=download.gif
+Content-Location: http://www.relisoft.com/win32/Images/download.gif
+Content-Transfer-Encoding: Base64
+
+R0lGODlhIwAjALMAADNgM5mvmf///0BqQM3YzU10TWWHZVl+Wdnh2WOMY////wAA
+AAAAAAAAAAAAAAAAACH5BAEHAAoALAAAAAAjACMAAATgUMlJJQmmgF1MIFUoTkIw
+bJsgoNsQCGNssoCq0oAbV8iB17Yf4IDYKRCnn20lHBRHSCHwJnWKotKltPWk+Lba
+7bASEE+Z4gApCQ6aBzBF2Rw2qxXsNvWtIJhTbn8Xf2eEABiEdWYZiYFmGih7OIos
+kjSUkY6ZlpuchZeUkGdonaCaHZWUikukGx6mknWsPx+Tsm6zPyB5gLhBuTgDEnOw
+K6yYKHd4SsfHVRTExc5SyhJfts1bByFY2MgoVty8na004VfjveXgXVDXoFJERhMz
+hDrzZOks9/giF4wcPIAwEgEAOw==
+
+------------UOTwRfajBSGThKuQbzU1U3--

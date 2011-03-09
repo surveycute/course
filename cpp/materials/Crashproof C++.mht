@@ -1,0 +1,339 @@
+Content-Type: multipart/related; start=<op.mhtml.1299626270401.439b7b23186fa933@192.168.1.3>; boundary=----------zSsPnv5RzVzjgHUykBlych
+Content-Location: http://www.troubleshooters.com/codecorn/crashprf.htm
+Subject: =?utf-8?Q?Crashproof=20C++?=
+MIME-Version: 1.0
+
+------------zSsPnv5RzVzjgHUykBlych
+Content-Disposition: inline; filename=crashprf.htm
+Content-Type: text/html; charset=iso-8859-1; name=crashprf.htm
+Content-ID: <op.mhtml.1299626270401.439b7b23186fa933@192.168.1.3>
+Content-Location: http://www.troubleshooters.com/codecorn/crashprf.htm
+Content-Transfer-Encoding: 8bit
+
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="description" content="Debugging and Troubleshooting Source Code including MS Access, C++, Delphi, FoxPro, MFC, SQL, Visual Basic">
+   <meta name="keywords" content="debugging, troubleshooting, Source Code, Access, C++, Delphi, FoxPro, MFC, Microsoft Foundation Classes, SQL, Visual Basic">
+   <meta name="GENERATOR" content="Mozilla/4.77 [en] (X11; U; Linux 2.4.3-20mdksmp i686) [Netscape]">
+   <meta name="FORMATTER" content="Microsoft FrontPage 1.1">
+   <meta name="Author" content="Steve Litt">
+   <meta name="Description" content="Eliminate C++ memory leak, errant pointers, stack problems, GPF's and crashes">
+   <meta name="KeyWords" content="C++, memory leak, stack overflow, GPF, classes, objects, string manipulation">
+   <title>Crashproof C++</title>
+</head>
+<body text="#000000" bgcolor="#FFFFF0" link="#0000EE" vlink="#551A8B" alink="#FF0000" background="tcbk.gif" nosave>
+
+<center>
+<h2>
+<a NAME="top"></a><a href="../troubleshooters.htm">Troubleshooters.Com</a>
+Presents</h2></center>
+
+<center>
+<h1>
+Crashproof C++</h1></center>
+
+<center><a href="../cpyright.htm">Copyright (C) 1997, 2001</a> by Steve
+Litt</center>
+
+<p><br>
+<center><table BORDER CELLSPACING=0 CELLPADDING=5 WIDTH="90%" BGCOLOR="#F0FFF7" NOSAVE >
+<tr NOSAVE>
+<td NOSAVE><b><font size=-1>Steve Litt is the author of <a href="../bookstore/ttech.htm">Troubleshooting
+Techniques of the Successful Technologist</a>, <a href="../bookstore/rl.htm">Rapid
+Learning: Secret Weapon of the Successful Technologist</a>, and <a href="../bookstore/su.htm">Samba
+Unleashed</a>.</font></b></td>
+</tr>
+</table></center>
+
+<br>&nbsp;
+<center>
+<h5>
+char ychFname[13];<br>
+strcpy(ychFname, "c:\\mydir\\setup.set");<br>
+cout &lt;&lt; "What are the odds that I will see this message?\n";</h5></center>
+
+<center>
+<h5>
+[ <a href="index.htm">Code Corner</a> | <a href="../troubleshooters.htm">Troubleshooters.Com</a>
+| <a href="../email_steve_litt.htm">Email Steve Litt</a> | <a href="../cpyright.htm">Copyright
+Notice</a> ]</h5></center>
+
+<ul>
+<li>
+<a href="#const">Use <b>const</b> at every opportunity</a></li>
+
+<li>
+<a href="#manipulation">Be very careful with string manipulation</a></li>
+
+<li>
+<a href="#stack">Protect your stack</a></li>
+
+<li>
+<a href="memleak.htm">"Just Say No" to Memory Leak</a></li>
+
+<li>
+<a href="#forgetc">Forget C</a></li>
+</ul>
+Under construction would be an understatement for this page. Here is a
+bare-bones, bound to be changed, list of suggestions for taking the crash
+out of C++.
+<center><table BORDER WIDTH="60%" NOSAVE >
+<tr>
+<td>
+<center><b><font size=+1>NOTE!</font></b></center>
+
+<p>Some versons of the gcc C++ compiler that you find in some Linux distros
+cannot compile C++ code with the standard command. If no C++ compiles on
+your system, try the following command:
+<pre>g++ -lstdc++ myprogram.cpp</pre>
+The <tt>-lstdc++</tt> argument solves the problem.</td>
+</tr>
+</table></center>
+
+<h1>
+<a NAME="const"></a>Use <b>const</b> at every opportunity</h1>
+Const is your most powerful anti-crash weapon. Use it at every opportunity.
+An additional benefit is that it makes your code self-documenting. For
+instance, look at this:
+<p><tt>const char *add2strings(const char *sz1, const char *sz2);</tt>
+<p>Such a declaration guarantee's that no matter what wierd things go on
+within the function, it can't harm the application programmer's two strings
+sz1 and sz2. If any memory corruption occurs, it will be to variables within
+the function's scope. This, of course, greatly reduces side effect bugs.
+Of course, if the program has global variables, all bets are off...
+<p>Furthermore, the declaration of the return pointer as const means that
+the application programmer can't "reach inside" the function to corrupt
+its scope. For instance, if the return value is a static array of 40 characters,
+if the return wasn't static the application programmer could do this:
+<p><tt>char *pchName = add2strings("Philbinoff", "James");</tt>
+<br><tt>strcat(pchName, " is the name of the first author of the three
+books");</tt>
+<br><tt>cout &lt;&lt; "I just corrupted an internal variable of add2strings.
+";</tt>
+<br><tt>cout &lt;&lt; "Will I see this message?\n";</tt>
+<br><tt>cout &lt;&lt; "Will it crash later in the program? Who knows!\n";</tt>
+<p>Fortunately, because add2strings() returns a const pointer, you'll get
+a compiler error on this:
+<p><tt>char *pchName = add2strings("Philbinoff", "James");</tt>
+<p>Even if you declared pchName as a const char *, the moment you modified
+its contents with strcat() you'd get a compile error. The const keyword
+helps the programmer keep any errors localized, thus greatly reducing the
+likelihood of side-effect errors.
+<h1>
+<br>
+<a NAME="manipulation"></a>Be very careful with string manipulation</h1>
+My experience tells me the number one cause of "memory tromp" -- hangs,
+GPF's and other nasty and hard to find problems, is string manipulation.
+In the bad-old-days of C, this was unavoidable. Now, it shouldn't be a
+problem.
+<h2>
+<br>
+If you can, make a string class</h2>
+Have you ever used strings in other languages? Isn't it nice? The penalty
+for a mistake is not a GPF on the other side of the program that occurs
+in some sites but not others. In other languages either it works or it
+doesn't, but you know right away. You can achieve the same level of confidence
+in your strings by using a string class.
+<p>There are many implementations of string classes. Stroustrup describes
+a simple one in chapter/section 7.11 of his book, The C++ Programming Language,
+Second Edition (ISBN0-201-53992-6). Your organization may make its own.
+Whatever you use, it should have provisions to output to and input from
+streams, concatenate, search/replace, etc, WITHOUT the application programmmer
+having to resort to pointer arithmetic. Such an implementation might use
+the plus sign for concatenation.
+<h3>
+<br>
+The Poor Man's String Class</h3>
+If your organization hasn't made a string class, you can have many of the
+benefits by using C++ string streams. A string steam is a stream that writes
+to a string instead of a file. You can declare it without giving a maximum
+length, and you can keep appending strings to it. For instance:
+<pre><tt>//***** Create nametag string ******
+ostrstream ost;&nbsp;
+ost &lt;&lt; "My name is " &lt;&lt; ychFname;
+ost.put(0);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //null terminate the string&nbsp;
+makenametag(ost.str());</tt></pre>
+
+<pre><tt>//***** Also create a nametag with the last name after first *****
+ost.seekp(ost.tellp()-1);&nbsp;&nbsp;&nbsp; //get rid of the null termination
+ost &lt;&lt; " " &lt;&lt; ychLname;
+ost.put(0);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //null terminate the string
+makenametag(ost.str());</tt></pre>
+
+<h2>
+<br>
+Avoid buffer overrun</h2>
+Even if you don't use a string class, there are still ways you can intelligently
+handle zero terminated strings. The following is not one of them:
+<pre><tt>char *pchPerson = "Magdelena Alexandra de la Romero";
+char ychName[20];
+strcpy(ychName, pchPerson); //CRUNCH!
+cout &lt;&lt; ychName &lt;&lt; '\n';&nbsp;&nbsp;&nbsp; //what this will output is anybody's guess.</tt></pre>
+Now handle it intelligently with strncpy instead
+<pre><tt>char *pchPerson = "Magdelena Alexandra de la Romero";
+char ychName[20];
+strncpy(ychName, pchPerson, sizeof(ychName)-1);
+ychName[sizeof(ychName)-1] = '\0';
+cout &lt;&lt; ychName &lt;&lt; '\n';&nbsp;&nbsp;&nbsp; //Magdelena Alexandra</tt></pre>
+Here's another way that won't corrupt memory:
+<pre>char *pchPerson = "Magdelena Alexandra de la Romero";
+char pchName = new char[strlen(pchPerson) + 1];
+strcpy(pchName, pchPerson);
+cout &lt;&lt; pchName &lt;&lt; '\n'; //Magdelena Alexandra de la Romero</pre>
+
+<pre>//***** Of course, sooner or later pchName must be deleted *****
+if(pchName)
+&nbsp; {
+&nbsp; delete(pchName)
+&nbsp; pchName = 0;
+&nbsp; }</pre>
+
+<h1>
+<br>
+<a NAME="stack"></a>Protect your stack</h1>
+
+<h2>
+Local Variables Come Off the Stack</h2>
+My biggest gripe about C++ is that local variables come off the stack.
+If you have a local instance of a class with a large buffer or lots of
+small variables, and you declare it as a local variable, you could use
+up your stack and cause the program to act erratically, probably at some
+other point in the program.
+<pre>//***** This might cause a big problem *****
+class bufferhandler
+&nbsp;{
+&nbsp;void zero(){*buf='\0';};
+&nbsp;void put(const char *pch){strncpy(buf, pch, sizeof(buf)-1);};
+&nbsp;const char *get(){return(buf);};
+&nbsp;private:
+&nbsp;char buf[2000];
+&nbsp;};</pre>
+
+<pre>void myprocess(void)
+&nbsp;{
+&nbsp;bufferhandler bh1;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //2000+ bytes gone from the stack
+&nbsp;bufferhandler bh2;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Another 2000+ gone. Will there be enough?
+&nbsp;bh1.put("Steve was here");
+&nbsp;bh2.put("Sylvia was here");
+&nbsp;/* . . . */
+&nbsp;}</pre>
+One way around this (though I think it's ugly) is to use pointers:
+<pre>void myprocess(void)
+&nbsp;{
+&nbsp;bufferhandler *pbh1 = new bufferhandler; //4 bytes gone for the pointer
+&nbsp;bufferhandler *pbh2 = new bufferhandler; //Another 4 gone. Stack is cool.
+&nbsp;pbh1->put("Steve was here");
+&nbsp;pbh2->put("Fred was here");
+&nbsp;/* . . . */</pre>
+
+<pre>&nbsp;//***** be sure to delete the pointers *****
+&nbsp;if(pbh1)
+&nbsp; {
+&nbsp; delete(pbh1);
+&nbsp; pbh1=0;
+&nbsp; }
+&nbsp;if(pbh2)
+&nbsp; {
+&nbsp; delete(pbh2);
+&nbsp; pbh2=0;
+&nbsp; }
+&nbsp;}</pre>
+
+<h2>
+<br>
+Don't Make This Bonehead Mistake</h2>
+I occasionally make this goof. I forget the local variable is on the stack,
+and pass a pointer to that local variable it back as the function return.
+If the code using the returned pointer doesn't write to that pointer's
+contents, this won't crash the program. However, sometimes, depending on
+the memory map, the returned value will magically change as something else
+on the stack overwrites the now out of scope variable.
+<p>The last time I did this (1994), it created a bug that occurred once
+every few days :-(. It took myself and two other people a week (off and
+on) to narrow it to returning a local string. Now I'm EXTREMELY careful
+not to make this goof.
+<pre>//***** BONEHEAD MISTAKE *****
+char *addstrings(const char *sz1, const char *sz2)
+&nbsp;{
+&nbsp;char ychDst[100];&nbsp;&nbsp;&nbsp; //life would be easier if I had made this static</pre>
+
+<pre>&nbsp;strncpy(ychDst, sz1, sizeof(ychDst) - 1);
+&nbsp;strncpy(ychDst + n1, sz2, sizeof(ychDst) - strlen(sz1) - 1);
+&nbsp;ychDst[sizeof(ychDst) - 1] = '\0';
+&nbsp;return(ychDst];&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //BONEHEAD
+&nbsp;}</pre>
+
+<h1>
+<br>
+"Just Say No" to Memory Leak</h1>
+This subject rates <a href="memleak.htm">a page of its own.</a>
+<h1>
+<br>
+<a NAME="forgetc"></a>Forget C</h1>
+Forget you ever knew printf(). Use cout &lt;&lt;. Of course, scanf() was
+flirting with disaster even in the rough and ready C days. Use cin >>,
+or make your own input routines or classes. What about that wonderful sprintf()?
+Instead of this:
+<p><tt>#include &lt;iostream.h></tt>
+<br><tt>#include &lt;stdio.h></tt>
+<br><tt>/* . . . */</tt>
+<br><tt>char ychString[100];</tt>
+<br><tt>sprintf(ychString, "%s, %s %c", ychLname, ychFname, *ychMname);</tt>
+<br><tt>cout &lt;&lt; ychString &lt;&lt; '\n';</tt>
+<br>&nbsp;
+<p>Try This:
+<p><tt>#include &lt;iostream.h></tt>
+<br><tt>#include &lt;strstream.h></tt>
+<br><tt>/* . . . */</tt>
+<br><tt>ostrstream ost;</tt>
+<br><tt>ost &lt;&lt; ychLname &lt;&lt; ", " &lt;&lt; ychFname &lt;&lt;
+" " &lt;&lt; *ychMname;</tt>
+<br><tt>ost.put(0); //null terminate the string cout</tt>
+<br><tt>cout &lt;&lt; ost.str() &lt;&lt; '\n';</tt>
+<p>
+<hr>
+<p>See also: [ <a href="index.htm">Code Corner</a> | <a href="../troubleshooters.htm">Troubleshooters.Com</a>
+| <a href="../email_steve_litt.htm">Email Steve Litt</a> | <a href="../cpyright.htm">Copyright
+Notice</a> ]
+<p><a href="../cpyright.htm#top"><img SRC="biglcpyr.gif" NOSAVE BORDER=0 height=30 width=30></a><a href="../cpyright.htm#top">Copyright
+(C)1997 by Steve Litt.</a> -- <a href="../cpyright.htm#top">Legal</a>
+<br>&nbsp;
+<br>&nbsp;
+</body>
+</html>
+
+------------zSsPnv5RzVzjgHUykBlych
+Content-Disposition: inline; filename=tcbk.gif
+Content-Type: image/gif; name=tcbk.gif
+Content-Location: http://www.troubleshooters.com/codecorn/tcbk.gif
+Content-Transfer-Encoding: Base64
+
+R0lGODlhpgCaALMAAAAAAP//2P//0L+/AAAAv78AvwC/v8DAwICAgP8AAAD/AP//
+9///8Pj46PDw4P///ywAAAAApgCaAAAE/pDJSau9OOvNu/9gKI5kaZ5oqq5s675w
+LM90bd94ru987//AoHBILBqPyKRyyWw6n9BorEGtWq/Yq3R7yTq+2K/Dyy0zrmLH
+Ga2WjKtfM9can4QtcPmcWrej8Xx6W3xtfn+AhYJPDX2GcIl+kIpLgYB0GIySk0mZ
+XYd4mptJmmQYoaKLbKira5esqHevm2GnsoOftoKxubq4vGW0v3q7wsC+xVGlyLd0
+tctKxM9Q0dJNytVOwdiprtvZx95I1+Gc1OREWZXn6OlY60Rp8fLv9PX29/j5+vv8
+/f7/AAMKHEiwoMGDCBMqXOiiXR6GKhyqg3hCIiOKKSw6w9hBI8eKyhI3ftTgcSSJ
+kiZFoEwJYiVLDy5fcogpU4O8mzVz6tzJs6fPn0CDCh1KtKjRo0iTKl3KVJZDP0LZ
+iEkncqTUCm+66byK6dFObSQnygQb9mJOshvEphyX1uxLL1UldBqrqmXchGw73D0I
+d2leolT9ojX6d2hgpX0Rmyta2PBiwI8dg2McWfJDwVqTZglB5etkT43oWoE51/Po
+sqG3urMkJqhFr0PBUG199Gbqprhz697Nu7fv38CDCx9OvLjx48iTK1/OvLnz59Cl
+RAAAOw==
+
+------------zSsPnv5RzVzjgHUykBlych
+Content-Disposition: inline; filename=biglcpyr.gif
+Content-Type: image/gif; name=biglcpyr.gif
+Content-Location: http://www.troubleshooters.com/codecorn/biglcpyr.gif
+Content-Transfer-Encoding: Base64
+
+R0lGODlhHgAeALMAAAAAAP//8AC//+D//wAAv78AvwC/v8DAwICAgP8AAAD/AP//
+AAAA//8A/wD//////yH5BAEAAA8ALAAAAAAeAB4AAASkMMhJwxAsMzGq/5Ymjh3o
+jehoUmmrrUHqzHRqonReq+eo/w5UZSQAAjGiycCnIzidOpKESXtaobtXTNO8WqOv
+JTf3JJezjIumWMWadciNqEsw/lp0OxhnruvRc31/gGNtfm97chlshn2HDnECWxl0
+Xo9BGh2BjleJU5ucd0mfhYOQIiWTi6anoxN8ekI9RD9xrrMuLTC5ujAhvBmpvhJq
+RMIeEQAAOw==
+
+------------zSsPnv5RzVzjgHUykBlych--

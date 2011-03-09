@@ -1,0 +1,141 @@
+Content-Type: multipart/related; start=<op.mhtml.1299635279368.fb50ed22406efcee@192.168.1.3>; boundary=----------8HRHlXcKAuCHMYjNfF9xQA
+Content-Location: http://www.glenmccl.com/perf_007.htm
+Subject: =?utf-8?Q?Stream=20I/O=20Output?=
+MIME-Version: 1.0
+
+------------8HRHlXcKAuCHMYjNfF9xQA
+Content-Disposition: inline; filename=perf_007.htm
+Content-Type: text/html; name=perf_007.htm
+Content-ID: <op.mhtml.1299635279368.fb50ed22406efcee@192.168.1.3>
+Content-Location: http://www.glenmccl.com/perf_007.htm
+Content-Transfer-Encoding: 8bit
+
+<html>
+<head>
+<title>Stream I/O Output</title>
+</head>
+<body background="./bg.jpg" bgcolor="#ffffff" text="#0000df" link="#ff0000" vlink="#000000">
+<h1>Stream I/O Output</h1>
+<p>
+In issue #006 we talked about stream I/O, and an example like this was
+shown:
+<br>
+<pre>
+        cout &lt;&lt; x &lt;&lt; "\n";
+</pre>
+A couple of people wrote.  One said that:<br>
+<br>
+<pre>
+        cout &lt;&lt; x &lt;&lt; endl;
+</pre>
+<p>
+was preferable, while another said:
+<br>
+<pre>
+        cout &lt;&lt; x &lt;&lt; '\n';
+</pre>
+<p>
+would be a better choice on performance grounds, that is, output a
+single character instead of a C string containing a single character.
+<br>
+<p>
+Using one popular C++ compiler (Borland C++ 4.52), and outputting 100K
+lines using these three methods, the running times in seconds are:
+<br>
+<pre>
+        "\n"            1.9
+
+        '\n'            1.3
+
+        endl            13.2
+</pre>
+<p>
+Outputting a single character is a little simpler than outputting a
+string of characters, so it's a bit faster.
+<br>
+<p>
+Why is endl much slower?  It turns out that it has different
+semantics.  Besides adding a newline character like the other two
+forms do, it also flushes the output buffer.  On a UNIX-like system,
+this means that ultimately a write() system call is done for each
+line, an expensive operation.  Normally, output directed to a file is
+buffered in chunks of size 512 or 1024 or similar.
+<br>
+<p>
+The Borland compiler has a #define called _BIG_INLINE_ in iostream.h
+that was enabled to do more inlining and achieve the times listed
+here.
+<br>
+<p>
+Does this sort of consideration matter very much?  Most of the time,
+no.  If you're doing interactive I/O, it is best to write in the style
+that is plainest to you and others.  If, however, you're writing
+millions of characters to files, then you ought to pay attention to an
+issue like this.
+<br>
+<p>
+Note also that there's no guarantee that performance characteristics
+of stream I/O operations will be uniform across different compilers.
+It's probably true in most cases that outputting a single character is
+cheaper than outputting a C string containing a single character, but
+it doesn't have to be that way.
+<br>
+<br>
+<a href="./brochure.htm">Our Services</a><br><br>
+<a href="./index.htm">Back to Home Page</a>
+</body>
+</html>
+
+------------8HRHlXcKAuCHMYjNfF9xQA
+Content-Disposition: inline; filename=bg.jpg
+Content-Type: image/jpeg; name=bg.jpg
+Content-Location: http://www.glenmccl.com/bg.jpg
+Content-Transfer-Encoding: Base64
+
+/9j/4AAQSkZJRgABAQEAZABkAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEj
+JR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/wAALCAH0
+ASwBAREA/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgED
+AwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2Jy
+ggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1
+dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJ
+ytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oACAEBAAA/APQKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKK//Z
+
+------------8HRHlXcKAuCHMYjNfF9xQA--

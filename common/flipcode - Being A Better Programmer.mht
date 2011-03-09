@@ -1,0 +1,1113 @@
+Content-Type: multipart/related; start=<op.mhtml.1299624952016.a91015541508a126@192.168.1.3>; boundary=----------hvvMwFXHvIPHo1tdxtQgfV
+Content-Location: http://www.flipcode.com/archives/Being_A_Better_Programmer.shtml
+Subject: =?utf-8?Q?flipcode=20-=20Being=20A=20Better=20Programmer?=
+MIME-Version: 1.0
+
+------------hvvMwFXHvIPHo1tdxtQgfV
+Content-Disposition: inline; filename=Being_A_Better_Programmer.shtml
+Content-Type: text/html; charset=UTF-8; name=Being_A_Better_Programmer.shtml
+Content-ID: <op.mhtml.1299624952016.a91015541508a126@192.168.1.3>
+Content-Location: http://www.flipcode.com/archives/Being_A_Better_Programmer.shtml
+Content-Transfer-Encoding: Quoted-Printable
+
+<html>
+<head><title>flipcode - Being A Better Programmer</title>
+<style type=3D"text/css">
+
+
+a.menulink:link    {color: #b9ffd0; }
+a.menulink:visited {color: #b9ffd0; }
+a.menulink:active  {color: #b9ffd0; }
+
+a.menulinkempty:link    {color: #b9ffd0; }
+a.menulinkempty:visited {color: #b9ffd0; }
+a.menulinkempty:active  {color: #b9ffd0; }
+a.menulinkempty:link, a.menulinkempty:visited, a.menulinkempty:active {t=
+ext-decoration: none}
+
+a.orangelink:link    { color:#FFAB04; }
+a.orangelink:visited { color:#FFAB04; }
+a.orangelink:active  { color:#FFAB04; }
+
+a.palegreen:link    {color: #b9ffd0; }
+a.palegreen:visited {color: #b9ffd0; }
+a.palegreen:active  {color: #b9ffd0; }
+
+a.bluelink:link    { color:#03F0FF; }
+a.bluelink:visited { color:#03F0FF; }
+a.bluelink:active  { color:#03F0FF; }
+
+a.softyellow:link     { color:#FFFCA9; }
+a.softyellow:visited  { color:#FFFCA9; }
+a.softyellow:active   { color:#FFFCA9; }
+
+a.nounderline:link        {color: #FFFCA9; }
+a.nounderline:visited     {color: #FFFCA9; }
+a.nounderline:active      {color: #FFFCA9; }
+a.nounderline:link, a.nounderline:visited, a.nounderline:active {text-de=
+coration: none}
+
+<!--
+#code_comment { font-family:Courier,Courier New; font-size:12px; color:#=
+007f00; }
+#code_text    { font-family:Courier,Courier New; font-size:12px; color:#=
+000000; }
+#code_keyword { font-family:Courier,Courier New; font-size:12px; color:#=
+0000FF; }
+-->
+
+</style>
+</head>
+<body bgcolor=3D"#000000" text=3D"#ffffff" link=3D"#FFFCA9" vlink=3D"#FF=
+FCA9" alink=3D"#FFFCA9">
+<center>
+<script type=3D"text/javascript"><!--
+google_ad_client =3D "pub-3512250068614659";
+//728x90, created 1/8/08
+google_ad_slot =3D "8394943283";
+google_ad_width =3D 728;
+google_ad_height =3D 90;
+//--></script>
+<script type=3D"text/javascript"
+src=3D"http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+<br>
+
+<br><center><table cellspacing=3D0 cellpadding=3D2 border=3D0 width=3D"8=
+0%"><tr><td background=3D"comments_bar2.jpg" bgcolor=3D"#333333" width=3D=
+"100" valign=3D"center"><font size=3D1>&nbsp;</font></td></tr></table></=
+center><br>
+<center>
+<table width=3D"80%" cellspacing=3D0 cellpadding=3D0 border=3D0>
+<tr>
+<td>
+<font size=3D3 face=3D"Verdana, Helvetica" color=3D"#ffffff"><b>Being A =
+Better Programmer</b><br>
+<font size=3D2>by <!--GO AWAY SPAM!!!--><script language=3D"javascript">=
+document.write('<a href=3D\"mailto:' +  '' + '' + ''    =
+
++''    =
+
++''    =
+
++''    =
+
++''    =
+
++''    =
+
++''    =
+
++ 'danny_burbol' + ''    =
+
++''    =
+
++''    =
+
++''    =
+
++''    =
+
++''    =
+
++''    =
+
++ '@' + 'hotmail' +  '.' + ''    =
+
++''    =
+
++''    =
+
++''    =
+
++''    =
+
++ 'com\">' + 'Danny Burbol' + '</a>')</script> (06 August 2001)</font>
+</font>
+<br><br><br>
+</td>
+<td align=3D"right" valign=3D"top"><font face=3D"Verdana, Helvetica" siz=
+e=3D2><a href=3D"articles.shtml">Return to The Archives</a>
+</td>
+</tr></table>
+</center><center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D3 color=3D"#ffffff" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman"><b>
+
+Introduction
+<font size=3D1><br><img src=3D"line_grey.png"><br><br></font></b></font>=
+</td></tr></table>
+</center>
+<center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D2 color=3D"#FFE291" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman">
+
+I always had this fantasy that game programmers were the cream of the cr=
+op. =
+
+Anyone can write a word processor or a Visual Basic application, and any=
+one can
+hack a save file, but game programmers have to push the limits of the ma=
+chine! =
+
+They have to get every aspect of an environment on the screen and someho=
+w not
+have a frame rate hit.  I always thought game programmers were the cream=
+ of the
+crop, until I actually joined the industry.  The harsh reality hit me al=
+most
+instantly and I began to think -even say aloud, <i>I'm amazed our game e=
+ven runs. </i><br><br>Traditionally, game programmers worked in their ba=
+sement or garage, piecing
+together assembly to put pixels on the screen.  Back when the programmer=
+ was the
+artist because the resolution was so bad actually paying an artist would=
+ be
+ludicrous.  However a lot has changed since then, games aren't made by t=
+wo
+buddies in a garage, they are made by teams of people over many months o=
+f
+development. <br><br>In this day and age, we are not individuals who wor=
+k on the entire project.  We
+are a piece of a living breathing company that must work together to ach=
+ieve
+success.  Now there are Game Developer Conferences ( <a href=3D"http://w=
+ww.gdconf.com/">http://www.gdconf.com/</a> ),
+Online Tutorials ( <a href=3D"http://www.flipcode.com/">http://www.flipc=
+ode.com/</a> , <a href=3D"http://www.gamedev.net/">http://www.gamedev.ne=
+t/</a> ),
+Articles ( <a href=3D"http://www.gamasutra.com/">http://www.gamasutra.co=
+m/</a> ), Message Boards ( <a href=3D"http://www.thedc.com/">http://www.=
+thedc.com/</a> ), Magazines ( <a href=3D"http://www.gdmag.com/">http://w=
+ww.gdmag.com/</a> ), and Books (
+<a href=3D"http://www.satori.org/gamegems/">http://www.satori.org/gamege=
+ms/</a> ) that allow us to share new ideas and
+techniques.  Yet somehow, with all this teamwork, and all these wonderfu=
+l new
+resources at our disposal, we still manage to code ourselves into corner=
+s.<br><br>If there was an approach to programming that dodged all obstac=
+les and bugs while
+somehow avoiding backtracking or rewriting code, then I'm sure we'd all =
+be using
+that technique.  Since there is not a perfect way to program, all we can=
+ do is
+keep our eyes and ears open, observe the programmers around us and see w=
+hat they
+are doing right and wrong.  <br><br>Here are a few basic programming tec=
+hniques that I've observed first hand which
+greatly improved my own programming habits.  The most important thing to=
+
+remember when reading them is that although some of them may sound simpl=
+e and
+elementary, knowing a technique is worthless unless you practice it.  Ma=
+ny
+programmers effortlessly shrug off things like error checking and commen=
+ting
+conventions as a waste of time.  So I'd just like to point out that thes=
+e
+suggestions are intended to improve the amount of time and effort needed=
+ to
+complete tasks.   After practicing only a few of these programming techn=
+iques, I
+have noticed that my own code writes itself much faster and more efficie=
+ntly
+than it ever did before.</font></td></tr></table>
+</center><br><br><center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D3 color=3D"#ffffff" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman"><b>
+
+Plan For The Worst
+<font size=3D1><br><img src=3D"line_grey.png"><br><br></font></b></font>=
+</td></tr></table>
+</center>
+<center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D2 color=3D"#FFE291" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman">
+
+Okay, let's just assume that you are a super human programmer, and you'r=
+e code is never buggy and never breaks. Let me be the first to congratul=
+ate you on writing the perfect code. However, what will happen when your=
+ perfect code is not given perfect data. Will the code assume a pointer =
+is valid? Will it try to use a sound file as a texture map?<br><br>As ba=
+sic as it may sound, code should not assume anything. The C language has=
+ a brilliant standard function called "assert," which was designed to tr=
+ap errors. Every time your code is given outside data, get in the habit =
+of making sure that data is what you expected it to be. If it's not, ass=
+ert AND print a message that explains exactly what is wrong and why the =
+program asserted.<br><br>It is important to give a message, this way any=
+one can read it and instantly say to themselves "oops, I see the mistake=
+". Ninety percent of the time that's what a bug is, a simple mistake. So=
+ instead of letting it cripple your game, and waste everyone's time as p=
+eople try to trace a bug backward in an effort to pinpoint it's cause, w=
+hy not just tell them the moment something goes wrong. Nine times out of=
+ ten it can be painlessly fixed. The other ten percent of the time the t=
+eam will be made aware of a major coding issue long before it becomes an=
+ unfixable problem that everyone will just have to work around.<br><br>R=
+egardless of what language you're working in. The first subroutine you s=
+hould ever write should be a simple error printing function. Make it wor=
+k like the language's basic print function, so it's simple and painless =
+for other programmers to remember and use. Then when the program asserts=
+ in a case that is not obvious from the error message, you can place a b=
+reak point inside the error printing function and the program will break=
+ exactly when the problem occurs. This will save time on locating the fi=
+rst occurrence of the problem while making it simple to debug.</font></t=
+d></tr></table>
+</center><br><br><center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D3 color=3D"#ffffff" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman"><b>
+
+Expect To Forget
+<font size=3D1><br><img src=3D"line_grey.png"><br><br></font></b></font>=
+</td></tr></table>
+</center>
+<center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D2 color=3D"#FFE291" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman">
+
+Don't expect to remember what your code is doing. Projects these days la=
+st for months and even years. You will not remember what you programmed =
+at the beginning of the project. In fact, it's probably the only real gu=
+arantee you'll ever get. The sky is blue (if it's not raining, and not d=
+usk, or night time), the grass is green (if it's watered regularly and i=
+t's not winter ), and you will always forget the details of a bunch of t=
+ext you wrote months ago (always).<br><br>So comment everything as if yo=
+u're teaching it to someone who doesn't know it at all --someone like yo=
+urself six months from now. Think about a team member telling you there =
+is a bug somewhere in your old code, and you have to revisit it and fix =
+it. If you can pop open your file and understand what you were doing, wi=
+thout having to care about variables or parameters. Finding and fixing t=
+he bug will be quick and almost painless.<br><br>The technique is simple=
+, when ever you use parentheses, have a comment to read what the line is=
+ doing. Just write it as if you were reading the line out loud. If someo=
+ne else read it, they'd speak it letter for letter not knowing what the =
+variables and crazy calculations were doing. If you read it, you would s=
+peak it after your mind converts all those calculation to what they real=
+ly mean. For example, if a line of code that should only be executed if =
+"(frmp>10)", "(plist[i].bdown & x03)", and "(plist[i].y > pond.y)". Why =
+not have a comment that says "if( ten frames have passed AND button 3 is=
+ still down AND player not underwater )".<br><br>When you comment this w=
+ay, you will benefit twice. First, anyone will be able to read exactly w=
+hat the function is supposed to be doing without even knowing how to pro=
+gram in that particular language. This makes checking logic much easier.=
+ Second, if the logic is sound, it's easy to spot errors because a line =
+of code won't do what it says it should be doing. In the previous exampl=
+e, if the actual code was running when the player was underwater, it wou=
+ld be easy to spot what part of the code the bug was in because the comm=
+ent tells us "AND player not underwater." If the line wasn't commented, =
+you may look at that if statement a hundred times thinking it was right =
+before it hits you, "wait a minute, is that greater than, or less than p=
+ond.y?"<br><br>Comments have to be one of the most powerful tools a prog=
+rammer has. They are universal because all programming languages have a =
+way to write comments. It's a shame that being simple and common also ma=
+kes them a prime target to be taken for granted.<br><br>This actually le=
+ads into our next point.</font></td></tr></table>
+</center><br><br><center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D3 color=3D"#ffffff" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman"><b>
+
+Documentation
+<font size=3D1><br><img src=3D"line_grey.png"><br><br></font></b></font>=
+</td></tr></table>
+</center>
+<center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D2 color=3D"#FFE291" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman">
+
+At one time I wrote documentation. I remember writing a few dozen pages =
+on various systems and modules. The documentation itself was sound, but =
+ultimately counter-productive. No one, including myself, ever used it. M=
+any people would forget it even existed, and if they came to me and aske=
+d about the system I could explain to them exactly what they needed to k=
+now in a fraction of the time it would have taken for them to read the d=
+ocumentation. Not to mention, there's a chance someone might read this s=
+o-called "documentation" from start to finish and get absolutely no insi=
+ght on what they wanted to know. The time it took me to write those page=
+s of text was completely wasted. Worse yet, every time we changed one of=
+ those various systems or modules, we had to change the document as well=
+. So I effectively doubled our work load.<br><br>However, the solution i=
+s most definitely NOT to skip documentation altogether. Instead, the sol=
+ution is to make your code files the documentation. Before every functio=
+n, make a comment block that explains what it does, how to use it, and w=
+hat to watch out for. If it's a complex piece of code, explain the appro=
+ach your about to take to the reader (maybe even yourself six months fro=
+m now) so they will understand what they are about to see before they ju=
+mp into the actual code. If things need to be used in a specific order, =
+say so. If a function only works in one obscure case tell people right t=
+here -as plain as day.<br><br>Now, instead of having to open a separate =
+document and search for what you need to know, the documentation will be=
+ right there in the code. The things you'd normally have to make an effo=
+rt to learn will be exactly where you need them, when you need them, and=
+ everyone will be saved the time of looking for them. Other programmers =
+will be more likely to use your code correctly if they find that you've =
+laid out all of the issues for them to see.<br><br>Also, unlike having a=
+ separate document, other programmers will unconsciously proof read your=
+ self documenting code. When anyone approaches you because they do not u=
+nderstand a piece of code, you can safely conclude that the documenting =
+comments in that area are lacking. This is something you probably would =
+never have been aware of if they hadn't just unintentionally told you. S=
+o while you're clarifying what they need to know, comment that piece of =
+code further. Now the next person won't have to ask you.</font></td></tr=
+></table>
+</center><br><br><center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D3 color=3D"#ffffff" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman"><b>
+
+Human Error and Monkey Business
+<font size=3D1><br><img src=3D"line_grey.png"><br><br></font></b></font>=
+</td></tr></table>
+</center>
+<center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D2 color=3D"#FFE291" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman">
+
+I read an article on <a href=3D"http://www.gamasutra.com/">Gamasutra</a>=
+ entitled "Postmortem: Angel Studios' Smuggler's Run" (by Charles Euback=
+s) and it introduced me to a concept that was so simple, yet so incredib=
+ly effective -maybe even brilliant. In this postmortem, they gave an ent=
+ire "What Went Right" point to something they called a "buildmonkey." Th=
+e buildmonkey was a tool that automatically compiled the entire game eve=
+ry morning at 3:00 am and logged the process. This way, at the start of =
+each day, the programmers would have a one hundred percent freshly compi=
+led version of their project. If for any reason the project didn't compi=
+le, they would have a log with errors to tell what went wrong. It even s=
+ent emails to key people to inform them if the built was successful or i=
+f it had problems.<br><br>Although I'm not proposing everyone go out and=
+ code a buildmonkey, I am pointing out the time saved in writing a tool =
+that's purpose is to perform a repetitive, mundane task and prevent/catc=
+h human error.<br><br>I've already touched on using error checking devic=
+es in your function calls, and how much time is saved when mistakes are =
+caught and corrected as they are made. Now I'd like to point out the exa=
+ct same advantage in data outside the code base itself. Most games these=
+ days rely heavily on scripts, ini files, and other data sources to make=
+ the game run as desired. However many times, while in development, a sc=
+ript writer will make a mistake, or an exporter will dump a command inco=
+rrectly.<br><br>Instead of waiting until this data is actually loaded in=
+to the game to see if it will work. Why not have a simple DOS program th=
+at could check the syntax of such files on the designer and artist's end=
+. This program could flag mistakes before the data is ever loaded into t=
+he game and would be a huge time saver.<br><br>Now I'm sure many of you =
+probably just thought to yourselves "that would be great, but nobody wou=
+ld actually use it." Well, it's simple. The next time someone comes to y=
+our desk asking you why the game is crashing, you're first response can =
+always be "did you run the syntax monkey?"<br><br>Another great example =
+of a monkey would be a function that prints out the latest known script =
+commands every time the game is run (on a build flag of course). This wo=
+uld also eliminate the need to constantly update documentation, and answ=
+er questions like "can you tell me again, what was the syntax for an AIP=
+oint?"<br><br>Humans make mistakes, some more than others. However there=
+ are these nifty new fangled things call "computers" that are made to do=
+ mind numbing, mundane tasks over and over again. It's about time we sta=
+rt putting them to good use, and save ourselves some time and effort.</f=
+ont></td></tr></table>
+</center><br><br><center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D3 color=3D"#ffffff" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman"><b>
+
+An Engine Has Belts And Rods
+<font size=3D1><br><img src=3D"line_grey.png"><br><br></font></b></font>=
+</td></tr></table>
+</center>
+<center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D2 color=3D"#FFE291" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman">
+
+The best metaphor for a game engine that I've ever heard came from one o=
+f my coworkers, Jerry, someone who isn't even a programmer. He actually =
+posed the question to me, "What is an engine? Why make one? What's the b=
+ig deal?" I did my best to explain, and when I was done he paraphrased t=
+o say that a game engine is a lot like a car's engine. Without it, the c=
+ar could never move, but at the same time, a running engine without the =
+chassis (tires, etc.) was just as useless.<br><br>I thought this was a g=
+ood example and listened as he continued to clarify. Jerry explained tha=
+t when a piece of your car's engine breaks, you can replace it. If a bel=
+t breaks, you insert a new one and tweak the tension to optimal performa=
+nce. At the same time, however, that engine has a transmission, a block,=
+ and rods. They are vital to the engine's functionality, but if you thro=
+w a rod, you can't just pop in a new one without disassembling half the =
+engine.<br><br>Then he concluded that if you were going to build a game =
+engine from the ground up, you'd want to build it with a lot of belts an=
+d no rods, so you could constantly swap parts out and tune performance w=
+ithout bringing the entire engine to a screeching halt.<br><br>Brilliant=
+. Not knowing a thing about programming, he hit the nail right on the he=
+ad. One of the biggest things that separates good programmers from great=
+ programmers is writing code that will fit in the engine like a belt, ra=
+ther than a rod. The concept of writing flexible, reusable, and replacea=
+ble code can actually be quite simple.<br><br>The key to writing general=
+ case code is to not let you're sub-routines become more than a screen l=
+ong. The way to do this is NOT to write as much compact, cryptic crap as=
+ you can squeeze on one line and NOT to use global variables. The soluti=
+on is to break down everything you can into tight, reusable functions th=
+at either perform one task, or call the necessary function to complete o=
+ne task.<br><br>For example: VectorAdd() would contain a small piece of =
+code to add two vectors together, while SceneDisplay() would contain cal=
+ls to PrepRender(), Render3dObjects(), RenderHud(), RenderDebugText(), a=
+nd SwapBuffers(). However both functions would only be a few lines long.=
+<br><br>As you break the code into smaller pieces, you will start spotti=
+ng functions that can be reused in other places without making much effo=
+rt at all. In the previous example, RenderHud() and RenderDebugText() wi=
+ll probably share some core function calls since they both draw objects =
+on top of everything else on the screen.<br><br>Many believe that there =
+must be some grand design before you can make general case code. When wr=
+iting modules and systems, design is an important step, but that is not =
+the point I'm making. I'm saying, make it a habit to write everything yo=
+u program as general and reusable as possible. Then, when you start desi=
+gning new systems and modules, you will have much of the functionality a=
+lready available, and you need only call those functions in an organized=
+ manner, instead of reinventing the wheel a couple hundred more times.</=
+font></td></tr></table>
+</center><br><br><center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D3 color=3D"#ffffff" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman"><b>
+
+A Shiny New Hammer
+<font size=3D1><br><img src=3D"line_grey.png"><br><br></font></b></font>=
+</td></tr></table>
+</center>
+<center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D2 color=3D"#FFE291" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman">
+
+As I stated in the beginning of this article, there is no single approac=
+h to programming that will handle the many hurdles you'll be put up agai=
+nst. Many consider programming a kind of black art form all it's own. I =
+like to think of us as being more like carpenters than wizards.<br><br>C=
+arpenters build structures from raw materials using the knowledge they'v=
+e gained through first and second hand experience. Early in their career=
+, maybe they built a deck in their own backyard with a hammer, nails, sa=
+w, and timber. As they gained experience, doing more advanced things, li=
+ke adding an extra room to a house, became more feasible. Before long ma=
+ny tasks like setting cement, constructing an internal frame, laying ins=
+ulation, putting up sheetrock, and shingling the roof all become second =
+nature to them. When a carpenter reaches that point, perhaps they will g=
+et the chance to actually build an entire house with a team of people su=
+ch as plumbers, electricians, and so on.<br><br>These carpenters are val=
+ued not because they have a lot of tools, but because they know how to u=
+se them --and more importantly, when to use them. Give a carpenter a ham=
+mer and ask him to hang a door on it's hinges and he will ask you for a =
+drill and a screw driver. Give an ordinary man a hammer and he might ass=
+ume the door was meant to be hung with nails. Give a child a shiny new h=
+ammer and suddenly everything becomes a nail, just begging to be hit.<br=
+><br>It's important to learn patience and good judgment when approaching=
+ a problem instead of charging at it and unconditionally using our lates=
+t technique. Just because you finally read a quaternion tutorial, doesn'=
+t mean their useful in all cases. Use your tools and techniques responsi=
+bly and if you don't have the correct knowledge to make the call on what=
+ would be the best approach, admit it.</font></td></tr></table>
+</center><br><br><center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D3 color=3D"#ffffff" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman"><b>
+
+Admit Your Own Limits
+<font size=3D1><br><img src=3D"line_grey.png"><br><br></font></b></font>=
+</td></tr></table>
+</center>
+<center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D2 color=3D"#FFE291" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman">
+
+We're all only human, and although it would be nice to know everything, =
+we don't. The danger in situations where we have to complete an unfamili=
+ar task is not our limited experience or knowledge, it's how we deal wit=
+h it. It's very tempting to accept a task you know nothing about and not=
+ tell anyone it may be problematic because you don't want to loose value=
+ in management's eyes. In cases like this, some people follow the reason=
+ing that it would be better not to say anything than to have someone thi=
+nk you might not know what you're doing. Sometimes this approach may wor=
+k. You might keep your mouth shut, work some extra hours, read a book an=
+d a few on-line articles and get the task completed on time.<br><br>More=
+ often than not, you keep your mouth shut, you work lots of extra hours,=
+ read anything you can find and the task still gets completed a week to =
+a month late. You did it, but at what cost?<br><br>If you don't have the=
+ correct knowledge for the task at hand, get over yourself and admit it.=
+ Don't hide or lie about it. If you express that you are unfamiliar with=
+ or simply don't know how to solve a problem, then something can be done=
+ about it. A phrase as simple as "I've done <insert related task>, but t=
+his is fairly new to me. What direction were you envisioning this code b=
+eing written with? Is there something else in the project that is coded =
+with the same general approach, something I could reference as an exampl=
+e?" You're not saying, "I can't do this. I'm Worthless -just fire me now=
+!" You're saying "I may not know this, but I want to. I will do what I c=
+an to make this work right the first time." In many cases other programm=
+ers will be happy to share some knowledge and experience with you. In a =
+way, it's flattering to have someone ask for your advice. Just remember,=
+ it's only flattering once or twice so listen to what they have to say t=
+o you, and everything will be fine. Sit there with a pad and pen so you =
+can write it all down if you have to. As long as you don't come back rep=
+eatedly and say "what was that again?" That's where you will push them a=
+cross the line between feeling flattered and being annoyed.<br><br>Regar=
+dless, don't be afraid to say something. When you do, someone can teach =
+you; you will be allocated time to learn the correct techniques; or some=
+one else can do it. The important thing is not to let the project suffer=
+, and not admitting your own limits is the best way to do just that. No =
+one will know you can't handle it if you don't tell them, and it's bette=
+r to let them know before hand, than when you're in way over you're head=
+.</font></td></tr></table>
+</center><br><br><center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D3 color=3D"#ffffff" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman"><b>
+
+Fix It, Don't Hack It
+<font size=3D1><br><img src=3D"line_grey.png"><br><br></font></b></font>=
+</td></tr></table>
+</center>
+<center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D2 color=3D"#FFE291" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman">
+
+Far too often prototype code is written and it ends up becoming game cod=
+e. Many times people (management) will walk by and see something on the =
+screen and assume it's done when it's not. So that programmer gets push =
+onto another task since they are "done," and a hack gets left behind to =
+plague the project some day down the line. Don't let this happen to you.=
+ Prototype code is fine so long as it stays prototype code. Once you und=
+erstand the process, take the time to write code that will work right, i=
+nstead of only working "for now."<br><br>Further more, if there is code =
+that is causing a problem, don't hack over it. Fix it. If you can add a =
+line of code that will hack it into a state that works, why not spend an=
+other five minutes to understand why that works. After that you can make=
+ it work in all cases. Do it right and you won't have to deal with it ag=
+ain. Then there will be one less thing to cause problems in the future.<=
+/font></td></tr></table>
+</center><br><br><center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D3 color=3D"#ffffff" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman"><b>
+
+Step Softly and Carry Nothing
+<font size=3D1><br><img src=3D"line_grey.png"><br><br></font></b></font>=
+</td></tr></table>
+</center>
+<center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D2 color=3D"#FFE291" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman">
+
+Many of us also get caught in the trap of "figuring things out for ourse=
+lves." Some times we will see nice code that we would like to apply to a=
+nother aspect of our programs, however we need to understand what exactl=
+y it's doing to use it properly. Prime examples of this are online tutor=
+ials.<br><br>When I stumbled onto Jeff Molofee's <a href=3D"http://nehe.=
+gamedev.net/">OpenGL tutorials</a>, I thought they were heaven sent. Wit=
+h his help, I was able to jumpstart my use of OpenGL, since those first =
+couple of steps are the toughest. Excited about the API, I set out to wr=
+ite "my 3d engine" (as I'm sure many before me have). Before long, I fou=
+nd that I was relying on Jeff's code as a crutch rather than for what it=
+ was intended to be used as. I'd spend countless hours fiddling with enu=
+m values and commands that I really didn't know, then looking back to th=
+e tutorials to see how he was doing it. Finally it occurred to me just h=
+ow much time I was wasting because I had to guess what things were doing=
+, rather than just knowing. Jeff's tutorials were great, but trying to m=
+imic what he did shouldn't be our goal. Now I have an OpenGL book, and i=
+nstead of guessing at the details of the API, I began to understand them=
+, and in turn I've come to appreciate Jeff's code in a whole new light.<=
+br><br>Choose your stepping stones wisely, but remember they exist only =
+to get you where you're going and will only slow you down if you try to =
+pick them up and carry them with you along the way. It also helps to lea=
+ve a few stepping stones behind for those to come. Others will benefit a=
+s you have, but above all, you'd be amazed just how much you yourself wi=
+ll learn in the process of trying to teach others.</font></td></tr></tab=
+le>
+</center><br><br><center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D3 color=3D"#ffffff" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman"><b>
+
+Don't Get Personal
+<font size=3D1><br><img src=3D"line_grey.png"><br><br></font></b></font>=
+</td></tr></table>
+</center>
+<center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D2 color=3D"#FFE291" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman">
+
+This is, by far, the hardest thing to do. Many of us can get very protec=
+tive of our code on an unconscious level. Programming is not an easy thi=
+ng to do, and it's nice to be able to take pride in our work and our acc=
+omplishments. It feels good to have someone point at the screen and say =
+"wow that's really cool," and to know that you did that.<br><br>However =
+there is always more to learn. If someone has a different approach to so=
+mething you've written, don't take it personal and don't dismiss them or=
+ get angry with them. Talk with them and one of two things will result. =
+Either you'll learn how to program better or you can explain to them wha=
+t you've concluded and hopefully they will become a better programmer. B=
+eing good at programming is nice and all, but working with others who ar=
+e good at programming is an honor that is far too often taken for grante=
+d. Be professional and learn from each other.</font></td></tr></table>
+</center><br><br><center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D3 color=3D"#ffffff" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman"><b>
+
+Summarize
+<font size=3D1><br><img src=3D"line_grey.png"><br><br></font></b></font>=
+</td></tr></table>
+</center>
+<center>
+<table style=3D"table-layout:fixed;" width=3D"80%" cellspacing=3D0 cellp=
+adding=3D0 border=3D0>
+<tr>
+<td width=3D"100%">
+<font size=3D2 color=3D"#FFE291" face=3D"Verdana, Helvetica, Arial, Time=
+s New Roman">
+
+I've touched on a lot of topics in this article. So before I sign off, h=
+ere's a quick recap.<br><br><b>Plan For The Worst</b><br>
+Regardless of what language you're working in. The first subroutine you =
+should ever write should be a simple error printing function.<br><br><b>=
+Expect To Forget</b><br>
+Comment everything as if you're teaching it to someone who doesn't know =
+it at all --someone like yourself six months from now.<br><br><b>Documen=
+tation</b><br>
+Make your program files contain the documentation, put it right there in=
+ the code, exactly where you will need it, and you will ultimately save =
+everyone time.<br><br><b>Human Error and Monkey Business</b><br>
+Humans make mistakes, some more than others. However computers were made=
+ to do mind numbing, mundane tasks over and over again. It's about time =
+we start putting them to good use, and save ourselves some time and effo=
+rt.<br><br><b>An Engine Has Belts And Rods</b><br>
+Writing code that will fit in the engine like a belt, rather than a rod =
+using concept of flexible, reusable, and replaceable general case code.<=
+br><br><b>A Shiny New Hammer</b><br>
+Give a child a shiny new hammer and suddenly everything becomes a nail, =
+just begging to be hit. It's important to learn patience and good judgme=
+nt when approaching a problem instead of charging at it and unconditiona=
+lly using our latest technique.<br><br><b>Admit Your Own Limits</b><br>
+No one will know you can't handle a task if you don't tell them, and it'=
+s better to tell them before hand, than when you're in way over you're h=
+ead.<br><br><b>Fix It, Don't Hack It</b><br>
+Do it right and you won't have to deal with it again. Then there will be=
+ one less thing to cause problems in the future.<br><br><b>Step Softly a=
+nd Carry Nothing</b><br>
+Choose your stepping stones wisely, but remember they exist only to get =
+you where you're going and will only slow you down if you try to pick th=
+em up and carry them with you along the way.<br><br><b>Don't Get Persona=
+l</b><br>
+Being good at programming is nice and all, but working with others who a=
+re good at programming is an honor that is far too often taken for grant=
+ed. Be professional and learn from each other.</font></td></tr></table>
+</center><center>
+<table width=3D"80%" cellspacing=3D0 cellpadding=3D0 border=3D0>
+<tr>
+<td>
+<font size=3D2 face=3D"Verdana" color=3D"#ffffff">
+<br>
+
+
+</font>
+</td>
+</tr>
+</table>
+</center>
+<center><table cellspacing=3D0 cellpadding=3D2 border=3D0 width=3D"80%">=
+<tr><td background=3D"comments_bar2.jpg" bgcolor=3D"#333333" width=3D"10=
+0" valign=3D"center"><font size=3D1>&nbsp;</font></td></tr></table></cen=
+ter><br>
+<center><font face=3D"Arial, Helvetica" size=3D1><font face=3D"Helvetica=
+,Tahoma,Verdana" size=3D1>Copyright 1999-2008 (C) FLIPCODE.COM and/or th=
+e original content author(s).  All rights reserved.</font> <center><font=
+ face=3D"Helvetica,Tahoma,Verdana" size=3D1>Please read our <a href=3D"t=
+erms.shtml">Terms</a>, <a href=3D"terms.shtml">Conditions</a>, and <a hr=
+ef=3D"terms.shtml">Privacy information</a>.</font></center></font></cent=
+er>
+<br>
+</body>
+</html>
+
+
+------------hvvMwFXHvIPHo1tdxtQgfV
+Content-Disposition: inline; filename=show_ads.js
+Content-Type: text/javascript; charset=UTF-8; name=show_ads.js
+Content-Location: http://pagead2.googlesyndication.com/pagead/show_ads.js
+Content-Transfer-Encoding: Quoted-Printable
+
+
+(function(){var g=3Dtrue,h=3Dnull,i=3Dfalse,j=3D(new Date).getTime();var=
+ k=3Dthis,aa=3Dfunction(a,b,c){a=3Da.split(".");c=3Dc||k;!(a[0]in c)&&c.=
+execScript&&c.execScript("var "+a[0]);for(var d;a.length&&(d=3Da.shift()=
+);)if(!a.length&&b!=3D=3Dundefined)c[d]=3Db;else c=3Dc[d]?c[d]:c[d]=3D{}=
+},ba=3Dfunction(a){return a.call.apply(a.bind,arguments)},ca=3Dfunction(=
+a,b){var c=3Db||k;if(arguments.length>2){var d=3DArray.prototype.slice.c=
+all(arguments,2);return function(){var f=3DArray.prototype.slice.call(ar=
+guments);Array.prototype.unshift.apply(f,d);return a.apply(c,f)}}else re=
+turn function(){return a.apply(c,
+arguments)}},l=3Dfunction(){l=3DFunction.prototype.bind&&Function.protot=
+ype.bind.toString().indexOf("native code")!=3D-1?ba:ca;return l.apply(h,=
+arguments)};var da=3D/&/g,ea=3D/</g,fa=3D/>/g,ga=3D/\"/g,m=3D{"\u0000":"=
+\\0","\u0008":"\\b","\u000c":"\\f","\n":"\\n","\r":"\\r","\t":"\\t","\u0=
+00b":"\\x0B",'"':'\\"',"\\":"\\\\"},p=3D{"'":"\\'"},t=3Dfunction(a,b){if=
+(a<b)return-1;else if(a>b)return 1;return 0};var u,v,w,z,B=3Dfunction(){=
+return k.navigator?k.navigator.userAgent:h};z=3Dw=3Dv=3Du=3Di;var C;if(C=
+=3DB()){var ha=3Dk.navigator;u=3DC.indexOf("Opera")=3D=3D0;v=3D!u&&C.ind=
+exOf("MSIE")!=3D-1;w=3D!u&&C.indexOf("WebKit")!=3D-1;z=3D!u&&!w&&ha.prod=
+uct=3D=3D"Gecko"}var D=3Dv,F=3Dz,ja=3Dw,G;
+a:{var H=3D"",I;if(u&&k.opera){var J=3Dk.opera.version;H=3Dtypeof J=3D=3D=
+"function"?J():J}else{if(F)I=3D/rv\:([^\);]+)(\)|;)/;else if(D)I=3D/MSIE=
+\s+([^\);]+)(\)|;)/;else if(ja)I=3D/WebKit\/(\S+)/;if(I){var ka=3DI.exec=
+(B());H=3Dka?ka[1]:""}}if(D){var K,la=3Dk.document;K=3Dla?la.documentMod=
+e:undefined;if(K>parseFloat(H)){G=3DString(K);break a}}G=3DH}
+var ma=3DG,na=3D{},L=3Dfunction(a){var b;if(!(b=3Dna[a])){b=3D0;for(var =
+c=3DString(ma).replace(/^[\s\xa0]+|[\s\xa0]+$/g,"").split("."),d=3DStrin=
+g(a).replace(/^[\s\xa0]+|[\s\xa0]+$/g,"").split("."),f=3DMath.max(c.leng=
+th,d.length),e=3D0;b=3D=3D0&&e<f;e++){var ta=3Dc[e]||"",s=3Dd[e]||"",n=3D=
+RegExp("(\\d*)(\\D*)","g"),A=3DRegExp("(\\d*)(\\D*)","g");do{var q=3Dn.e=
+xec(ta)||["","",""],o=3DA.exec(s)||["","",""];if(q[0].length=3D=3D0&&o[0=
+].length=3D=3D0)break;b=3Dt(q[1].length=3D=3D0?0:parseInt(q[1],10),o[1].=
+length=3D=3D0?0:parseInt(o[1],10))||t(q[2].length=3D=3D
+0,o[2].length=3D=3D0)||t(q[2],o[2])}while(b=3D=3D0)}b=3Dna[a]=3Db>=3D0}r=
+eturn b};var M,N;N=3DM=3Di;var O=3DB();if(O)if(O.indexOf("Firefox")!=3D-=
+1)M=3Dg;else if(O.indexOf("Camino")=3D=3D-1)if(!(O.indexOf("iPhone")!=3D=
+-1||O.indexOf("iPod")!=3D-1))if(O.indexOf("iPad")=3D=3D-1)if(O.indexOf("=
+Android")=3D=3D-1)if(O.indexOf("Chrome")!=3D-1)N=3Dg;var oa=3DM,pa=3DN;v=
+ar qa=3Ddocument,P=3Dwindow;var Q=3Dfunction(a){a=3DparseFloat(a);return=
+ isNaN(a)||a>1||a<0?0:a},ra=3Dfunction(a){if(a=3D=3D"true")return g;retu=
+rn i},sa=3D/^([\w-]+\.)*([\w-]{2,})(\:[0-9]+)?$/,ua=3Dfunction(a){if(!a)=
+return"pagead2.googlesyndication.com";return(a=3Da.match(sa))?a[0]:"page=
+ad2.googlesyndication.com"};var va=3DQ("0"),wa=3DQ("0"),xa=3DQ("0"),ya=3D=
+Q("0.2");var za=3Dra("false"),Aa=3Dra("false"),Ba=3Dra("false");var Ca=3D=
+function(){return ua("")};!D||L("9");!F&&!D||D&&L("9")||F&&L("1.9.1");D&=
+&L("9");ua("");var R=3Dfunction(a){return!!a&&typeof a=3D=3D"function"&&=
+!!a.call},Da=3Dfunction(a){if(!(arguments.length<2))for(var b=3D1,c=3Dar=
+guments.length;b<c;++b)a.push(arguments[b])};function S(a){return typeof=
+ encodeURIComponent=3D=3D"function"?encodeURIComponent(a):escape(a)}func=
+tion Ea(a,b){if(a.attachEvent)a.attachEvent("onload",b);else a.addEventL=
+istener&&a.addEventListener("load",b,i)}
+function Fa(a,b){if(!(Math.random()<1.0E-4)){var c=3DMath.random();if(c<=
+b)return a[Math.floor(c/b*a.length)]}return""};aa("google_protectAndRun"=
+,function(a,b,c){a=3Dl(b,k,a);b=3Dwindow.onerror;window.onerror=3Da;try{=
+c()}catch(d){c=3Dd.toString();var f=3D"";if(d.fileName)f=3Dd.fileName;va=
+r e=3D-1;if(d.lineNumber)e=3Dd.lineNumber;if(!a(c,f,e))throw d;}window.o=
+nerror=3Db},void 0);
+aa("google_handleError",function(a,b,c,d){if(Math.random()<0.01){a=3D["h=
+ttp://",Ca(),"/pagead/gen_204","?id=3Djserror","&jscb=3D",za?1:0,"&jscd=3D=
+",Aa?1:0,"&context=3D",S(a),"&msg=3D",S(b),"&file=3D",S(c),"&line=3D",S(=
+d.toString()),"&url=3D",S(qa.URL.substring(0,512)),"&ref=3D",S(qa.referr=
+er.substring(0,512))];a.push(["&client=3D",S(P.google_ad_client),"&forma=
+t=3D",S(P.google_ad_format),"&slotname=3D",S(P.google_ad_slot),"&output=3D=
+",S(P.google_ad_output),"&ad_type=3D",S(P.google_ad_type)].join(""));a=3D=
+a.join("");P.google_image_requests||
+(P.google_image_requests=3D[]);b=3Dnew Image;b.src=3Da;P.google_image_re=
+quests.push(b)}return!Ba},void 0);var Ha=3Dfunction(a){try{var b=3Da.goo=
+gle_test;a.google_test=3D!b;if(a.google_test=3D=3D=3D!b){a.google_test=3D=
+b;return g}}catch(c){}return i},Ia=3Dh,Ja=3Dfunction(){if(!Ia){for(var a=
+=3Dwindow;a!=3Da.parent&&Ha(a.parent);)a=3Da.parent;Ia=3Da}return Ia};va=
+r T,U=3Dfunction(a){this.d=3D[];this.b=3Da||window;this.a=3D0;this.c=3Dh=
+},Ka=3Dfunction(a,b){this.j=3Da;this.o=3Db};U.prototype.i=3Dfunction(a,b=
+){if(this.a=3D=3D0&&this.d.length=3D=3D0&&(!b||b=3D=3Dwindow)){this.a=3D=
+2;this.h(new Ka(a,window))}else this.f(a,b)};U.prototype.f=3Dfunction(a,=
+b){this.d.push(new Ka(a,b||this.b));La(this)};U.prototype.k=3Dfunction(a=
+){this.a=3D1;if(a)this.c=3Dthis.b.setTimeout(l(this.g,this),a)};U.protot=
+ype.g=3Dfunction(){if(this.a=3D=3D1){if(this.c!=3Dh){this.b.clearTimeout=
+(this.c);this.c=3Dh}this.a=3D0}La(this)};
+U.prototype.m=3Dfunction(){return g};U.prototype.nq=3DU.prototype.i;U.pr=
+ototype.nqa=3DU.prototype.f;U.prototype.al=3DU.prototype.k;U.prototype.r=
+l=3DU.prototype.g;U.prototype.sz=3DU.prototype.m;var La=3Dfunction(a){a.=
+b.setTimeout(l(a.n,a),0)};U.prototype.n=3Dfunction(){if(this.a=3D=3D0&&t=
+his.d.length){var a=3Dthis.d.shift();this.a=3D2;a.o.setTimeout(l(this.h,=
+this,a),0);La(this)}};U.prototype.h=3Dfunction(a){this.a=3D0;a.j()};
+var Ma=3Dfunction(a){try{return a.sz()}catch(b){return i}},Na=3Dfunction=
+(a){return!!a&&(typeof a=3D=3D"object"||typeof a=3D=3D"function")&&Ma(a)=
+&&R(a.nq)&&R(a.nqa)&&R(a.al)&&R(a.rl)},Oa=3Dfunction(){if(T&&Ma(T))retur=
+n T;var a=3DJa(),b=3Da.google_jobrunner;if(Na(b))return T=3Db;return a.g=
+oogle_jobrunner=3DT=3Dnew U(a)},Pa=3Dfunction(a,b){Oa().nq(a,b)},Qa=3Dfu=
+nction(a,b){Oa().nqa(a,b)};var Ra=3Dfunction(a,b,c){var d=3D["<iframe"],=
+f;for(f in a)a.hasOwnProperty(f)&&Da(d,f+"=3D"+a[f]);d.push('style=3D"le=
+ft:0;position:absolute;top:0;"');d.push("></iframe>");b=3D"border:none;h=
+eight:"+c+"px;margin:0;padding:0;position:relative;visibility:visible;wi=
+dth:"+b+"px";return['<ins style=3D"display:inline-table;',b,'"><ins id=3D=
+"',a.id+"_anchor",'" style=3D"display:block;',b,'">',d.join(" "),"</ins>=
+</ins>"].join("")};var Sa=3Dfunction(){},Ua=3Dfunction(a,b,c){switch(typ=
+eof b){case "string":Ta(a,b,c);break;case "number":c.push(isFinite(b)&&!=
+isNaN(b)?b:"null");break;case "boolean":c.push(b);break;case "undefined"=
+:c.push("null");break;case "object":if(b=3D=3Dh){c.push("null");break}if=
+(b instanceof Array){var d=3Db.length;c.push("[");for(var f=3D"",e=3D0;e=
+<d;e++){c.push(f);Ua(a,b[e],c);f=3D","}c.push("]");break}c.push("{");d=3D=
+"";for(f in b)if(b.hasOwnProperty(f)){e=3Db[f];if(typeof e!=3D"function"=
+){c.push(d);Ta(a,f,c);c.push(":");Ua(a,
+e,c);d=3D","}}c.push("}");break;case "function":break;default:throw Erro=
+r("Unknown type: "+typeof b);}},Va=3D{'"':'\\"',"\\":"\\\\","/":"\\/","\=
+u0008":"\\b","\u000c":"\\f","\n":"\\n","\r":"\\r","\t":"\\t","\u000b":"\=
+\u000b"},Wa=3D/\uffff/.test("\uffff")?/[\\\"\x00-\x1f\x7f-\uffff]/g:/[\\=
+\"\x00-\x1f\x7f-\xff]/g,Ta=3Dfunction(a,b,c){c.push('"');c.push(b.replac=
+e(Wa,function(d){if(d in Va)return Va[d];var f=3Dd.charCodeAt(0),e=3D"\\=
+u";if(f<16)e+=3D"000";else if(f<256)e+=3D"00";else if(f<4096)e+=3D"0";re=
+turn Va[d]=3De+f.toString(16)}));
+c.push('"')};var V=3D["google_ad_block","google_ad_channel","google_ad_c=
+lient","google_ad_format","google_ad_height","google_ad_host","google_ad=
+_host_channel","google_ad_host_tier_id","google_ad_output","google_ad_ov=
+erride","google_ad_region","google_ad_section","google_ad_slot","google_=
+ad_type","google_ad_width","google_adtest","google_allow_expandable_ads"=
+,"google_alternate_ad_url","google_alternate_color","google_analytics_do=
+main_name","google_analytics_uacct","google_bid","google_city","google_c=
+olor_bg","google_color_border",
+"google_color_line","google_color_link","google_color_text","google_colo=
+r_url","google_container_id","google_contents","google_country","google_=
+cpm","google_ctr_threshold","google_cust_age","google_cust_ch","google_c=
+ust_gender","google_cust_id","google_cust_interests","google_cust_job","=
+google_cust_l","google_cust_lh","google_cust_u_url","google_disable_vide=
+o_autoplay","google_ed","google_eids","google_enable_osd","google_encodi=
+ng","google_font_face","google_font_size","google_frame_id","google_gl",=
+
+"google_hints","google_image_size","google_kw","google_kw_type","google_=
+language","google_max_num_ads","google_max_radlink_len","google_num_radl=
+inks","google_num_radlinks_per_unit","google_num_slots_to_rotate","googl=
+e_only_ads_with_video","google_only_pyv_ads","google_only_userchoice_ads=
+","google_override_format","google_page_url","google_referrer_url","goog=
+le_region","google_reuse_colors","google_rl_dest_url","google_rl_filteri=
+ng","google_rl_mode","google_rt","google_safe","google_skip","google_tag=
+_info",
+"google_targeting","google_ui_features","google_ui_version","google_vide=
+o_doc_id","google_video_product_type","google_with_pyv_ads"];var Xa=3Dfu=
+nction(a){this.b=3Da;a.google_iframe_oncopy||(a.google_iframe_oncopy=3D{=
+handlers:{},log:[],img:Math.random()<0.01?[]:h});this.e=3Da.google_ifram=
+e_oncopy;a.setTimeout(l(this.l,this),3E4)},Ya;var W=3D"var i=3Dthis.id,s=
+=3Dwindow.google_iframe_oncopy,H=3Ds&&s.handlers,h=3DH&&H[i],w=3Dthis.co=
+ntentWindow,d;try{d=3Dw.document}catch(e){}if(h&&d&&(!d.body||!d.body.fi=
+rstChild)){if(h.call){i+=3D'.call';setTimeout(h,0)}else if(h.match){i+=3D=
+'.nav';w.location.replace(h)}s.log&&s.log.push(i)}";
+if(/[&<>\"]/.test(W)){if(W.indexOf("&")!=3D-1)W=3DW.replace(da,"&amp;");=
+if(W.indexOf("<")!=3D-1)W=3DW.replace(ea,"&lt;");if(W.indexOf(">")!=3D-1=
+)W=3DW.replace(fa,"&gt;");if(W.indexOf('"')!=3D-1)W=3DW.replace(ga,"&quo=
+t;")}Ya=3DW;Xa.prototype.set=3Dfunction(a,b){this.e.handlers[a]=3Db};
+Xa.prototype.l=3Dfunction(){if(this.e.img){var a=3Dthis.e.log,b=3Dthis.b=
+.document;if(a.length){b=3D["http://",Ca(),"/pagead/gen_204?id=3Diframec=
+opy&log=3D",S(a.join("-")),"&url=3D",S(b.URL.substring(0,512)),"&ref=3D"=
+,S(b.referrer.substring(0,512))].join("");a.length=3D0;a=3Dnew Image;thi=
+s.e.img.push(a);a.src=3Db}}};var Za=3Dfunction(){var a=3D"script";return=
+["<",a,' src=3D"http://',ua(""),'/pagead/js/r20101117/r20110307/show_ads=
+_impl.js"></',a,">"].join("")},$a=3Dfunction(a,b,c,d){return function(){=
+var f=3Di;d&&Oa().al(3E4);try{var e;try{e=3D!!a.document.getElementById(=
+b).contentWindow.document}catch(ta){e=3Di}if(e){var s=3Da.document.getEl=
+ementById(b).contentWindow,
+n=3Ds.document;if(!(n.body&&n.body.firstChild)){n.open();s.google_async_=
+iframe_close=3Dg;n.write(c)}}else{var A=3Da.document.getElementById(b).c=
+ontentWindow,q;e=3Dc;e=3DString(e);if(e.quote)q=3De.quote();else{s=3D['"=
+'];for(n=3D0;n<e.length;n++){var o=3De.charAt(n),Ga=3Do.charCodeAt(0),ob=
+=3Ds,pb=3Dn+1,ia;if(!(ia=3Dm[o])){var E;if(Ga>31&&Ga<127)E=3Do;else{var =
+r=3Do;if(r in p)E=3Dp[r];else if(r in m)E=3Dp[r]=3Dm[r];else{var x=3Dr,y=
+=3Dr.charCodeAt(0);if(y>31&&y<127)x=3Dr;else{if(y<256){x=3D"\\x";if(y<16=
+||y>256)x+=3D"0"}else{x=3D"\\u";if(y<4096)x+=3D
+"0"}x+=3Dy.toString(16).toUpperCase()}E=3Dp[r]=3Dx}}ia=3DE}ob[pb]=3Dia}s=
+.push('"');q=3Ds.join("")}A.location.replace("javascript:"+q)}f=3Dg}catc=
+h(vb){A=3DJa().google_jobrunner;Na(A)&&A.rl()}f&&(new Xa(a)).set(b,$a(a,=
+b,c,i))}},ab=3Dfunction(){return va&&wa/va||typeof window.google_hash_ra=
+tio=3D=3D"number"&&window.google_hash_ratio||h};window.google_loader_use=
+d=3Dg;(function(a){if(!("google_onload_fired"in a)){a.google_onload_fire=
+d=3Di;Ea(a,function(){a.google_onload_fired=3Dg})}})(window);if(!window.=
+google_loader_experiment)window.google_loader_experiment=3DFa(["async1_a=
+ll","block1"],ya)||Fa(["launch"],xa)||"none";var bb,cb=3Dwindow.google_l=
+oader_experiment;
+if(bb=3Dwindow.google_enable_async=3D=3D=3Dg||cb=3D=3D"launch"||cb=3D=3D=
+"async1_all")bb=3Dwindow.google_enable_async=3D=3D=3Di?i:(D&&/MSIE 8/.te=
+st(navigator.userAgent)||pa||oa&&!!window.document.body)&&!window.google=
+_container_id&&(!window.google_ad_output||window.google_ad_output=3D=3D"=
+html");
+if(bb){var db=3Dwindow;if(db.google_unique_id)++db.google_unique_id;else=
+ db.google_unique_id=3D1;for(var X=3Dwindow,_script$$inline_211=3D"scrip=
+t",Y,Z=3D{allowtransparency:'"true"',frameborder:'"0"',height:'"'+X.goog=
+le_ad_height+'"',hspace:'"0"',marginwidth:'"0"',marginheight:'"0"',onloa=
+d:'"'+Ya+'"',scrolling:'"no"',vspace:'"0"',width:'"'+X.google_ad_width+'=
+"'},eb=3DX.document,$=3DZ.id,fb=3D0;!$||X.document.getElementById($);)$=3D=
+"aswift_"+fb++;Z.id=3D$;Z.name=3D$;eb.write(Ra(Z,X.google_ad_width,X.goo=
+gle_ad_height));Y=3D
+$;var gb;if(X.google_page_url)X.google_page_url=3DString(X.google_page_u=
+rl);for(var hb=3D[],ib=3D0,jb=3DV.length;ib<jb;ib++){var kb=3DV[ib];if(X=
+[kb]!=3Dh){var lb;try{var mb=3D[];Ua(new Sa,X[kb],mb);lb=3Dmb.join("")}c=
+atch(nb){}lb&&Da(hb,kb,"=3D",lb,";")}}gb=3Dhb.join("");for(var qb=3D0,rb=
+=3DV.length;qb<rb;qb++)X[V[qb]]=3Dh;var sb=3D(new Date).getTime(),tb=3Da=
+b(),ub=3Dwindow.google_loader_experiment,wb=3D["<!doctype html><html><bo=
+dy><",_script$$inline_211,">",gb,"google_show_ads_impl=3Dtrue;google_uni=
+que_id=3D",X.google_unique_id,';google_async_iframe_id=3D"',
+Y,'";google_start_time=3D',j,";",tb?"google_hash_ratio=3D"+tb+";":"",ub?=
+'google_loader_experiment=3D"'+ub+'";':"","google_bpp=3D",sb>j?sb-j:1,";=
+</",_script$$inline_211,">",Za(),"</body></html>"].join("");(X.document.=
+getElementById(Y)?Pa:Qa)($a(X,Y,wb,g))}else{window.google_start_time=3Dj=
+;window.google_hash_ratio=3Dab();document.write(Za())};})();
+
+------------hvvMwFXHvIPHo1tdxtQgfV
+Content-Disposition: inline; filename=comments_bar2.jpg
+Content-Type: image/jpeg; name=comments_bar2.jpg
+Content-Location: http://www.flipcode.com/archives/comments_bar2.jpg
+Content-Transfer-Encoding: Base64
+
+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
+V/6j5N4H7P79Z6D/2Q==
+
+------------hvvMwFXHvIPHo1tdxtQgfV
+Content-Disposition: inline; filename=line_grey.png
+Content-Type: image/png; name=line_grey.png
+Content-Location: http://www.flipcode.com/archives/line_grey.png
+Content-Transfer-Encoding: Base64
+
+iVBORw0KGgoAAAANSUhEUgAAAgAAAAABCAIAAAAn2YEhAAAAa0lEQVR42r2TSxbA
+IAgD5Yzc/yzpzkWtNQk82conGSQyc2wCwBBjV0K2WtMARIRXzuuXCg2Pn76MEa+n
+Y5OJ7h8jKY+nxGR6zOtkJpAKfJLkMY3pU5nVuAhVknQmhoYLW1A/VeN1VM5NcvEA
+ihzeJh4lSqAAAAAASUVORK5CYII=
+
+------------hvvMwFXHvIPHo1tdxtQgfV--

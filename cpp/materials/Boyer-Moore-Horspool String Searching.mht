@@ -1,0 +1,205 @@
+Content-Type: multipart/related; start=<op.mhtml.1299635549553.1c091d1e7733b8d8@192.168.1.3>; boundary=----------sRQ8IxnJiuhyMdLnpQp596
+Content-Location: http://www.glenmccl.com/bmh.htm
+Subject: =?utf-8?Q?Boyer-Moore-Horspool=20String=20Searching?=
+MIME-Version: 1.0
+
+------------sRQ8IxnJiuhyMdLnpQp596
+Content-Disposition: inline; filename=bmh.htm
+Content-Type: text/html; name=bmh.htm
+Content-ID: <op.mhtml.1299635549553.1c091d1e7733b8d8@192.168.1.3>
+Content-Location: http://www.glenmccl.com/bmh.htm
+Content-Transfer-Encoding: 8bit
+
+<html>
+<head>
+<title>Boyer-Moore-Horspool String Searching</title>
+</head>
+<body background="./bg.jpg" bgcolor="#ffffff" text="#0000df" link="#ff0000" vlink="#000000">
+<h1>Boyer-Moore-Horspool String Searching</h1>
+<p>
+As another example of how a class can represent an abstraction,
+consider the problem of searching a char* string for a given pattern.
+In the C library there is a strstr() function for doing this.  But
+suppose that we wish to implement our own scheme, based on one of the
+relatively new high-performance algorithms for searching like the
+Boyer-Moore-Horspool one (see the book "Information Retrieval" by
+William Frakes for a description of this algorithm).
+<br>
+<p>
+This particular algorithm does some preprocessing of the pattern, as a
+means of determining how far to skip ahead in the search text if an
+initial match attempt fails.  The results of the preprocessing are
+saved in a vector, that is used during the search process.
+<br>
+<p>
+It is quite possible but inconvenient and inefficient to code this
+algorithm in C, especially if the same pattern is to be applied to a
+large body of text.  If coding in C, the preprocessing would have to
+be done each time, or else saved in an auxiliary structure that is
+passed to the search function.
+<br>
+<p>
+But with C++, using a class abstraction, this algorithm can be
+implemented quite neatly:
+<br>
+<pre>
+        #include &lt;string.h&gt;
+        #include &lt;assert.h&gt;
+        #include &lt;stdio.h&gt;
+        
+        class Search {
+                static const int MAXCHAR = 256;
+                int d[MAXCHAR];
+                int m;
+                char* patt;
+        public:
+                Search(char*);
+                int find(char*);
+        };
+        
+        Search::Search(char* p)
+        {
+                assert(p);
+        
+                patt = p;
+                m = strlen(patt);
+        
+                int k = 0;
+        
+                for (k = 0; k &lt; MAXCHAR; k++)
+                        d[k] = m;
+        
+                for (k = 0; k &lt; m - 1; k++)
+                        d[patt[k]] = m - k - 1;
+        }
+        
+        int Search::find(char* text)
+        {
+                assert(text);
+        
+                int n = strlen(text);
+                if (m &gt; n)
+                        return -1;
+        
+                int k = m - 1;
+        
+                while (k &lt; n) {
+                        int j = m - 1;
+                        int i = k;
+                        while (j &gt;= 0 &amp;&amp; text[i] == patt[j]) {
+                                j--;
+                                i--;
+                        }
+                        if (j == -1)
+                                return i + 1;
+                        k += d[text[k]];
+                }
+        
+                return -1;
+        }
+        
+        #ifdef DRIVER
+        int main(int argc, char* argv[])
+        {
+                assert(argc == 3);
+        
+                const int MAXLINE = 256;
+                char fbuf[MAXLINE];
+                Search patt(argv[1]);
+                FILE* fp = fopen(argv[2], "r");
+                assert(fp);
+                int nf = 0;
+        
+                while (fgets(fbuf, MAXLINE, fp) != NULL) {
+                        if (patt.find(fbuf) != -1) {
+                                fputs(fbuf, stdout);
+                                nf++;
+                        }
+                }
+        
+                fclose(fp);
+        
+                return !nf; 
+        }
+        #endif
+</pre>
+<p>
+We've added a short driver program, to produce a search program
+something like the UNIX "fgrep" tool.
+<br>
+<p>
+We construct a Search object based on a pattern, and then apply that
+pattern to successive lines of text.  Search::find() returns -1 if the
+pattern is not found, else the starting index &gt;= 0 in the text.
+<br>
+<p>
+Whether this algorithm will be faster than that available on your
+local system depends on several factors.  A standard library function
+like strstr() may be coded in assembly language.  Also, there's
+another class of string matching algorithms based on regular
+expressions and finite state machines, with different performance
+characteristics.
+<br>
+<p>
+This simple program illustrates a way of wrapping the details of a
+particular algorithm into a neat package, hidden from the user.
+<br>
+<br>
+<a href="./brochure.htm">Our Services</a><br><br>
+<a href="./index.htm">Back to Home Page</a>
+</body>
+</html>
+
+------------sRQ8IxnJiuhyMdLnpQp596
+Content-Disposition: inline; filename=bg.jpg
+Content-Type: image/jpeg; name=bg.jpg
+Content-Location: http://www.glenmccl.com/bg.jpg
+Content-Transfer-Encoding: Base64
+
+/9j/4AAQSkZJRgABAQEAZABkAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEj
+JR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/wAALCAH0
+ASwBAREA/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgED
+AwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2Jy
+ggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1
+dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJ
+ytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oACAEBAAA/APQKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKK//Z
+
+------------sRQ8IxnJiuhyMdLnpQp596--

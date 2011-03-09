@@ -1,0 +1,303 @@
+Content-Type: multipart/related; start=<op.mhtml.1299635010222.b59a8d22456efcee@192.168.1.3>; boundary=----------fJlbiEE5dNqEv5arfM2QuU
+Content-Location: http://www.glenmccl.com/perf_002.htm
+Subject: =?utf-8?Q?Handling=20Lots=20of=20Small=20Strings=20With=20a=20C++=20Class?=
+MIME-Version: 1.0
+
+------------fJlbiEE5dNqEv5arfM2QuU
+Content-Disposition: inline; filename=perf_002.htm
+Content-Type: text/html; name=perf_002.htm
+Content-ID: <op.mhtml.1299635010222.b59a8d22456efcee@192.168.1.3>
+Content-Location: http://www.glenmccl.com/perf_002.htm
+Content-Transfer-Encoding: 8bit
+
+<html>
+<head>
+<title>Handling Lots of Small Strings With a C++ Class</title>
+</head>
+<body background="./bg.jpg" bgcolor="#ffffff" text="#0000df" link="#ff0000" vlink="#000000">
+<h1>Handling Lots of Small Strings With a C++ Class</h1>
+<p>
+In performance tips this issue, we will present a complete C++ class
+along with its implementation code, which is appended to the end of the
+discussion.
+<br>
+<p>
+This C++ example addresses a common problem in applications that use a
+lot of small strings.  The problem has to do with the overhead
+associated with allocating the string via malloc() (in C) or operator
+new() (C++).  Typically, such overhead is 8-16 bytes per string.  And
+allocating then deallocating many small blocks will tend to fragment
+memory.
+<br>
+<p>
+The Copy class deals with the problem by internally allocating large
+blocks and then shaving off small chunks for individual strings.  It
+keeps track of all the large blocks allocated and deallocates them
+when a given Copy object is no longer needed.  To use this system, you
+would allocate a Copy object for each major subsystem in your
+application that uses small strings.  For example, at one point in
+your application, you might need to read in a dictionary from disk and
+use it for a while.  You would allocate a Copy object and then use it
+to allocate the strings for each word, then flush the strings all at
+once.
+<br>
+<p>
+In the application that this class was devised for, implementing
+string copying in this way saved 50K out of a total available memory
+pool of 500K.  This is with Borland C++, which rounds the number of
+requested bytes for a string to the next multiple of 16, or an average
+wastage of 8 bytes.  Since the Copy class uses 1024-byte chunks, on
+average 512 bytes will be wasted for a given set of strings, so the
+breakeven point would be 512 / 8 = 64 or more strings.
+<br>
+<p>
+There are many variations on this theme.  For example, if you are
+certain that the strings will never be freed, then you can simply grab
+a large amount of memory and shave chunks off of it, without worrying
+about keeping track of the allocated memory.  Or if you have many
+objects of one class, such as tree nodes, you can overload operator
+new() for that class to do a similar type of thing.
+<br>
+<p>
+Note that this particular storage allocator is not general.  The
+allocated storage is aligned on 1-byte boundaries.  This means that
+trying to allocate other than char* objects may result in performance
+degradation or a memory fault (such as "bus error" on UNIX systems).
+And the performance gains of course decline somewhat with large
+strings, while the wastage increases from stranding parts of the
+1024-byte allocated chunks.
+<br>
+<p>
+This same approach could be used in C or assembly language, but C++
+makes it easier and encourages this particular style of programming.
+<br>
+<p>
+An example of usage is included.  A dictionary of 20065 words with
+total length 168K is read in.  Without use of the Copy class it
+requires 354K, an 111% overhead.  With the Copy class it takes 194K,
+an overhead of 15%.  This is a difference of 160K, or 8 bytes per
+word.  The results will of course vary depending on a particular
+operating system and runtime library.  And the Copy version runs about
+20% faster than the conventional version on a 486 PC.
+<br>
+<p>
+The driver program that is included will work only with Borland C++,
+so you will need to write some other code to emulate the logic.
+<br>
+<br>
+#include &lt;string.h&gt;<br>
+#include &lt;assert.h&gt;<br>
+<br>
+<p>
+const int COPY_BUF = 1024;                      // size of buffer to get
+const int COPY_VEC = 64;                        // starting size of vector
+<br>
+<p>
+class Copy {
+<pre>
+        int ln;                                 // number of buffers in use
+        int maxln;                              // max size of vector
+        char** vec;                             // storage vector
+        int freelen;                            // length free in current
+        char* freestr;                          // current free string
+</pre>
+<p>
+public:
+<pre>
+        Copy();                                 // constructor
+        ~Copy();                                // destructor
+        char* copy(char*);                      // copy a string
+</pre>
+<h3>};</h3>
+// constructor<br>
+Copy::Copy()<br>
+<h3>{</h3>
+<pre>
+        ln = 0;
+        maxln = 0;
+        vec = 0;
+        freelen = 0;
+        freestr = 0;
+</pre>
+<h3>}</h3>
+// destructor<br>
+Copy::~Copy()<br>
+<h3>{</h3>
+<pre>
+        int i;
+
+        // delete buffers
+
+        for (i = 0; i &lt; ln; i++)
+                delete vec[i];
+
+        // delete vector itself
+
+        if (vec)
+                delete vec;
+</pre>
+<h3>}</h3>
+<p>
+// copy a string<br>
+char* Copy::copy(char* s)
+{
+<pre>
+        int i;
+        char** newvec;
+        int len;
+        char* p;
+
+        assert(s &amp;&amp; *s);
+
+        len = strlen(s) + 1;
+
+        // first time or current buffer exhausted?
+
+        if (len &gt; freelen) {
+                if (!vec || ln == maxln) {
+
+                        // reallocate vector
+
+                        maxln = (maxln ? maxln * 2 : COPY_VEC);
+                        newvec = new char*[maxln];
+                        assert(newvec);
+                        for (i = 0; i &lt; ln; i++)
+                                newvec[i] = vec[i];
+                        if (vec)
+                                delete vec;
+                        vec = newvec;
+                }
+
+                // allocate new buffer
+
+                vec[ln] = new char[COPY_BUF];
+                assert(vec[ln]);
+                freelen = COPY_BUF;
+                freestr = vec[ln];
+                ln++;
+        }
+
+        // allocate and copy string
+
+        freelen -= len;
+        p = freestr;
+        freestr += len;
+        strcpy(p, s);
+        return p;
+</pre>
+<h3>}</h3>
+<p>
+#ifdef DRIVER
+<br>
+<br>
+#include &lt;stdio.h&gt;<br>
+#include &lt;alloc.h&gt;<br>
+<br>
+<p>
+main()
+{
+<pre>
+        long cl;
+        const int MAXLINE = 256;
+        char buf[MAXLINE];
+        FILE* fp;
+        char* s;
+</pre>
+<p>
+#ifdef USE_COPY
+<pre>
+        Copy co;
+</pre>
+<p>
+#endif
+<br>
+<pre>
+        cl = coreleft();
+        fp = fopen("c:/src/words", "r");
+        assert(fp);
+        while (fgets(buf, MAXLINE, fp) != NULL) {
+</pre>
+<p>
+#ifdef USE_COPY
+<pre>
+                s = co.copy(buf);
+</pre>
+<p>
+#else
+<pre>
+                s = new char[strlen(buf) + 1];
+                assert(s);
+                strcpy(s, buf);
+</pre>
+<p>
+#endif
+<pre>
+        }
+        fclose(fp);
+        printf("memory used = %ld\n", cl - coreleft());
+
+        return 0;
+</pre>
+<h3>}</h3>
+<p>
+#endif
+<br>
+<br>
+<a href="./brochure.htm">Our Services</a><br><br>
+<a href="./index.htm">Back to Home Page</a>
+</body>
+</html>
+
+------------fJlbiEE5dNqEv5arfM2QuU
+Content-Disposition: inline; filename=bg.jpg
+Content-Type: image/jpeg; name=bg.jpg
+Content-Location: http://www.glenmccl.com/bg.jpg
+Content-Transfer-Encoding: Base64
+
+/9j/4AAQSkZJRgABAQEAZABkAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEj
+JR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/wAALCAH0
+ASwBAREA/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgED
+AwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2Jy
+ggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1
+dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJ
+ytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oACAEBAAA/APQKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKK//Z
+
+------------fJlbiEE5dNqEv5arfM2QuU--

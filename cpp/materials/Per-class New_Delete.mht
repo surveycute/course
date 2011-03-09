@@ -1,0 +1,193 @@
+Content-Type: multipart/related; start=<op.mhtml.1299635357896.eebced22476ffcee@192.168.1.3>; boundary=----------Y1HpywXbK99gzE1Gt6xjal
+Content-Location: http://www.glenmccl.com/perf_010.htm
+Subject: =?utf-8?Q?Per-class=20New/Delete?=
+MIME-Version: 1.0
+
+------------Y1HpywXbK99gzE1Gt6xjal
+Content-Disposition: inline; filename=perf_010.htm
+Content-Type: text/html; name=perf_010.htm
+Content-ID: <op.mhtml.1299635357896.eebced22476ffcee@192.168.1.3>
+Content-Location: http://www.glenmccl.com/perf_010.htm
+Content-Transfer-Encoding: 8bit
+
+<html>
+<head>
+<title>Per-class New/Delete</title>
+</head>
+<body background="./bg.jpg" bgcolor="#ffffff" text="#0000df" link="#ff0000" vlink="#000000">
+<h1>Per-class New/Delete</h1>
+<p>
+Some types of applications tend to use many small blocks of space for
+allocating nodes for particular types of data structures, small
+strings, and so on.  In issue #002 we talked about a technique for
+efficiently allocating many small strings.
+<br>
+<p>
+Another way of tackling this problem is to overload the new/delete
+operators on a per-class basis.  That is, take over responsibility for
+allocating and deallocating the storage required by class objects.
+Here is an example of what this would look like for a class A:
+<br>
+<pre>
+        #include &lt;stddef.h&gt;
+        #include &lt;stdlib.h&gt;
+
+        class A {
+                int data;
+                A* next;
+        #ifdef USE_ND
+                static A* freelist;             // pointer to free list
+        #endif
+        public:
+                A();
+                ~A();
+        #ifdef USE_ND
+                void* operator new(size_t);     // overloaded new()
+                void operator delete(void*);    // overloaded delete()
+        #endif
+        };
+
+        #ifdef USE_ND
+        A* A::freelist = 0;
+
+        inline void* A::operator new(size_t sz)
+        {
+                // get free node from freelist if any
+
+                if (freelist) {
+                        A* p = freelist;
+                        freelist = freelist-&gt;next;
+                        return p;
+                }
+
+                // call malloc() otherwise
+
+                return malloc(sz);
+        }
+
+        inline void A::operator delete(void* vp)
+        {
+                A* p = (A*)vp;
+
+                // link freed node onto freelist
+
+                p-&gt;next = freelist;
+                freelist = p;
+        }
+        #endif
+
+        A::A() {}
+
+        A::~A() {}
+
+        #ifdef DRIVER
+        const int N = 1000;
+        A* aptr[N];
+
+        int main()
+        {
+                int i;
+                int j;
+
+                // repeatedly allocate / deallocate A objects
+
+                for (i = 1; i &lt;= N; i++) {
+                        for (j = 0; j &lt; N; j++)
+                                aptr[j] = new A();
+                        for (j = 0; j &lt; N; j++)
+                                delete aptr[j];
+                }
+
+                return 0;
+        }
+        #endif
+</pre>
+<p>
+We've also included a driver program.  For this example, that recycles
+the memory for object instances, the new approach is about 4-5X faster
+than the standard approach.
+<br>
+<p>
+When new() is called for an A type, the overloaded function checks the
+free list to see if any old recycled instances are around, and if so
+one of them is used instead of calling malloc().  The free list is
+shared across all object instances (the freelist variable is static).
+delete() simply returns a no-longer-needed instance to the free list.
+<br>
+<p>
+This technique is useful only for dynamically-created objects.  For
+static or local objects, the storage has already been allocated (on
+the stack, for example).
+<br>
+<p>
+We have again sidestepped the issue of whether a failure in new()
+should throw an exception instead of returning an error value.  This
+is an area in transition in the language.
+<br>
+<p>
+There are other issues with writing your own storage allocator.  For
+example, you have to make sure that the memory for an object is
+aligned correctly.  A double of 8-byte length may need to be aligned,
+say, on a 4-byte boundary for performance reasons or to avoid
+addressing exceptions ("bus error - core dumped" on a UNIX system).
+Other issues include fragmentation and support for program threads.
+<br>
+<br>
+<a href="./brochure.htm">Our Services</a><br><br>
+<a href="./index.htm">Back to Home Page</a>
+</body>
+</html>
+
+------------Y1HpywXbK99gzE1Gt6xjal
+Content-Disposition: inline; filename=bg.jpg
+Content-Type: image/jpeg; name=bg.jpg
+Content-Location: http://www.glenmccl.com/bg.jpg
+Content-Transfer-Encoding: Base64
+
+/9j/4AAQSkZJRgABAQEAZABkAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEj
+JR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/wAALCAH0
+ASwBAREA/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgED
+AwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2Jy
+ggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1
+dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJ
+ytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oACAEBAAA/APQKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKK//Z
+
+------------Y1HpywXbK99gzE1Gt6xjal--

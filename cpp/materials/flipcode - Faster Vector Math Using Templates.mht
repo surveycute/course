@@ -1,0 +1,1392 @@
+Content-Type: multipart/related; start=<op.mhtml.1299623195424.002378767a79ca75@192.168.1.3>; boundary=----------jRx3WKU075rSFjXa7mK1Kj
+Content-Location: http://www.flipcode.com/archives/Faster_Vector_Math_Using_Templates.shtml
+Subject: =?utf-8?Q?flipcode=20-=20Faster=20Vector=20Math=20Using=20Templates?=
+MIME-Version: 1.0
+
+------------jRx3WKU075rSFjXa7mK1Kj
+Content-Disposition: inline; filename=Faster_Vector_Math_Using_Templates.shtml
+Content-Type: text/html; charset=UTF-8; name=Faster_Vector_Math_Using_Templates.shtml
+Content-ID: <op.mhtml.1299623195424.002378767a79ca75@192.168.1.3>
+Content-Location: http://www.flipcode.com/archives/Faster_Vector_Math_Using_Templates.shtml
+Content-Transfer-Encoding: 8bit
+
+<html>
+<head><title>flipcode - Faster Vector Math Using Templates</title>
+<style type="text/css">
+
+
+a.menulink:link    {color: #b9ffd0; }
+a.menulink:visited {color: #b9ffd0; }
+a.menulink:active  {color: #b9ffd0; }
+
+a.menulinkempty:link    {color: #b9ffd0; }
+a.menulinkempty:visited {color: #b9ffd0; }
+a.menulinkempty:active  {color: #b9ffd0; }
+a.menulinkempty:link, a.menulinkempty:visited, a.menulinkempty:active {text-decoration: none}
+
+a.orangelink:link    { color:#FFAB04; }
+a.orangelink:visited { color:#FFAB04; }
+a.orangelink:active  { color:#FFAB04; }
+
+a.palegreen:link    {color: #b9ffd0; }
+a.palegreen:visited {color: #b9ffd0; }
+a.palegreen:active  {color: #b9ffd0; }
+
+a.bluelink:link    { color:#03F0FF; }
+a.bluelink:visited { color:#03F0FF; }
+a.bluelink:active  { color:#03F0FF; }
+
+a.softyellow:link     { color:#FFFCA9; }
+a.softyellow:visited  { color:#FFFCA9; }
+a.softyellow:active   { color:#FFFCA9; }
+
+a.nounderline:link        {color: #FFFCA9; }
+a.nounderline:visited     {color: #FFFCA9; }
+a.nounderline:active      {color: #FFFCA9; }
+a.nounderline:link, a.nounderline:visited, a.nounderline:active {text-decoration: none}
+
+<!--
+#code_comment { font-family:Courier,Courier New; font-size:12px; color:#007f00; }
+#code_text    { font-family:Courier,Courier New; font-size:12px; color:#000000; }
+#code_keyword { font-family:Courier,Courier New; font-size:12px; color:#0000FF; }
+-->
+
+</style>
+</head>
+<body bgcolor="#000000" text="#ffffff" link="#FFFCA9" vlink="#FFFCA9" alink="#FFFCA9">
+<center>
+<script type="text/javascript"><!--
+google_ad_client = "pub-3512250068614659";
+//728x90, created 1/8/08
+google_ad_slot = "8394943283";
+google_ad_width = 728;
+google_ad_height = 90;
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+<br>
+
+<br><center><table cellspacing=0 cellpadding=2 border=0 width="80%"><tr><td background="comments_bar2.jpg" bgcolor="#333333" width="100" valign="center"><font size=1>&nbsp;</font></td></tr></table></center><br>
+<center>
+<table width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td>
+<font size=3 face="Verdana, Helvetica" color="#ffffff"><b>Faster Vector Math Using Templates</b><br>
+<font size=2>by <!--GO AWAY SPAM!!!--><script language="javascript">document.write('<a href=\"mailto:' + ''    
++''    
++''    
++''    
++''    
++''    
++''    
++ '' + '' + ''    
++ 'tarce' +  '@' + 'austin' +  '.' + ''    
++''    
++''    
++''    
++''    
++''    
++''    
++''    
++ 'rr.com\">' + 'Tomas Arce' + '</a>')</script> (22 March 2001)</font>
+</font>
+<br><br><br>
+</td>
+<td align="right" valign="top"><font face="Verdana, Helvetica" size=2><a href="articles.shtml">Return to The Archives</a>
+</td>
+</tr></table>
+</center><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Introduction
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+In the quest for knowledge we must try all kinds of new ideas. Not too long ago
+I came across an interesting article written by Jim Blinn. (He is one of the
+real pioneers of computer graphics. He currently works for Microsoft as a
+researcher. Jim invented bump mapping, the new specular formula being used in
+D3D, and so on.) He was talking about faster ways of implementing vector math
+using templates and observed that the most common method of implementing a
+vector class is wasteful with the stack and registers. The goal of this article
+is to demonstrate these concepts and create our own implementation.<br><br>You are about to embark upon one of the strangest articles you have ever read on
+C++. So if you are… let’s say… uncomfortable with the language, you may
+experience some vomiting sensations. But not to worry, after reading it a couple
+of times I am sure it will become clear. I will try to explain how Jim is right
+and how the Microsoft compiler can’t handle the truth. Well, not so much the
+truth as the templates, but you get the picture.</font></td></tr></table>
+</center><br><br><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Defining the problem
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+Mind you, there are many ways to do a vector class, but the most typical case is
+shown in Listing 1. Let’s start analyzing this code. As you can see, the
+operator + function returns a vector3d object. Of course, the return value is
+placed in a anonymous temporary value on the stack. Then, the operator =
+function (even if it was generated by the compiler like in our example) is used
+to move the result data from the anonymous object on the stack to the final
+destination. Of course, under the right circumstances, the optimizer can help
+out substantially on this type of problem.<br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+<font color="#0000ff">struct</font> vector3d
+{
+    <font color="#0000ff">float</font> X, Y, Z;
+ 
+    <font color="#0000ff">inline</font> vector3d( <font color="#0000ff">void</font> ) {}
+    <font color="#0000ff">inline</font> vector3d( <font color="#0000ff">const</font> <font color="#0000ff">float</font> x, <font color="#0000ff">const</font> <font color="#0000ff">float</font> y, <font color="#0000ff">const</font> <font color="#0000ff">float</font> z )
+    { X = x; Y = y; Z = z; }<br><br>    <font color="#0000ff">inline</font> vector3d <font color="#0000ff">operator</font> + ( <font color="#0000ff">const</font> vector3d& A ) <font color="#0000ff">const</font>
+    { <font color="#0000ff">return</font> vector3d( X + A.X, Y + A.Y, Z + A.Z ); }<br><br>    <font color="#0000ff">inline</font> vector3d <font color="#0000ff">operator</font> + ( <font color="#0000ff">const</font> <font color="#0000ff">float</font> A ) <font color="#0000ff">const</font>
+    { <font color="#0000ff">return</font> vector3d( X + A, Y + A, Z + A ); }<br><br>    <font color="#0000ff">inline</font> <font color="#0000ff">float</font> Dot( <font color="#0000ff">const</font> vector3d& A ) <font color="#0000ff">const</font>
+    { <font color="#0000ff">return</font> A.X*X + A.Y*Y + A.Z*Z; }
+};<br><br><font color="#007f00">// Listing 1
+</font> </font></pre></td></tr></table></div></center><br><br>Assume we have an expression like this: vA = vB + vC + vD. How many vector3ds
+are going to end up in the stack? Let’s walk through step by step. The first
+thing that happens is that vB + vC gets executed, so that is where our first
+temp (call it temp1) is created. Then temp1 + vD is going to execute. This will
+create the temp2 object. Finally, temp2 will be copied to vA. What a waste, huh?
+We would much prefer that the compiler not generate any temps and refrain from
+reading and writing from memory unnecessarily. Listing 2a shows some pseudo
+assembly that demonstrates that.<br><br><center>
+<table border=1 width="85%%" cellspacing=0 cellpadding=10>
+<tr><td width="50%">
+<center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+Mov  eax, vB.X
+Mov  ebx, vB.Y
+Mov  ecx, vB.Z<br><br>Addf eax, vC.X
+Addf ebx, vC.Y
+Addf ecx, vC.Z<br><br>Addf eax, vD.X
+Addf ebx, vD.Y
+Addf ecx, vD.Z <br><br>Mov  vA.X, eax
+Mov  vA.Y, ebx
+Mov  vA.Z, ecx
+ </font></pre></td></tr></table></div></center>
+</td>
+<td width=50%>
+<center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+Mov  eax,  vB.X
+Addf eax,  vC.X 
+Addf eax,  vD.X 
+Mov  vA.X, eax<br><br>Mov  eax,  vB.Y
+Addf eax,  vC.Y
+Addf eax,  vD.Y
+Mov  vA.Y, eax<br><br>Mov  eax,  vB.Z
+Addf eax,  vC.Z
+Addf eax,  vD.Z
+Mov  vA.Z, eax
+ </font></pre></td></tr></table></div></center>
+</td>
+</tr>
+<tr>
+<td><font size=2 color="#ffe291" face="Verdana,Helvetica">Listing 2a</font>
+</td><br><br><td><font size=2 color="#ffe291" face="Verdana,Helvetica">Listing 2b</font>
+</td>
+</tr>
+</table>
+</center><br><br>But even Listing 2a is still wasteful because it uses more registers than it
+needs. We can improve that by using Listing 2b. As you can see only one register
+is used. The important concept is not really that we used only one register, but
+that we have done all the operations in each of the dimensions independently.
+The reason why this concept is so important is that when we have an expression
+that requires intermediate results, the compiler has a much better chance to
+keep everything in registers. For instance, let’s say that we have an expression
+that looks something like this: vA = (vB + vC) + (vD + vE). The compiler will
+first do vB + vC which will generate temp1, then vD + vE and create temp2 then
+it will add both temps (temp1 + temp2) which will generate temp3. Finally, temp3
+is assigned to vA. The problem is that temp1 and temp2 exist at the same time.
+That means that we have 6 floats in our hands if we do all the dimensions at the
+same time. But if we do one dimension at a time then we only have 2 floats to
+deal with. The best part of this is that the method scales up very gracefully.
+For instance, what will happen if instead of having a vector3d we had a
+vector16d? If we do one dimension at a time we still have only 2 floats using
+the method in listing 2b. But if we do it like in listing 2a we will have 32
+floats. Guess which method is more likely to use the registers efficiently.</font></td></tr></table>
+</center><br><br><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Defining the tool to solve the problem
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+Now that we have seen how painful it can be using the common implementation, we
+must improve upon it somehow. The first thing that we will need is to define a
+tool that will allow us to change the situation. I’ve chosen C++ and templates
+to solve the problem. Templates still are an area of exploration. In 1994 Erwin
+Unruh presented to the C++ Standards Committee a template program that generated
+prime numbers. The program didn’t compile, but in its error messages it
+displayed the prime numbers. This created a new way of thinking about templates.<br><br>Templates are one of those kinds of things that people either love or hate. But
+like most things, it is what you make of it.</font></td></tr></table>
+</center><br><br><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Defining the solution
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+So how to go about solving the problem? Currently, each sub expression is
+completely solved for all three components (x, y, and z) before moving on. We
+are going to change the order a bit. Without regard to the complexity of the
+expression, we want to completely solve for just the x component, then for y,
+and then for z. (Within our studio, we call this “rotating the problem 90
+degrees”.) Let’s first start with a simple formula: vA = vB + vC. The final C++
+code has to expand to something like this:<br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+vA.X = vB.X + vC.X;
+vA.Y = vB.Y + vC.Y;
+vA.Z = vB.Z + vC.Z;
+ </font></pre></td></tr></table></div></center><br><br>Let’s first build a structure that will take our original formula and break it
+into a set of expressions. For that we are going to have to create a new class.
+This class is going to be in charge of holding one part of the formula. In this
+example there is only one part, specifically vB + vC, since the expression
+contains only 2 vectors. Actually, all the operations that we are going to deal
+with involve 2 or less vectors. We will call the new class vecexp_2. This class
+can be found in Listing 3. There are some other changes that we need to make.
+The vector3d class needs to be able to get each dimension in a generic way. What
+better way than an array of floats (see Listing 3)? Next, we are going to create
+an operator + function outside the class. Later on, it will become useful to
+have done it this way. Finally, if you keep looking at Listing 3, you will
+notice that we have a structure called sum. This looks a bit like overkill for
+what we are trying to do, but again it will make sense later on. Take your time
+to figure out how all this works.<br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+<font color="#0000ff">struct</font> vector3d
+{
+    <font color="#0000ff">float</font> V[3];
+    <font color="#0000ff">inline</font> <font color="#0000ff">float</font> Evaluate( <font color="#0000ff">const</font> <font color="#0000ff">int</font> I ) <font color="#0000ff">const</font> { <font color="#0000ff">return</font> V[I]; }
+    <font color="#0000ff">inline</font> <font color="#0000ff">const</font> vector3d& <font color="#0000ff">operator</font> = ( <font color="#0000ff">const</font> vecexp_2& Exp )
+    {
+        V[0] = Exp.Evaluate( 0 );
+        V[1] = Exp.Evaluate( 1 );
+        V[2] = Exp.Evaluate( 2 );
+        <font color="#0000ff">return</font> *<font color="#0000ff">this</font>;
+    }
+};<br><br><font color="#0000ff">struct</font> sum
+{
+    <font color="#0000ff">static</font> <font color="#0000ff">inline</font> <font color="#0000ff">float</font> Evaluate( <font color="#0000ff">const</font> <font color="#0000ff">int</font> I, <font color="#0000ff">const</font> vector3d& Va, 
+                                               <font color="#0000ff">const</font> vector3d& Vb )
+    {
+        <font color="#0000ff">return</font> Va.Evaluate( I ) + Vb.Evaluate( I );
+    }
+};
+ <br><br><font color="#0000ff">class</font> vecexp_2
+{
+    <font color="#0000ff">const</font> vector3d& V1;
+    <font color="#0000ff">const</font> vector3d& V2;
+<font color="#0000ff">public</font>:
+     <font color="#0000ff">inline</font> vecexp_2( <font color="#0000ff">const</font> vector3d& Va, <font color="#0000ff">const</font> vector3d& Vb ) 
+      : V1( Va ), V2( Vb ) {}
+     <font color="#0000ff">inline</font> <font color="#0000ff">const</font> <font color="#0000ff">float</font> Evaluate( <font color="#0000ff">const</font> <font color="#0000ff">int</font> I ) <font color="#0000ff">const</font>
+     { <font color="#0000ff">return</font> sum::Evaluate( I, V1, V2 ); }
+};<br><br> 
+vecexp_2 <font color="#0000ff">inline</font> <font color="#0000ff">operator</font> + ( <font color="#0000ff">const</font> vector3d& Va, <font color="#0000ff">const</font> vector3d& Vb )
+{
+    <font color="#0000ff">return</font> vecexp_2( Va, Vb );
+}<br><br><font color="#007f00">// Listing 3
+</font> </font></pre></td></tr></table></div></center><br><br>Let’s now follow what happens to our original expression vA = vB + vC. First,
+function operator + will be called with vB and vC as references and will create
+a vecexp_2.  Note how we call the constructor and pass both references. Those
+references will be stored within the vecexp_2 class when the constructor
+executes. After the vecexp_2 is constructed, it is passed to the vector3d
+function operator = because we are assigning the constructed vecexp_2 to
+vector3d vA. This operator = in turn calls the vecexp_2 function Evaluate for
+each of the dimensions. This results in the sum::Evaluate function being called.
+Here we call each of the vector3d::Evaluate functions and finally the results
+are added and returned.<br><br>All this looks like overkill, but it is a stepping stone. It may seem that we
+just added tons more overhead to get the same thing as before. But actually, to
+everyone’s surprise, if the code is compiled in release mode, it will run a bit
+faster than the original.<br><br>What happened? Well for one thing, we added tons of const’s and inlines
+everywhere. This caused the optimizer to inline everything, and it creates the
+result that we wanted in Listing 2b. Crazy isn’t it? Well, get ready for a lot
+more craziness. The problem with the current program is that it’s unable to
+handle longer expressions.  To solve problems with longer expressions we need to
+use templates. Where do we need templates? Everywhere!<br><br>Let’s try to solve a more complex problem: vA = vB + vC + vD. Our code right now
+will pick up vB + vC and create a vecexp_2. Note that now we could write one
+more function to solve this particular problem. The prototype of that function
+would look like inline operator + ( const vecexp& Exp, const vector3d& B ). The
+problem of heading this direction is that we would need a new expression class.
+This would cascade and require changes all over the place forcing us to add way
+too much code to make it practical. Not to worry, here is where we introduce the
+templates to solve all these problems in one shot. Listing 4 has the new source
+code.<br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+<font color="#0000ff">struct</font> vector3d
+{
+    <font color="#0000ff">float</font> V[3];
+    <font color="#0000ff">inline</font> <font color="#0000ff">float</font> Evaluate( <font color="#0000ff">const</font> <font color="#0000ff">int</font> I ) <font color="#0000ff">const</font> { <font color="#0000ff">return</font> V[I]; }<br><br>    <font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta >
+    <font color="#0000ff">inline</font> <font color="#0000ff">const</font> vector3d& <font color="#0000ff">operator</font> = ( <font color="#0000ff">const</font> ta& Exp )
+    {
+        V[0] = Exp.Evaluate( 0 );
+        V[1] = Exp.Evaluate( 1 );
+        V[2] = Exp.Evaluate( 2 );
+    }
+};<br><br> 
+<font color="#0000ff">struct</font> sum
+{
+    <font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta, <font color="#0000ff">class</font> tb >
+    <font color="#0000ff">static</font> <font color="#0000ff">inline</font> <font color="#0000ff">float</font> Evaluate( <font color="#0000ff">const</font> <font color="#0000ff">int</font> I, <font color="#0000ff">const</font> ta& A, <font color="#0000ff">const</font> tb& B )
+    { <font color="#0000ff">return</font> A.Evaluate( I ) + B.Evaluate( I ); }
+};<br><br> <br><br><font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta_a, <font color="#0000ff">class</font> ta_b, <font color="#0000ff">class</font> ta_eval >
+<font color="#0000ff">class</font> vecexp_2
+{
+   <font color="#0000ff">const</font> ta_a   Arg1;
+   <font color="#0000ff">const</font> ta_b   Arg2;<br><br><font color="#0000ff">public</font>:
+    <font color="#0000ff">inline</font> vecexp_2( <font color="#0000ff">const</font> ta_a& A1, <font color="#0000ff">const</font> ta_b& A2 ) 
+     : Arg1( A1 ), Arg2( A2 ) {}
+    <font color="#0000ff">inline</font> <font color="#0000ff">const</font> <font color="#0000ff">float</font> Evaluate ( <font color="#0000ff">const</font> <font color="#0000ff">int</font> I ) <font color="#0000ff">const</font>
+    { <font color="#0000ff">return</font> ta_eval::Evaluate( I, Arg1, Arg2 ); }
+};
+ <br><br><font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta, <font color="#0000ff">class</font> tb > <font color="#0000ff">inline</font>
+vecexp_2&lt; ta, tb, sum > 
+<font color="#0000ff">inline</font> <font color="#0000ff">operator</font> + ( <font color="#0000ff">const</font> ta& A, <font color="#0000ff">const</font> tb& B )
+{
+    <font color="#0000ff">return</font> vecexp_2&lt; <font color="#0000ff">const</font> ta, <font color="#0000ff">const</font> tb, sum >( A, B );
+}<br><br><font color="#007f00">// Listing 4
+</font> </font></pre></td></tr></table></div></center><br><br>Let’s first focus on the vecexp_2. Note how it takes 3 classes in the template
+argument, the two operands and the operator. This will allow any operator that
+uses two operands to use its functionality, which produces the virtual like
+functionality. The only requirement is that you have in your operator a function
+called Evaluate(int I). For this article we are only going to do the sum, but
+you’ll see how adding the rest of the operators are trivial. In the structure
+sum you will notice that it also has the same concept for the operands. We only
+have two types of operands so far, vecexp_2 and vector3d. Note that other
+classes that are not vector related could be passed to any of our generic
+template classes by mistake, but we will address that problem later. The other
+big change that has been added is in the function operator +. Now it takes two
+objects of any kind and it builds a vecexp_2. The syntax for all of this is a
+bit heavy so it may take a bit to get familiar with all this, so take your time.<br><br>Congratulations if you made it this far! Now you have the basic concepts about
+templatized math. If you don’t understand what we just did, I don’t blame you.
+Just take it easy and try understanding one item at a time. Once it’s in your
+head, try to see how the whole thing works.<br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+<font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta_a >
+<font color="#0000ff">class</font> vecarg
+{
+    <font color="#0000ff">const</font> ta_a& Argv;
+<font color="#0000ff">public</font>:
+    <font color="#0000ff">inline</font> vecarg( <font color="#0000ff">const</font> ta_a& A ) : Argv( A ) {}
+    <font color="#0000ff">inline</font> <font color="#0000ff">const</font> <font color="#0000ff">float</font> Evaluate( <font color="#0000ff">const</font> <font color="#0000ff">int</font> i ) <font color="#0000ff">const</font> 
+    { <font color="#0000ff">return</font> Argv.Evaluate( i ); }
+};<br><br> 
+<font color="#0000ff">template</font>&lt;> 
+<font color="#0000ff">class</font> vecarg&lt; <font color="#0000ff">const</font> <font color="#0000ff">float</font> >
+{
+    <font color="#0000ff">const</font> ta_a& Argv;
+<font color="#0000ff">public</font>:
+    <font color="#0000ff">inline</font> vecarg( <font color="#0000ff">const</font> ta_a& A ) : Argv( A ) {}
+    <font color="#0000ff">inline</font> <font color="#0000ff">const</font> <font color="#0000ff">float</font> Evaluate( <font color="#0000ff">const</font> <font color="#0000ff">int</font> i ) <font color="#0000ff">const</font> { <font color="#0000ff">return</font> Argv; }
+};
+ <br><br><font color="#0000ff">template</font>&lt;> 
+<font color="#0000ff">class</font> vecarg&lt; <font color="#0000ff">const</font> <font color="#0000ff">int</font> >
+{
+    <font color="#0000ff">const</font> ta_a& Argv;
+<font color="#0000ff">public</font>:
+    <font color="#0000ff">inline</font> vecarg( <font color="#0000ff">const</font> ta_a& A ) : Argv( A ) {}
+    <font color="#0000ff">inline</font> <font color="#0000ff">const</font> <font color="#0000ff">float</font> Evaluate( <font color="#0000ff">const</font> <font color="#0000ff">int</font> i ) <font color="#0000ff">const</font> { <font color="#0000ff">return</font> (<font color="#0000ff">float</font>)Argv; }
+};<br><br> 
+<font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta_a, <font color="#0000ff">class</font> ta_b, <font color="#0000ff">class</font> ta_eval >
+<font color="#0000ff">class</font> vecexp_2
+{
+    <font color="#0000ff">const</font> vecarg&lt;ta_a>   Arg1;
+    <font color="#0000ff">const</font> vecarg&lt;ta_b>   Arg2;<br><br> 
+<font color="#0000ff">public</font>:
+    <font color="#0000ff">inline</font> vecexp_2( <font color="#0000ff">const</font> ta_a& A1, <font color="#0000ff">const</font> ta_b& A2 )
+     : Arg1( A1 ), Arg2( A2 ) {}
+    <font color="#0000ff">inline</font> <font color="#0000ff">const</font> <font color="#0000ff">float</font> Evaluate ( <font color="#0000ff">const</font> <font color="#0000ff">int</font> I ) <font color="#0000ff">const</font>
+    { <font color="#0000ff">return</font> ta_eval::Evaluate( i, Arg1, Arg2 ); }
+};<br><br><font color="#007f00">// Listing 5
+</font> </font></pre></td></tr></table></div></center><br><br>Okay, now we can solve any type of expression that involves additions with other
+vectors. Fantastic! Let’s push it a bit more and try to do it with two types,
+vectors and numbers. That way we can write this other interesting expression: vA
+= vB + 5 + (vC + vB). The first thing to consider is that the operator + will
+take any type. That of course includes integers, and floating point numbers,
+which is what we want. But the problem is that an integer doesn’t have a member
+function called Evaluate. This will cause our whole system to fail miserably.
+Well, don’t worry—it’s not that bad. We just need to add another class called
+vecarg. We don’t want to add complexity to the operators since we have a few
+more operators to write, such as *, -, /, etc. We would like to add the
+complexity in the vecexp_2. You can look in Listing 5 to see what the new
+changes to this class have been. As you see, vecexp_2 is wrapping all its types
+with the class vecarg. The vecarg class creates a generic template for all
+types. You will notice that inside the class it also has a member function
+called Evaluate. Again, this forces any type to have that function. This is a
+good thing since this class will solve two problems. The generic version of it
+still assumes that the basic type has a function called Evaluate. We want to do
+that because it will allow us to create a compile time error for any unfriendly
+types such our famous banana class. The second thing that it solves is that it
+creates a template from which we can create particular instances. Look at the
+other class in Listing 5.  Now we have an int and a float argument with the
+function Evaluate. This will force the compiler to use these classes instead of
+the generic vecarg version.</font></td></tr></table>
+</center><br><br><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Defining the features
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+Basically we are about to finish the whole framework. We just need to clean it
+up and add a few missing pieces. One detail I want to add, because I think it is
+worth it, is the ability to have a multidimensional vector class. That means
+that we can have a vector2d or vector4d or whatever else we want. Most game
+programmers will find useful the ability to use 2D, 3D, and 4D vectors. Some of
+you may even be using 6D vectors for visibility stuff. I also added another
+feature just for fun, this feature will allow us to say vA.X rather than vA.V[0]
+because an array like that is very unfriendly. Also, you may want 2 different
+names for such things as UV vectors, versus XY vectors. Furthermore, let’s clean
+up the entire thing and put it in a namespace to make sure we never collide with
+any other function name. Up to the challenge? Don’t worry, this part is simple…<br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+<font color="#0000ff">namespace</font> vector
+{
+<font color="#007f00">//////////////////// ARGUMENTS ////////////////////
+</font>    <font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta_a >
+    <font color="#0000ff">class</font> vecarg
+    {
+        <font color="#0000ff">const</font> ta_a& Argv;
+    <font color="#0000ff">public</font>:
+        <font color="#0000ff">inline</font> vecarg( <font color="#0000ff">const</font> ta_a& A ) : Argv( A ) {}
+        <font color="#0000ff">inline</font> <font color="#0000ff">const</font> <font color="#0000ff">float</font> Evaluate( <font color="#0000ff">const</font> <font color="#0000ff">int</font> i ) <font color="#0000ff">const</font> 
+        { <font color="#0000ff">return</font> Argv.Evaluate( i ); }
+    };<br><br>    <font color="#0000ff">template</font>&lt;> 
+    <font color="#0000ff">class</font> vecarg&lt; <font color="#0000ff">const</font> <font color="#0000ff">float</font> >
+    {
+        <font color="#0000ff">const</font> ta_a& Argv;
+    <font color="#0000ff">public</font>:
+        <font color="#0000ff">inline</font> vecarg( <font color="#0000ff">const</font> ta_a& A ) : Argv( A ) {}
+        <font color="#0000ff">inline</font> <font color="#0000ff">const</font> <font color="#0000ff">float</font> Evaluate( <font color="#0000ff">const</font> <font color="#0000ff">int</font> i ) <font color="#0000ff">const</font> { <font color="#0000ff">return</font> Argv; }
+    };<br><br>    <font color="#0000ff">template</font>&lt;> 
+    <font color="#0000ff">class</font> vecarg&lt; <font color="#0000ff">const</font> <font color="#0000ff">int</font> >
+    {
+        <font color="#0000ff">const</font> ta_a& Argv;
+    <font color="#0000ff">public</font>:
+        <font color="#0000ff">inline</font> vecarg( <font color="#0000ff">const</font> ta_a& A ) : Argv( A ) {}
+        <font color="#0000ff">inline</font> <font color="#0000ff">const</font> <font color="#0000ff">float</font> Evaluate( <font color="#0000ff">const</font> <font color="#0000ff">int</font> i ) <font color="#0000ff">const</font> 
+        { <font color="#0000ff">return</font> (<font color="#0000ff">float</font>)Argv; }
+    };<br><br><font color="#007f00">//////////////////// EXPRESIONS ////////////////////
+</font>    <font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta_a, <font color="#0000ff">class</font> ta_b, <font color="#0000ff">class</font> ta_eval >
+    <font color="#0000ff">class</font> vecexp_2
+    {
+        <font color="#0000ff">const</font> vecarg&lt;ta_a>   Arg1;
+        <font color="#0000ff">const</font> vecarg&lt;ta_b>   Arg2;
+    <font color="#0000ff">public</font>:
+        <font color="#0000ff">inline</font> vecexp_2( <font color="#0000ff">const</font> ta_a& A1, <font color="#0000ff">const</font> ta_b& A2 )
+         : Arg1( A1 ), Arg2( A2 ) {}
+        <font color="#0000ff">inline</font> <font color="#0000ff">const</font> <font color="#0000ff">float</font> Evaluate ( <font color="#0000ff">const</font> <font color="#0000ff">int</font> i ) <font color="#0000ff">const</font>
+        { <font color="#0000ff">return</font> ta_eval::Evaluate( i, Arg1, Arg2 ); }
+    };<br><br>    <font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta_a, <font color="#0000ff">class</font> ta_eval >
+    <font color="#0000ff">class</font> vecexp_1
+    {
+        <font color="#0000ff">const</font> vecarg&lt;ta_a>   Arg1;
+    <font color="#0000ff">public</font>:
+        <font color="#0000ff">inline</font> vecexp_1( <font color="#0000ff">const</font> ta_a& A1 ) : Arg1( A1 ) {}
+        <font color="#0000ff">inline</font> <font color="#0000ff">const</font> <font color="#0000ff">float</font> Evaluate( <font color="#0000ff">const</font> <font color="#0000ff">int</font> i ) <font color="#0000ff">const</font>
+        { <font color="#0000ff">return</font> ta_eval::Evaluate( i, Arg1.Evaluate( i ) ); }
+    };<br><br><font color="#007f00">//////////////////// BASE CLASS ////////////////////
+</font>    <font color="#0000ff">template</font>&lt; <font color="#0000ff">int</font> ta_dimension, <font color="#0000ff">class</font> T >
+    <font color="#0000ff">struct</font> base : <font color="#0000ff">public</font> T
+    {
+        <font color="#0000ff">inline</font> <font color="#0000ff">const</font> <font color="#0000ff">float</font> Evaluate( <font color="#0000ff">const</font> <font color="#0000ff">int</font> I ) <font color="#0000ff">const</font> 
+        { <font color="#0000ff">return</font> (*((T*)<font color="#0000ff">this</font>))[i]; }
+        <font color="#007f00">//////////////////// ASSIGMENT ////////////////////
+</font>        <font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta >
+        <font color="#0000ff">inline</font> <font color="#0000ff">const</font> vector3d& <font color="#0000ff">operator</font> = ( <font color="#0000ff">const</font> ta& Exp )
+        {
+            <font color="#0000ff">for</font>( <font color="#0000ff">int</font> I=0; I&lt;ta_ dimension; I++ )
+                (*((T*)<font color="#0000ff">this</font>))[I] = Exp.Evaluate( I );
+        }
+<font color="#007f00">//////////////////// SUM ////////////////////
+</font>    <font color="#0000ff">struct</font> sum
+    {
+        <font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta_a, <font color="#0000ff">class</font> ta_b > <font color="#0000ff">inline</font> <font color="#0000ff">static</font> 
+        <font color="#0000ff">const</font> <font color="#0000ff">float</font> Evaluate( <font color="#0000ff">const</font> <font color="#0000ff">int</font> i, <font color="#0000ff">const</font> ta_a& A, <font color="#0000ff">const</font> ta_b& B )
+        { <font color="#0000ff">return</font> A.Evaluate(i) + B.Evaluate(i); }
+    };<br><br>    <font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta_c1, <font color="#0000ff">class</font> ta_c2 > <font color="#0000ff">inline</font> 
+    <font color="#0000ff">const</font> vecexp_2&lt; <font color="#0000ff">const</font> ta_c1, <font color="#0000ff">const</font> ta_c2, sum > 
+    <font color="#0000ff">operator</font> + ( <font color="#0000ff">const</font> ta_c1& Pa, <font color="#0000ff">const</font> ta_c2& Pb )
+    { <font color="#0000ff">return</font> vecexp_2&lt; <font color="#0000ff">const</font> ta_c1, <font color="#0000ff">const</font> ta_c2, sum >( Pa, Pb ); }<br><br><font color="#007f00">//////////////////// DATA ////////////////////
+</font>
+    <font color="#0000ff">struct</font> desc_xyz
+    {
+        <font color="#0000ff">float</font> X, Y, Z;      
+        <font color="#0000ff">inline</font> <font color="#0000ff">float</font>& <font color="#0000ff">operator</font>[](<font color="#0000ff">const</font> <font color="#0000ff">int</font> i) { <font color="#0000ff">return</font> ((<font color="#0000ff">float</font>*)<font color="#0000ff">this</font>)[i]; } 
+    };<br><br>    <font color="#0000ff">struct</font> desc_xy
+    {
+        <font color="#0000ff">float</font> X, Y;      
+        <font color="#0000ff">inline</font> <font color="#0000ff">float</font>& <font color="#0000ff">operator</font>[](<font color="#0000ff">const</font> <font color="#0000ff">int</font> i) { <font color="#0000ff">return</font> ((<font color="#0000ff">float</font>*)<font color="#0000ff">this</font>)[i]; } 
+    };
+ 
+    <font color="#0000ff">struct</font> desc_uv
+    {
+        <font color="#0000ff">float</font> U, V;      
+        <font color="#0000ff">inline</font> <font color="#0000ff">float</font>& <font color="#0000ff">operator</font>[](<font color="#0000ff">const</font> <font color="#0000ff">int</font> i) { <font color="#0000ff">return</font> ((<font color="#0000ff">float</font>*)<font color="#0000ff">this</font>)[i]; } 
+    };
+};<br><br><font color="#007f00">// Listing 6
+</font> </font></pre></td></tr></table></div></center><br><br>Take a look at the source code in Listing 6. We have changed the name of our
+original vector3d to base. The namespace is now called vector. One nice thing is
+that now vecarg, vecexp, sum, and such are hidden from the global namespace. Our
+base class now takes two arguments, ta_dimension and class T, which allows us to
+build our own personalized vectors like in Listing 7. Note that we are forced to
+add the operator =. This is one thing about C++ that is not helpful sometimes.
+It seems that our original operator is unable to make it to its children. I
+haven’t sat down and worked out an elegant way to solve this.<br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+<font color="#0000ff">struct</font> vector3 : <font color="#0000ff">public</font> vector::base&lt; 3, vector::desc_xyz >
+{
+    <font color="#0000ff">typedef</font> vector::base&lt; 3, vector::desc_xyz > base; <br><br>    <font color="#0000ff">inline</font> vector3( <font color="#0000ff">const</font> <font color="#0000ff">float</font> x, <font color="#0000ff">const</font> <font color="#0000ff">float</font> y, <font color="#0000ff">const</font> <font color="#0000ff">float</font> z )
+    { X = z; Y = y; Z = z; }<br><br>    <font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta_type > <font color="#0000ff">inline</font>
+    vector3& <font color="#0000ff">operator</font> = ( <font color="#0000ff">const</font> ta_type& A )
+    { base::<font color="#0000ff">operator</font> = ( A ); <font color="#0000ff">return</font> *<font color="#0000ff">this</font>; }
+};<br><br> 
+<font color="#0000ff">struct</font> vector2 : <font color="#0000ff">public</font> vector::base&lt; 2, vector::desc_xy >
+{
+    <font color="#0000ff">typedef</font> vector::base&lt; 2, vector::desc_xy > base;<br><br>    <font color="#0000ff">inline</font> vector2( <font color="#0000ff">const</font> <font color="#0000ff">float</font> x, <font color="#0000ff">const</font> <font color="#0000ff">float</font> y )
+    { X = x; Y = y; } <br><br>    <font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta_type > <font color="#0000ff">inline</font>
+    vector2& <font color="#0000ff">operator</font> = ( <font color="#0000ff">const</font> ta_type& A )
+    { base::<font color="#0000ff">operator</font> = ( A ); <font color="#0000ff">return</font> *<font color="#0000ff">this</font>; }
+};<br><br><font color="#007f00">// Listing 7
+</font> </font></pre></td></tr></table></div></center></font></td></tr></table>
+</center><br><br><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Defining the compiler workarounds
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+Okay, we’re almost done. We now need to deal with Microsoft’s C++ compiler and
+make it do what we want. In our case we just want it to inline everything. For
+that, Microsoft has provided a few pragmas. If we fail to force the issue the
+compiler will try to be smart and fall on its face.<br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+<font color="#0000ff">#pragma</font> inline_depth( 255 )
+<font color="#0000ff">#pragma</font> inline_recursion( on )
+<font color="#0000ff">#pragma</font> auto_inline( on )
+ </font></pre></td></tr></table></div></center><br><br>The first two pragmas tell the compiler to do inline recursion as deep as it
+needs to. You can change the depth to any number up to 255. The other pragma
+tells the compiler to inline whenever it feels like it. We want the compiler to
+inline all the functions. You would think that putting inline in front would do
+it, but that is not the case. The optimizer considers whether it’s worth
+inlining or not, which makes me wonder about the point of the inline keyword. We
+really need the optimizer not to think but just do. For that, Microsoft added
+another type of inline command called forceinline which tells the compiler to
+inline the functions no matter what. This almost works. I found myself having to
+“rebuild all” every time I compiled to force it to inline everything. Bad, bad
+Microsoft compiler! Finally, my last problem was that the compiler would not
+unroll the for loop that we introduced in the operator =. This may not be a big
+deal in the big picture, but it is just unacceptable for me. That is what got me
+madder that anything else. Well, this last problem also needs to be solved with
+templates.<br><br>Unrolling a loop with a template requires that you put the for loop in a
+recursive-like form. That is not a problem most times. I had to create two
+different structures in order to achieve my unroll.  But it’s usually good
+enough with just one. To keep the compiler from recursing forever, I had to add
+a terminator.  Look at Listing 8.  This function, template<> struct
+recurse<ta_dimension,int>, tells the compiler not to use the generic template
+function, but to use this one instead. This is exactly the same thing that we
+did before with the vecarg class. The structure recurse has a function called
+assign. This function is where the guts of the for loop goes. In my case it’s
+just the assignment of one of the dimensions. The following line forces the
+recursion with this template structure. In the end, we just call our normal
+operator = and that takes care of everything. Interesting, right? In the program
+that comes with the article there are other examples of doing this trick with
+the dot product. Check it out.<br><br><center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+<font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta >
+<font color="#0000ff">struct</font> assigment
+{
+    <font color="#0000ff">template</font>&lt; <font color="#0000ff">int</font> I, <font color="#0000ff">class</font> R >
+    <font color="#0000ff">struct</font> recurse
+    {
+        <font color="#0000ff">enum</font>{ COUNTER = I+1 };<br><br>        <font color="#0000ff">static</font> <font color="#0000ff">inline</font> <font color="#0000ff">void</font> Assign( base&lt;ta_dimension, T>& V, <font color="#0000ff">const</font> ta& A ) 
+        {
+            V[I] = A.Evaluate( I );
+            recurse&lt;COUNTER, <font color="#0000ff">int</font>>::Assign( V, A );
+        }
+    }; <br><br>    <font color="#0000ff">template</font>&lt;> <font color="#0000ff">struct</font> recurse&lt;ta_dimension,<font color="#0000ff">int</font>>
+    {
+        <font color="#0000ff">static</font> <font color="#0000ff">inline</font> <font color="#0000ff">void</font> Assign( base&lt;ta_dimension, T>& V, <font color="#0000ff">const</font> ta& A ) {}
+    };
+ 
+    <font color="#0000ff">static</font> <font color="#0000ff">inline</font> <font color="#0000ff">void</font> Assign( base&lt;ta_dimension, T>& V, <font color="#0000ff">const</font> ta& A )
+    {
+        recurse&lt;0,<font color="#0000ff">int</font>>::Assign( V, A );
+    }
+};<br><br> 
+<font color="#0000ff">template</font>&lt; <font color="#0000ff">class</font> ta_type > <font color="#0000ff">inline</font>
+<font color="#0000ff">const</font> base&lt;ta_dimension, T>& <font color="#0000ff">operator</font> = ( <font color="#0000ff">const</font> ta_type& A )
+{
+    assigment&lt;ta_type>::Assign( *<font color="#0000ff">this</font>, A );
+    <font color="#0000ff">return</font> *<font color="#0000ff">this</font>;
+}<br><br><font color="#007f00">// Listing 8
+</font> </font></pre></td></tr></table></div></center></font></td></tr></table>
+</center><br><br><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Examining the results
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+And now the critical question: How fast is it really? I implemented three
+versions of the vector math routines. The first version is based on Jim Blinn’s
+article, the second version is mine, and the last version is the common method.
+The graph shows the performance on an AMDK7 950Mhz. The thing that surprised me
+the most from the results was that my version worked faster than Jim’s. It has
+nothing to do with the concepts, but rather how the compiler chose to inline. At
+the end of the day both Jim’s version and my version should have ended up
+working at the same speed, but the universe is not perfect.<br><br><center><img src="article_fastervectormath.gif" width=575 height=417></center>
+<center>
+<table border=1 width="85%%" cellspacing=0 cellpadding=10>
+<tr>
+<td width="33%"><font size=2 color="#ffe291" face="Verdana,Helvetica">VD = vD + vA + vB</font>
+</td><br><br><td width="33%"><font size=2 color="#ffe291" face="Verdana,Helvetica">vD = vD + vA + vB</font>
+</td><br><br><td width="33%"><font size=2 color="#ffe291" face="Verdana,Helvetica">vD = vD + vA + vB</font>
+</td>
+</tr>
+<tr><td width="33%" valign="top">
+<center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+mov   ecx,dword ptr ds:[408C68h]
+mov   edx,dword ptr ds:[408C6Ch]
+mov   dword ptr [ebp-24h],ecx
+fld   dword ptr [ebp-24h]
+mov   ecx,dword ptr ds:[408C70h]
+mov   dword ptr [ebp-20h],edx
+mov   edx,dword ptr ds:[408C78h]
+mov   dword ptr [ebp-18h],edx
+mov   edx,dword ptr ds:[408C80h]
+fadd  dword ptr [ebp-18h]
+mov   dword ptr [ebp-1Ch],ecx
+mov   ecx,dword ptr ds:[408C7Ch]
+fadd  dword ptr ds:[408C88h]
+mov   dword ptr [ebp-14h],ecx
+mov   dword ptr [ebp-10h],edx
+fstp  dword ptr ds:[408C68h]
+fld   dword ptr [ebp-20h]
+fadd  dword ptr [ebp-14h]
+fadd  dword ptr ds:[408C8Ch]
+fstp  dword ptr ds:[408C6Ch]
+fld   dword ptr [ebp-1Ch]
+fadd  dword ptr [ebp-10h]
+fadd  dword ptr ds:[408C90h]
+fstp  dword ptr ds:[408C70h]
+ </font></pre></td></tr></table></div></center>
+</td>
+<td width="33%" valign="top">
+<center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+fld   dword ptr ds:[408CE8h]
+fadd  dword ptr ds:[408CD8h]
+mov   dword ptr [ebp-14h],edx
+mov   dword ptr [ebp-10h],eax
+fadd  dword ptr ds:[408D08h]
+fstp  dword ptr ds:[408D08h]
+fld   dword ptr [eax+4]
+fadd  dword ptr ds:[408CECh]
+fadd  dword ptr ds:[408D0Ch]
+fstp  dword ptr ds:[408D0Ch]
+fld   dword ptr [eax+8]
+fadd  dword ptr ds:[408CF0h]
+fadd  dword ptr ds:[408D10h]
+fstp  dword ptr ds:[408D10h]
+ </font></pre></td></tr></table></div></center>
+</td>
+<td width="33%" valign="top">
+<center><div style="width:100%; overflow:auto; background-color:#FFFFFF; border:solid 1px #c0c0c0;"><table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=12 border=0><tr><td width="100%" bgcolor="#ffffff"><pre><font face="Courier, Courier New" color="#000000">
+fld   dword ptr ds:[408C98h]
+fadd  dword ptr ds:[408CC8h]
+fld   dword ptr ds:[408C9Ch]
+fadd  dword ptr ds:[408CCCh]
+fstp  dword ptr [ebp-8]
+fld   dword ptr ds:[408CA0h]
+fadd  dword ptr ds:[408CD0h]
+fstp  dword ptr [ebp-4]
+fadd  dword ptr ds:[408CA8h]
+fstp  dword ptr [ebp-18h]
+fld   dword ptr [ebp-8]
+mov   edx,dword ptr [ebp-18h]
+fadd  dword ptr ds:[408CACh]
+mov   dword ptr ds:[408CC8h],edx
+fstp  dword ptr [ebp-14h]
+fld   dword ptr [ebp-4]
+mov   ecx,dword ptr [ebp-14h]
+fadd  dword ptr ds:[408CB0h]
+mov   dword ptr ds:[408CCCh],ecx
+fstp  dword ptr [ebp-10h]
+mov   edx,dword ptr [ebp-10h]
+mov   dword ptr ds:[408CD0h],edx
+ </font></pre></td></tr></table></div></center>
+</td>
+</tr>
+<tr>
+<td width="33%"><font size=2 color="#ffe291" face="Verdana,Helvetica">Jim’s</font>
+</td>
+<td width="33%"><font size=2 color="#ffe291" face="Verdana,Helvetica">Tomas’</font>
+</td>
+<td width="33%"><font size=2 color="#ffe291" face="Verdana,Helvetica">Typical’s</font>
+</td>
+</tr>
+</table>
+</center><br><br>Let’s take a quick look at some of the assembly generated by each of the
+versions. You will notice that Jim’s code is actually the longest, yet it
+performs better than the standard method. The compiler produced code which
+stalled less than the common implementation. It accomplishes this by
+interleaving the moves and the floating point operations. You can still see how
+much movement of memory there is due to poor inlining. My method had some memory
+movement, but far less than either of the other two versions. The common method
+fails to inline as much as it should, and spends most of its time moving memory
+from the floating point unit. Although performance may vary with different
+compiler options, Jim’s and mine should most often produce better code.</font></td></tr></table>
+</center><br><br><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Limitations
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+In a statement like vA = vB + vC, each component of vA can be expressed using
+only one component each from vB and vC.  However, assume we have a cross product
+function and the following: vA = Cross( vB, vC ).  There is no way to express,
+say, vA.X using only one component from vB (or from vC).  This last one isn’t
+too bad.  But it can get much worse.  Consider: vA = Cross( vB1+vB2, vC1+vC2 ). 
+The two vector adds should need 6 floating point additions total, and the cross
+product itself needs 3 subtractions.  But beware!  A naïve implementation of the
+cross product using these techniques could very well end up performing 12
+floating point additions and 3 subtractions.  Dot products can also lead to
+trouble. I the source code included with this article there is an example on how
+to implement the Dot product properly.<br><br>A colleague of mine, D. Michael Traub, pointed out, it gets even worse if you
+extrapolate these techniques to matrices.  Consider matrix concatenation: mA =
+mB * mC.  The upper left cell of mA can only be expressed by using 4 components
+each from mB and mC.  Of course, matrix transposition does not have any problems
+since each cell of the transposed matrix is expressed as one cell from the
+original matrix.  It’s just not the same cell.<br><br>These techniques work best when each component of the resulting vector can be
+expressed entirely in terms of only one component per vector in the expression.
+Operations which are troublesome should just do it the old fashioned way and
+fully compute their result to be stored internally.  Our clever “solve
+completely for each component at a time” pipeline will be forced to stall on
+these operations, but it certainly beats redundant computations.</font></td></tr></table>
+</center><br><br><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+Conclusion
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+Well, we have learned to take a simple math vector class and transmute it into a
+mean parsing machine. With three dimensional vectors, we realized performance
+improvements of up to 2.3 times over the typical implementation. There should be
+even larger gains with vectors of higher dimensions. (Note that there was no
+attempt to implement template versions of matrix operations, so we don’t know
+where that may lead or what performance changes may be realized. Said
+differently, the matrix version is left as a reader exercise!)<br><br>As cool as this all sounds, it has its place. There are many issues with using
+templates. Most compilers still don’t completely satisfy the standard C++
+language description. This can cause incompatible code, not to mention
+obfuscated bugs. There is the issue with the optimizer and the inlining. Not all
+compilers can do this in a very elegant way. The Microsoft compiler wouldn’t
+inline everything unless I rebuilt the entire project. There are also the new
+SIMD instructions in the new processors which provide an attractive alternative
+to using standard floating point math for our vectors. But all is not lost. We
+have learned how to think in a different way using templates. We can apply our
+new knowledge to many other problems such as AI, physics, or even file
+processing. As always, it is up to you to decide whether this new tool is the
+right thing for a particular problem. So pick and choose your battles carefully,
+because there are two times you need to deal with: run time and development
+time.<br><br>Download the source code included with this article: <a href="article_fastervectormath.zip">article_fastervectormath.zip</a></font></td></tr></table>
+</center><br><br><center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=3 color="#ffffff" face="Verdana, Helvetica, Arial, Times New Roman"><b>
+
+References
+<font size=1><br><img src="line_grey.png"><br><br></font></b></font></td></tr></table>
+</center>
+<center>
+<table style="table-layout:fixed;" width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td width="100%">
+<font size=2 color="#FFE291" face="Verdana, Helvetica, Arial, Times New Roman">
+
+Tomas Arce<br>
+<a href="http://www.zen-x.net">www.zen-x.net</a><br><br>Jim Blinn<br>
+Jim Blinn’s Corner. Optimizing C++ vector Expressions<br>
+IEEE Computer Graphics Applications<br>
+<a href="http://www.research.microsoft.com/~blinn/">www.research.microsoft.com/~blinn/</a><br><br>Pete Isensee<br>
+Fast Math Using Template Metaprogramming<br>
+Game Programming Gems</font></td></tr></table>
+</center><center>
+<table width="80%" cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td>
+<font size=2 face="Verdana" color="#ffffff">
+<br>
+
+
+</font>
+</td>
+</tr>
+</table>
+</center>
+<center><table cellspacing=0 cellpadding=2 border=0 width="80%"><tr><td background="comments_bar2.jpg" bgcolor="#333333" width="100" valign="center"><font size=1>&nbsp;</font></td></tr></table></center><br>
+<center><font face="Arial, Helvetica" size=1><font face="Helvetica,Tahoma,Verdana" size=1>Copyright 1999-2008 (C) FLIPCODE.COM and/or the original content author(s).  All rights reserved.</font> <center><font face="Helvetica,Tahoma,Verdana" size=1>Please read our <a href="terms.shtml">Terms</a>, <a href="terms.shtml">Conditions</a>, and <a href="terms.shtml">Privacy information</a>.</font></center></font></center>
+<br>
+</body>
+</html>
+
+
+------------jRx3WKU075rSFjXa7mK1Kj
+Content-Disposition: inline; filename=show_ads.js
+Content-Type: text/javascript; charset=UTF-8; name=show_ads.js
+Content-Location: http://pagead2.googlesyndication.com/pagead/show_ads.js
+Content-Transfer-Encoding: Quoted-Printable
+
+
+(function(){var g=3Dtrue,h=3Dnull,i=3Dfalse,j=3D(new Date).getTime();var=
+ k=3Dthis,aa=3Dfunction(a,b,c){a=3Da.split(".");c=3Dc||k;!(a[0]in c)&&c.=
+execScript&&c.execScript("var "+a[0]);for(var d;a.length&&(d=3Da.shift()=
+);)if(!a.length&&b!=3D=3Dundefined)c[d]=3Db;else c=3Dc[d]?c[d]:c[d]=3D{}=
+},ba=3Dfunction(a){return a.call.apply(a.bind,arguments)},ca=3Dfunction(=
+a,b){var c=3Db||k;if(arguments.length>2){var d=3DArray.prototype.slice.c=
+all(arguments,2);return function(){var f=3DArray.prototype.slice.call(ar=
+guments);Array.prototype.unshift.apply(f,d);return a.apply(c,f)}}else re=
+turn function(){return a.apply(c,
+arguments)}},l=3Dfunction(){l=3DFunction.prototype.bind&&Function.protot=
+ype.bind.toString().indexOf("native code")!=3D-1?ba:ca;return l.apply(h,=
+arguments)};var da=3D/&/g,ea=3D/</g,fa=3D/>/g,ga=3D/\"/g,m=3D{"\u0000":"=
+\\0","\u0008":"\\b","\u000c":"\\f","\n":"\\n","\r":"\\r","\t":"\\t","\u0=
+00b":"\\x0B",'"':'\\"',"\\":"\\\\"},p=3D{"'":"\\'"},t=3Dfunction(a,b){if=
+(a<b)return-1;else if(a>b)return 1;return 0};var u,v,w,z,B=3Dfunction(){=
+return k.navigator?k.navigator.userAgent:h};z=3Dw=3Dv=3Du=3Di;var C;if(C=
+=3DB()){var ha=3Dk.navigator;u=3DC.indexOf("Opera")=3D=3D0;v=3D!u&&C.ind=
+exOf("MSIE")!=3D-1;w=3D!u&&C.indexOf("WebKit")!=3D-1;z=3D!u&&!w&&ha.prod=
+uct=3D=3D"Gecko"}var D=3Dv,F=3Dz,ja=3Dw,G;
+a:{var H=3D"",I;if(u&&k.opera){var J=3Dk.opera.version;H=3Dtypeof J=3D=3D=
+"function"?J():J}else{if(F)I=3D/rv\:([^\);]+)(\)|;)/;else if(D)I=3D/MSIE=
+\s+([^\);]+)(\)|;)/;else if(ja)I=3D/WebKit\/(\S+)/;if(I){var ka=3DI.exec=
+(B());H=3Dka?ka[1]:""}}if(D){var K,la=3Dk.document;K=3Dla?la.documentMod=
+e:undefined;if(K>parseFloat(H)){G=3DString(K);break a}}G=3DH}
+var ma=3DG,na=3D{},L=3Dfunction(a){var b;if(!(b=3Dna[a])){b=3D0;for(var =
+c=3DString(ma).replace(/^[\s\xa0]+|[\s\xa0]+$/g,"").split("."),d=3DStrin=
+g(a).replace(/^[\s\xa0]+|[\s\xa0]+$/g,"").split("."),f=3DMath.max(c.leng=
+th,d.length),e=3D0;b=3D=3D0&&e<f;e++){var ta=3Dc[e]||"",s=3Dd[e]||"",n=3D=
+RegExp("(\\d*)(\\D*)","g"),A=3DRegExp("(\\d*)(\\D*)","g");do{var q=3Dn.e=
+xec(ta)||["","",""],o=3DA.exec(s)||["","",""];if(q[0].length=3D=3D0&&o[0=
+].length=3D=3D0)break;b=3Dt(q[1].length=3D=3D0?0:parseInt(q[1],10),o[1].=
+length=3D=3D0?0:parseInt(o[1],10))||t(q[2].length=3D=3D
+0,o[2].length=3D=3D0)||t(q[2],o[2])}while(b=3D=3D0)}b=3Dna[a]=3Db>=3D0}r=
+eturn b};var M,N;N=3DM=3Di;var O=3DB();if(O)if(O.indexOf("Firefox")!=3D-=
+1)M=3Dg;else if(O.indexOf("Camino")=3D=3D-1)if(!(O.indexOf("iPhone")!=3D=
+-1||O.indexOf("iPod")!=3D-1))if(O.indexOf("iPad")=3D=3D-1)if(O.indexOf("=
+Android")=3D=3D-1)if(O.indexOf("Chrome")!=3D-1)N=3Dg;var oa=3DM,pa=3DN;v=
+ar qa=3Ddocument,P=3Dwindow;var Q=3Dfunction(a){a=3DparseFloat(a);return=
+ isNaN(a)||a>1||a<0?0:a},ra=3Dfunction(a){if(a=3D=3D"true")return g;retu=
+rn i},sa=3D/^([\w-]+\.)*([\w-]{2,})(\:[0-9]+)?$/,ua=3Dfunction(a){if(!a)=
+return"pagead2.googlesyndication.com";return(a=3Da.match(sa))?a[0]:"page=
+ad2.googlesyndication.com"};var va=3DQ("0"),wa=3DQ("0"),xa=3DQ("0"),ya=3D=
+Q("0.2");var za=3Dra("false"),Aa=3Dra("false"),Ba=3Dra("false");var Ca=3D=
+function(){return ua("")};!D||L("9");!F&&!D||D&&L("9")||F&&L("1.9.1");D&=
+&L("9");ua("");var R=3Dfunction(a){return!!a&&typeof a=3D=3D"function"&&=
+!!a.call},Da=3Dfunction(a){if(!(arguments.length<2))for(var b=3D1,c=3Dar=
+guments.length;b<c;++b)a.push(arguments[b])};function S(a){return typeof=
+ encodeURIComponent=3D=3D"function"?encodeURIComponent(a):escape(a)}func=
+tion Ea(a,b){if(a.attachEvent)a.attachEvent("onload",b);else a.addEventL=
+istener&&a.addEventListener("load",b,i)}
+function Fa(a,b){if(!(Math.random()<1.0E-4)){var c=3DMath.random();if(c<=
+b)return a[Math.floor(c/b*a.length)]}return""};aa("google_protectAndRun"=
+,function(a,b,c){a=3Dl(b,k,a);b=3Dwindow.onerror;window.onerror=3Da;try{=
+c()}catch(d){c=3Dd.toString();var f=3D"";if(d.fileName)f=3Dd.fileName;va=
+r e=3D-1;if(d.lineNumber)e=3Dd.lineNumber;if(!a(c,f,e))throw d;}window.o=
+nerror=3Db},void 0);
+aa("google_handleError",function(a,b,c,d){if(Math.random()<0.01){a=3D["h=
+ttp://",Ca(),"/pagead/gen_204","?id=3Djserror","&jscb=3D",za?1:0,"&jscd=3D=
+",Aa?1:0,"&context=3D",S(a),"&msg=3D",S(b),"&file=3D",S(c),"&line=3D",S(=
+d.toString()),"&url=3D",S(qa.URL.substring(0,512)),"&ref=3D",S(qa.referr=
+er.substring(0,512))];a.push(["&client=3D",S(P.google_ad_client),"&forma=
+t=3D",S(P.google_ad_format),"&slotname=3D",S(P.google_ad_slot),"&output=3D=
+",S(P.google_ad_output),"&ad_type=3D",S(P.google_ad_type)].join(""));a=3D=
+a.join("");P.google_image_requests||
+(P.google_image_requests=3D[]);b=3Dnew Image;b.src=3Da;P.google_image_re=
+quests.push(b)}return!Ba},void 0);var Ha=3Dfunction(a){try{var b=3Da.goo=
+gle_test;a.google_test=3D!b;if(a.google_test=3D=3D=3D!b){a.google_test=3D=
+b;return g}}catch(c){}return i},Ia=3Dh,Ja=3Dfunction(){if(!Ia){for(var a=
+=3Dwindow;a!=3Da.parent&&Ha(a.parent);)a=3Da.parent;Ia=3Da}return Ia};va=
+r T,U=3Dfunction(a){this.d=3D[];this.b=3Da||window;this.a=3D0;this.c=3Dh=
+},Ka=3Dfunction(a,b){this.j=3Da;this.o=3Db};U.prototype.i=3Dfunction(a,b=
+){if(this.a=3D=3D0&&this.d.length=3D=3D0&&(!b||b=3D=3Dwindow)){this.a=3D=
+2;this.h(new Ka(a,window))}else this.f(a,b)};U.prototype.f=3Dfunction(a,=
+b){this.d.push(new Ka(a,b||this.b));La(this)};U.prototype.k=3Dfunction(a=
+){this.a=3D1;if(a)this.c=3Dthis.b.setTimeout(l(this.g,this),a)};U.protot=
+ype.g=3Dfunction(){if(this.a=3D=3D1){if(this.c!=3Dh){this.b.clearTimeout=
+(this.c);this.c=3Dh}this.a=3D0}La(this)};
+U.prototype.m=3Dfunction(){return g};U.prototype.nq=3DU.prototype.i;U.pr=
+ototype.nqa=3DU.prototype.f;U.prototype.al=3DU.prototype.k;U.prototype.r=
+l=3DU.prototype.g;U.prototype.sz=3DU.prototype.m;var La=3Dfunction(a){a.=
+b.setTimeout(l(a.n,a),0)};U.prototype.n=3Dfunction(){if(this.a=3D=3D0&&t=
+his.d.length){var a=3Dthis.d.shift();this.a=3D2;a.o.setTimeout(l(this.h,=
+this,a),0);La(this)}};U.prototype.h=3Dfunction(a){this.a=3D0;a.j()};
+var Ma=3Dfunction(a){try{return a.sz()}catch(b){return i}},Na=3Dfunction=
+(a){return!!a&&(typeof a=3D=3D"object"||typeof a=3D=3D"function")&&Ma(a)=
+&&R(a.nq)&&R(a.nqa)&&R(a.al)&&R(a.rl)},Oa=3Dfunction(){if(T&&Ma(T))retur=
+n T;var a=3DJa(),b=3Da.google_jobrunner;if(Na(b))return T=3Db;return a.g=
+oogle_jobrunner=3DT=3Dnew U(a)},Pa=3Dfunction(a,b){Oa().nq(a,b)},Qa=3Dfu=
+nction(a,b){Oa().nqa(a,b)};var Ra=3Dfunction(a,b,c){var d=3D["<iframe"],=
+f;for(f in a)a.hasOwnProperty(f)&&Da(d,f+"=3D"+a[f]);d.push('style=3D"le=
+ft:0;position:absolute;top:0;"');d.push("></iframe>");b=3D"border:none;h=
+eight:"+c+"px;margin:0;padding:0;position:relative;visibility:visible;wi=
+dth:"+b+"px";return['<ins style=3D"display:inline-table;',b,'"><ins id=3D=
+"',a.id+"_anchor",'" style=3D"display:block;',b,'">',d.join(" "),"</ins>=
+</ins>"].join("")};var Sa=3Dfunction(){},Ua=3Dfunction(a,b,c){switch(typ=
+eof b){case "string":Ta(a,b,c);break;case "number":c.push(isFinite(b)&&!=
+isNaN(b)?b:"null");break;case "boolean":c.push(b);break;case "undefined"=
+:c.push("null");break;case "object":if(b=3D=3Dh){c.push("null");break}if=
+(b instanceof Array){var d=3Db.length;c.push("[");for(var f=3D"",e=3D0;e=
+<d;e++){c.push(f);Ua(a,b[e],c);f=3D","}c.push("]");break}c.push("{");d=3D=
+"";for(f in b)if(b.hasOwnProperty(f)){e=3Db[f];if(typeof e!=3D"function"=
+){c.push(d);Ta(a,f,c);c.push(":");Ua(a,
+e,c);d=3D","}}c.push("}");break;case "function":break;default:throw Erro=
+r("Unknown type: "+typeof b);}},Va=3D{'"':'\\"',"\\":"\\\\","/":"\\/","\=
+u0008":"\\b","\u000c":"\\f","\n":"\\n","\r":"\\r","\t":"\\t","\u000b":"\=
+\u000b"},Wa=3D/\uffff/.test("\uffff")?/[\\\"\x00-\x1f\x7f-\uffff]/g:/[\\=
+\"\x00-\x1f\x7f-\xff]/g,Ta=3Dfunction(a,b,c){c.push('"');c.push(b.replac=
+e(Wa,function(d){if(d in Va)return Va[d];var f=3Dd.charCodeAt(0),e=3D"\\=
+u";if(f<16)e+=3D"000";else if(f<256)e+=3D"00";else if(f<4096)e+=3D"0";re=
+turn Va[d]=3De+f.toString(16)}));
+c.push('"')};var V=3D["google_ad_block","google_ad_channel","google_ad_c=
+lient","google_ad_format","google_ad_height","google_ad_host","google_ad=
+_host_channel","google_ad_host_tier_id","google_ad_output","google_ad_ov=
+erride","google_ad_region","google_ad_section","google_ad_slot","google_=
+ad_type","google_ad_width","google_adtest","google_allow_expandable_ads"=
+,"google_alternate_ad_url","google_alternate_color","google_analytics_do=
+main_name","google_analytics_uacct","google_bid","google_city","google_c=
+olor_bg","google_color_border",
+"google_color_line","google_color_link","google_color_text","google_colo=
+r_url","google_container_id","google_contents","google_country","google_=
+cpm","google_ctr_threshold","google_cust_age","google_cust_ch","google_c=
+ust_gender","google_cust_id","google_cust_interests","google_cust_job","=
+google_cust_l","google_cust_lh","google_cust_u_url","google_disable_vide=
+o_autoplay","google_ed","google_eids","google_enable_osd","google_encodi=
+ng","google_font_face","google_font_size","google_frame_id","google_gl",=
+
+"google_hints","google_image_size","google_kw","google_kw_type","google_=
+language","google_max_num_ads","google_max_radlink_len","google_num_radl=
+inks","google_num_radlinks_per_unit","google_num_slots_to_rotate","googl=
+e_only_ads_with_video","google_only_pyv_ads","google_only_userchoice_ads=
+","google_override_format","google_page_url","google_referrer_url","goog=
+le_region","google_reuse_colors","google_rl_dest_url","google_rl_filteri=
+ng","google_rl_mode","google_rt","google_safe","google_skip","google_tag=
+_info",
+"google_targeting","google_ui_features","google_ui_version","google_vide=
+o_doc_id","google_video_product_type","google_with_pyv_ads"];var Xa=3Dfu=
+nction(a){this.b=3Da;a.google_iframe_oncopy||(a.google_iframe_oncopy=3D{=
+handlers:{},log:[],img:Math.random()<0.01?[]:h});this.e=3Da.google_ifram=
+e_oncopy;a.setTimeout(l(this.l,this),3E4)},Ya;var W=3D"var i=3Dthis.id,s=
+=3Dwindow.google_iframe_oncopy,H=3Ds&&s.handlers,h=3DH&&H[i],w=3Dthis.co=
+ntentWindow,d;try{d=3Dw.document}catch(e){}if(h&&d&&(!d.body||!d.body.fi=
+rstChild)){if(h.call){i+=3D'.call';setTimeout(h,0)}else if(h.match){i+=3D=
+'.nav';w.location.replace(h)}s.log&&s.log.push(i)}";
+if(/[&<>\"]/.test(W)){if(W.indexOf("&")!=3D-1)W=3DW.replace(da,"&amp;");=
+if(W.indexOf("<")!=3D-1)W=3DW.replace(ea,"&lt;");if(W.indexOf(">")!=3D-1=
+)W=3DW.replace(fa,"&gt;");if(W.indexOf('"')!=3D-1)W=3DW.replace(ga,"&quo=
+t;")}Ya=3DW;Xa.prototype.set=3Dfunction(a,b){this.e.handlers[a]=3Db};
+Xa.prototype.l=3Dfunction(){if(this.e.img){var a=3Dthis.e.log,b=3Dthis.b=
+.document;if(a.length){b=3D["http://",Ca(),"/pagead/gen_204?id=3Diframec=
+opy&log=3D",S(a.join("-")),"&url=3D",S(b.URL.substring(0,512)),"&ref=3D"=
+,S(b.referrer.substring(0,512))].join("");a.length=3D0;a=3Dnew Image;thi=
+s.e.img.push(a);a.src=3Db}}};var Za=3Dfunction(){var a=3D"script";return=
+["<",a,' src=3D"http://',ua(""),'/pagead/js/r20101117/r20110307/show_ads=
+_impl.js"></',a,">"].join("")},$a=3Dfunction(a,b,c,d){return function(){=
+var f=3Di;d&&Oa().al(3E4);try{var e;try{e=3D!!a.document.getElementById(=
+b).contentWindow.document}catch(ta){e=3Di}if(e){var s=3Da.document.getEl=
+ementById(b).contentWindow,
+n=3Ds.document;if(!(n.body&&n.body.firstChild)){n.open();s.google_async_=
+iframe_close=3Dg;n.write(c)}}else{var A=3Da.document.getElementById(b).c=
+ontentWindow,q;e=3Dc;e=3DString(e);if(e.quote)q=3De.quote();else{s=3D['"=
+'];for(n=3D0;n<e.length;n++){var o=3De.charAt(n),Ga=3Do.charCodeAt(0),ob=
+=3Ds,pb=3Dn+1,ia;if(!(ia=3Dm[o])){var E;if(Ga>31&&Ga<127)E=3Do;else{var =
+r=3Do;if(r in p)E=3Dp[r];else if(r in m)E=3Dp[r]=3Dm[r];else{var x=3Dr,y=
+=3Dr.charCodeAt(0);if(y>31&&y<127)x=3Dr;else{if(y<256){x=3D"\\x";if(y<16=
+||y>256)x+=3D"0"}else{x=3D"\\u";if(y<4096)x+=3D
+"0"}x+=3Dy.toString(16).toUpperCase()}E=3Dp[r]=3Dx}}ia=3DE}ob[pb]=3Dia}s=
+.push('"');q=3Ds.join("")}A.location.replace("javascript:"+q)}f=3Dg}catc=
+h(vb){A=3DJa().google_jobrunner;Na(A)&&A.rl()}f&&(new Xa(a)).set(b,$a(a,=
+b,c,i))}},ab=3Dfunction(){return va&&wa/va||typeof window.google_hash_ra=
+tio=3D=3D"number"&&window.google_hash_ratio||h};window.google_loader_use=
+d=3Dg;(function(a){if(!("google_onload_fired"in a)){a.google_onload_fire=
+d=3Di;Ea(a,function(){a.google_onload_fired=3Dg})}})(window);if(!window.=
+google_loader_experiment)window.google_loader_experiment=3DFa(["async1_a=
+ll","block1"],ya)||Fa(["launch"],xa)||"none";var bb,cb=3Dwindow.google_l=
+oader_experiment;
+if(bb=3Dwindow.google_enable_async=3D=3D=3Dg||cb=3D=3D"launch"||cb=3D=3D=
+"async1_all")bb=3Dwindow.google_enable_async=3D=3D=3Di?i:(D&&/MSIE 8/.te=
+st(navigator.userAgent)||pa||oa&&!!window.document.body)&&!window.google=
+_container_id&&(!window.google_ad_output||window.google_ad_output=3D=3D"=
+html");
+if(bb){var db=3Dwindow;if(db.google_unique_id)++db.google_unique_id;else=
+ db.google_unique_id=3D1;for(var X=3Dwindow,_script$$inline_211=3D"scrip=
+t",Y,Z=3D{allowtransparency:'"true"',frameborder:'"0"',height:'"'+X.goog=
+le_ad_height+'"',hspace:'"0"',marginwidth:'"0"',marginheight:'"0"',onloa=
+d:'"'+Ya+'"',scrolling:'"no"',vspace:'"0"',width:'"'+X.google_ad_width+'=
+"'},eb=3DX.document,$=3DZ.id,fb=3D0;!$||X.document.getElementById($);)$=3D=
+"aswift_"+fb++;Z.id=3D$;Z.name=3D$;eb.write(Ra(Z,X.google_ad_width,X.goo=
+gle_ad_height));Y=3D
+$;var gb;if(X.google_page_url)X.google_page_url=3DString(X.google_page_u=
+rl);for(var hb=3D[],ib=3D0,jb=3DV.length;ib<jb;ib++){var kb=3DV[ib];if(X=
+[kb]!=3Dh){var lb;try{var mb=3D[];Ua(new Sa,X[kb],mb);lb=3Dmb.join("")}c=
+atch(nb){}lb&&Da(hb,kb,"=3D",lb,";")}}gb=3Dhb.join("");for(var qb=3D0,rb=
+=3DV.length;qb<rb;qb++)X[V[qb]]=3Dh;var sb=3D(new Date).getTime(),tb=3Da=
+b(),ub=3Dwindow.google_loader_experiment,wb=3D["<!doctype html><html><bo=
+dy><",_script$$inline_211,">",gb,"google_show_ads_impl=3Dtrue;google_uni=
+que_id=3D",X.google_unique_id,';google_async_iframe_id=3D"',
+Y,'";google_start_time=3D',j,";",tb?"google_hash_ratio=3D"+tb+";":"",ub?=
+'google_loader_experiment=3D"'+ub+'";':"","google_bpp=3D",sb>j?sb-j:1,";=
+</",_script$$inline_211,">",Za(),"</body></html>"].join("");(X.document.=
+getElementById(Y)?Pa:Qa)($a(X,Y,wb,g))}else{window.google_start_time=3Dj=
+;window.google_hash_ratio=3Dab();document.write(Za())};})();
+
+------------jRx3WKU075rSFjXa7mK1Kj
+Content-Disposition: inline; filename=comments_bar2.jpg
+Content-Type: image/jpeg; name=comments_bar2.jpg
+Content-Location: http://www.flipcode.com/archives/comments_bar2.jpg
+Content-Transfer-Encoding: Base64
+
+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
+V/6j5N4H7P79Z6D/2Q==
+
+------------jRx3WKU075rSFjXa7mK1Kj
+Content-Disposition: inline; filename=line_grey.png
+Content-Type: image/png; name=line_grey.png
+Content-Location: http://www.flipcode.com/archives/line_grey.png
+Content-Transfer-Encoding: Base64
+
+iVBORw0KGgoAAAANSUhEUgAAAgAAAAABCAIAAAAn2YEhAAAAa0lEQVR42r2TSxbA
+IAgD5Yzc/yzpzkWtNQk82conGSQyc2wCwBBjV0K2WtMARIRXzuuXCg2Pn76MEa+n
+Y5OJ7h8jKY+nxGR6zOtkJpAKfJLkMY3pU5nVuAhVknQmhoYLW1A/VeN1VM5NcvEA
+ihzeJh4lSqAAAAAASUVORK5CYII=
+
+------------jRx3WKU075rSFjXa7mK1Kj
+Content-Disposition: inline; filename=article_fastervectormath.gif
+Content-Type: image/gif; name=article_fastervectormath.gif
+Content-Location: http://www.flipcode.com/archives/article_fastervectormath.gif
+Content-Transfer-Encoding: Base64
+
+R0lGODlhPwKhAXcAMSH+GlNvZnR3YXJlOiBNaWNyb3NvZnQgT2ZmaWNlACH5BAEA
+AAAALAUABQA1ApgBhIGBgQAAAJkzZoCAgJmZ/8DAwP//AP///wECAwECAwECAwEC
+AwECAwECAwECAwECAwECAwECAwECAwECAwECAwECAwECAwECAwECAwECAwECAwEC
+AwECAwECAwECAwECAwP/GLrc/jDKSau9OOvNu/9gKI5kaZ5o2hxs675wLM90bd94
+ru987//AoHBILBqPyKRyyVIwn9CodEqtWq/YrPbq3Hq/4LB4TC6bt92zes1uu9/w
+uC0tr9vv+Lx+76Lz/4CBgoOEPn6FiImKi4xnh42QkZKTlIYBlZiZmpuQj5yfoKGi
+Zp6jpqeoqUilqq2ur7B9l7G0tbamrLe6u7yDub3AwcJuv8QLw8jJqcVss03K0NGb
+zGvO0tfYktRq1tne34TbjgfH4ObneOKkzt1NDwPw8fLz9PX29/j5+vv8/f7/AAMK
+HEiwoMGDCBMqXIhQhroy1tq9CFCgosWLGDNq3Mix/6PHjyBDihxJsqTJkyhTqlzJ
+sqXLlzBfDnAoUU7EGhRj6tzJs6fPn0CDCh1K9OfMGA/J3KSRs6jTp1CjSp1KtarU
+ozCSKi3H1KrXr2DDih1L1iXWiTURNS3Ltq3bt3DjtjwrS5vcu3jz6t3rlW4LrXfW
+8h1MuLDhwx/9urOLuLHjx5DdKiaXtpDgyJgza97MczJgO5c5ix5NurRGz5XDmV7N
+unVm1Ixdy55N+y7sSKFr697NO+rtTr2DCx8O9Hej3MSTK18O0jgj5MyjS1/ufBH0
+6diz666u6Lr27+BLc0/kPbz585DHq0XPvv1rmrHdy58/WL1l+vjz24aPW7////9k
+2acagAQWOJWAvhio4IIFGBAUgoKUx+CE5hlgYXH8AUfhhvNZ6KFRGR7H4YjseWii
+TxAGIiGJLBJnooMohvhcizRqdyKISKWWYI08MgcjjDhmpWOEPRbpYlEpArKikUyO
+BqRQSf6xZJNUYvYklDJaV+WWrF2JZY7xcSmmZl5+KWSYY6bpWJlmooWmmnASxmab
+de2xQldx5inngVmClsOUegb61ZxDRcnNn4ImGhehhfZpkw6AKiqpU4zS+deQzTAw
+x6ScilWppYvpsRRaDnRq6lSfgkpZhDid6mpUqar6GUStvmrrULHKimk1fdR66689
+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
+iLd5V/d/yHdku3cS7EdZAEhciOUQpUFf42eAimd9jJd/MAFjDWgSD0hYEWhrnBFf
+BuBMOGV5GHh9HPgSHoh+KhGCKcZ0jwdio7FcJwhg94d6Gqh6LegSL/iDLSGDNZZ1
+WEZI4UdSFiJfPQhRO8hcMJgSQaiA/adnQlhyNThtSfhQOciE9eeETXh+V5h+DBiF
+KEGEQGaEalZuW4hPXeiFCFh+YYh/VNiBZTiGMeh/tDaC3FaCbviGcFh71feFYliH
+LniHhgiEethrathnwJYZWwWIPEiIyUWJcWeGDoiIe7iAVpiIrJeFpHSD6iSJk/8Y
+hwcoiH6Hh1KoiYxYhYSGiTzVe1k0gN20hFyVezo4h5eoimfIisfGia/Iiycli2dE
+i9BEipCFiw2mi1AojCDoi9AGjPQGi0VFjHVkjCg4iKaYgZbYjJ6YfdCobTuBhn/V
+fEPmh81ki3LYjeykjBj2gSUxhZvoitPojNUIir1kjMhoek/Yjv1YX/ZIEvLYinbY
+ifMIeFr3OEm4j/zIjP7okAD5jWS4iL9Ij5wXkBr3BPFHKQzZkOyYix/ZWvAokOE4
+buNIkdFIgwmJY5xhAOrXE143e/UokXmIkuIojRdJk3OHj1/VkgXwkjyxYfxXkMGo
+k71okyaJkwl4kI63kjP/JzMwApQnaZAEeYhUWZFEWZRMqYhXmZIIeYTnCBlPIpVK
+mYpGmYldeZMWmZNbOYRIuW6NSGok2Dk2d2RDaZVaWZVcmZdYiZd86ZV+yZZ6+YlO
+qSRW4iUD2Zd7OZNtCY5pmZRruZSD6Zh/qZZfuYZI2BhskpiAuZiCqZhu+ZhwGZlm
+2ZgTWZmQeZmO6GqFMSecaZmBKZmgSZmMOZmniZqjmZWf2ZmECZZb15qE8pqpGZul
+aZs1iZvMN5WimZxl6WjU6FTWuEma+RHCmZvE6ZwBORLkaGXNiZ1n+YzL2X1x+Wus
+CUCV95bMSZpk95zaiZ7iqZ7rmZ0isZ3m+JsAlCrV/5meuimbvEmbuwmbnvmfwxmg
+xTmbP8eTfrMn81mS1kmg3mmax1mbBhqhEtqftymgDdqbmBmWeCEs+fme+1mgFkqh
+/AmgoRme7dedLPid91iYNHWf8cig+nmd8cmiJImiEKiiKwqhq4ijIjieyRZ05gme
+PjqDIfqgxtmjyAmiNFqjPHqUS5qiKumbCikX3fKhUnqkTpqkUFqhJuqfGDqjDrql
+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
+
+------------jRx3WKU075rSFjXa7mK1Kj--
