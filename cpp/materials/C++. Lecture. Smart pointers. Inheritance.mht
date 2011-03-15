@@ -1,0 +1,631 @@
+Content-Type: multipart/related; start=<op.mhtml.1300147711288.27dcde317b42c342@192.168.1.7>; boundary=----------yzDYNM1UtlDHWFzHQczmlP
+Content-Location: http://amse.ru/courses/cpp2/2010_12_01.html
+Subject: =?utf-8?Q?C++.=20Lecture.=20Smart=20pointers.=20Inheritance?=
+MIME-Version: 1.0
+
+------------yzDYNM1UtlDHWFzHQczmlP
+Content-Disposition: inline; filename=2010_12_01.html
+Content-Type: text/html; charset=UTF-8; name=2010_12_01.html
+Content-ID: <op.mhtml.1300147711288.27dcde317b42c342@192.168.1.7>
+Content-Location: http://amse.ru/courses/cpp2/2010_12_01.html
+Content-Transfer-Encoding: 8bit
+
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C++. Lecture. Smart pointers. Inheritance</title>
+<link rel="stylesheet" href="smartptr.css">
+</head>
+<body>
+	<h1>Лекция. Умные указатели. Наследование.</h1>
+	<h2>Умные указатели</h2>
+
+<pre class="codeBlock">
+	<span class="syntax">int</span>  j = 10;<span class="comment">//память выделится в стеке (stack)</span>
+	<span class="syntax">int</span>* i = <span class="syntax">new int</span>(10);<span class="comment">//память выделится в куче (heap)</span>
+</pre>
+<p>
+К примеру, для переменных цикла не стоит выделять память в куче: потребуется дополнительное время на выделение памяти при создании переменной, разыменование указателя при итеративном обращении к значению переменной и освобождение памяти после окончания работы цикла.<br>
+Когда необходимо использовать указатель на объект:<br>
+<ul>
+	<li>Заранее неизвестно количество объектов;</li>
+	<li>Возвращение сложного объекта из функции;</li>
+	<li>В случае совместно используемых объектов;</li>
+	<li>Для необязательных полей объекта, например, опциональные настройки или какой-либо эффект, накладываемый на изображение.</li>
+</ul>
+<p>
+Умный указатель – структура, которая управляет указателем. В конструкторе ей передается указатель, а в деструкторе она его освобождает. В таком случае пользователю не приходится заботиться об утечке памяти.<br>
+	<h3>Типы умных указателей</h3>
+	<h4>Scoped_ptr</h4>
+<ol>
+	<li>Использует стратегию «одного владельца» - единственный объект scoped_ptr владеет указателем, он же его и освобождает.
+	<pre class="codeBlock">
+	Picture* p = <span class="syntax">new</span> Picture();<span class="comment">//обычный указатель на объект типа Picture</span>
+	Picture_ptr pp(<span class="syntax">new</span> Picture());<span class="comment">//умный указатель</span>
+	</pre>
+</li>
+	<li>Оператор присваивания и конструктор копирования объявляются с модификатором доступа private для запрета присваивания.</li>
+</ol>
+
+	<h4>Shared_ptr</h4>
+<ol>
+	<li>Может быть много владельцев.</li>
+	<li>Создается внешний счетчик ссылок, значение которого увеличивается каждый раз, когда добавляется еще один указатель на объект.</li>
+	<li>Память освобождает последний, т.е. в деструкторе уменьшается значение счетчика, если после этого  количество ссылок на объект равно 0, то память освобождается.</li>
+</ol>
+<img src="shared_ptr.png" alt="shared_ptr" />
+
+	<h4>Auto_ptr</h4>
+<ol>
+	<li>Как и Scoped_ptr реализует стратегию «одного владельца».</li>
+	<li>При копировании владелец передается.</li>
+</ol>
+
+	<pre class="codeBlock">
+	Picture* a = <span class="syntax">new</span> Picture(); 
+	Auto_ptr b = a; <span class="comment">//после этого а перестает указывать на объект</span>
+	</pre>
+
+	<h4>Intrusive_ptr</h4>
+<ol>
+	<li>Много владельцев.</li>
+	<li>Объект сам управляет указателями.</li>
+	<li>Объект сам себя удаляет.</li>
+</ol>
+В объекте заводится счетчик указателей,  и методы addref() и release(), которые вызываются при создании и удалении указателя на объект. Следовательно, объект сам принимает решения.
+<pre class="codeBlock">
+	void Picture::release(){
+		--m_refs;
+		<span class="syntax">if</span>(m_refs == 0){
+			<span class="syntax">delete this</span>;
+		}
+	}
+</pre>
+Использование Release() корректно, если после вызова <span class="syntax">delete this;</span> не происходит обращения к полям удаляемого объекта.<br>
+<pre class="codeBlock">
+	Intrusive_Picture(Picture* p){
+		<span class="syntax">if</span>(p){
+			p-&gt;addref();
+		}
+		<span class="comment">//...</span>
+	}
+
+	void Picture::addref(){
+		++m_refs;
+	}
+</pre>
+<p>
+Различия с Shared_ptr:
+<ul>
+	<li>Shared_ptr использует внешний счетчик указателей, Intrusive_ptr – внутренний;</li>
+	<li>Shared_ptr можно скопировать только от другого Shared_ptr, а Intrusive_ptr можно создать от обычного указателя.</li>
+</ul>
+Замечание: интрузивные списки – указатели на следующий  и предыдущий объекты хранятся в самом объекте.
+
+	<h4>Linked_ptr</h4>
+<ol>
+	<li>Много владельцев.</li>
+	<li>Нет счетчика.</li>
+	<li>Создается список указателей.</li>
+</ol>
+В каждом Linked_ptr кроме указателя на сам объект хранятся указатели на следующий и предыдущий Linked_ptr для того же объекта.
+<img src="linked_ptr.png" alt="linked_ptr" />
+<ul>
+	<li>Использование Linked_ptr быстрее, если существует много указателей на объект;</li>  
+	<li>Сложное копирование указателя и его вставка в связный список;</li>
+	<li>Нет проблем с фрагментацией памяти.</li>
+
+</ul>
+<table width="100%" border="1" cellspacing="0" cellpadding="4">
+	<tr align="center" bgcolor="#999999">
+		<td>Scoped_ptr</td>
+		<td>Shared_ptr</td>
+		<td>Auto_ptr</td>
+		<td>Intrusive_ptr</td>
+		<td>Linked_ptr</td>
+	</tr>
+	<tr>
+		<td><ol>
+			<li>Стратегия одного владельца.</li>
+			<li>Нет присваивания.</li>		
+		</ol></td>
+		<td><ol>
+			<li>Много владельцев.</li>
+			<li>Внешний счетчик указателей.</li>
+			<li>Освобождает память последний владелец.</li>		
+		</ol></td>
+		<td><ol>
+			<li>Один владелец.</li>
+			<li>При копировании вледелец передается.</li>		
+		</ol></td>
+		<td><ol>
+			<li>Много владельцев.</li>
+			<li>Объект, на который ссылается обычный указатель, сам управляет указателями на себя.</li>
+			<li>Объект сам себя удаляет.</li>
+		</ol></td>
+		<td><ol>
+			<li>Много владельцев.</li>
+			<li>Нет счетчика.</li>
+			<li>Создается список указателей.</li>
+		</ol></td>
+
+	</tr>
+</table>
+<p>
+Возможные проблемы в использовании умных указателей:
+	<ul><li>Если есть объекты, хранящие умные указатели друг на друга, то есть циклические указатели, которые не удалятся до тех пор, пока явно не обнулить счетчик ссылок одного из них.</li></ul><br>
+Если где-то в программе используются умные указатели для некоторого объекта, то стоит использовать их везде с этим типом.
+
+	<h2>Наследование</h2>
+<p>
+Предоставляет возможность расширения функциональности класса. Понятие наследования и  производного класса предназначены для выражения иерархических отношений, т.е. отражения общности классов.
+<pre class="codeBlock">
+<span class="syntax">struct</span> OutputFile{
+	<span class="comment">//…</span>
+	<span class="syntax">void</span> write(<span class="syntax">char const</span> *);
+};
+
+<span class="syntax">struct</span> MyOutputFile{
+	<span class="comment">//…</span>
+	<span class="syntax">void</span> write(<span class="syntax">HTML const</span>  &);
+};
+</pre><br>
+MyOutputFile можно унаследовать от OutputFile, тогда объектам MyOutputFile будут доступны поля и методы базовой структуры – OutputFile.
+<pre class="codeBlock">
+<span class="syntax">struct</span> MyOutputFile : <span class="syntax">public</span> OutputFile
+{
+	<span class="comment">//…</span>
+};
+</pre>
+<p>
+При наследовании классов модификатор public указывать обязательно, для структур  - нет.
+В случае, когда MyOutputFile  унаследован от OutputFile метод write(HTML const &) полностью перекроет метод write(char const *) даже учитывая, что эти методы различаются типами передаваемых аргументов. Если в MyOutputFile добавить using OutputFile::write(), тогда метод  write (HTML const &) не перекроет метод базового класса и у объектов MyOutputFile можно будет вызывать write(char const*).
+<p>
+При наследовании конструктор и деструктор не наследуются.
+<pre class="codeBlock">
+MyOutputFile(<span class="syntax">char const</span> *filename)
+				: OutputFile(filename){
+	<span class="comment">//…</span>
+}
+</pre>
+<p>
+Если в MyOutputFile определить метод с таким же именем и сигнатурой, как и в базовом, то обратиться к методу базового объекта можно через имя базового класса OutputFile::write();
+Так же можно вызвать метод базового класса у объекта класса-наследника.
+<pre class="codeBlock">
+MyOutputFile mf(filename);
+mf.OutputFile::write(“text”);
+</pre>
+<p>
+В памяти, выделенной под объект типа MyOutputFile, сначала расположены данные, унаследованные от базового класса, далее следуют данные относящиеся только к типу MyOutputFile.<br>
+Наследование может быть многоуровневым, то есть класс OutputFile может быть унаследован от какого-либо другого типа.  При создании объекта класса-наследника сначала вызываются конструкторы всех базовых классов в порядке иерархии, начиная с самого верхнего. Деструкторы вызываются в обратном порядке.<br>
+Другой пример использования наследования:<br>
+<img src="inheritance_exmp.png" alt="inheritance_exmp" />
+<p>
+В классификации объектов отношение «является» приводит к неявному приведению.<br>
+Наследование:<br> 
+<pre class="codeBlock">
+	MyOutputFile f;
+	OutputFile & of = f;
+	of.write(“”);<span class="comment">// вызовется метод  родителя</span>
+
+	Student s;
+	Person p = s; 
+</pre>
+В переменную p скопируются только поля, унаследованные от Person. Данный эффект называют срезкой.
+
+</body>
+</html>
+
+------------yzDYNM1UtlDHWFzHQczmlP
+Content-Disposition: inline; filename=smartptr.css
+Content-Type: text/css; charset=utf-8; name=smartptr.css
+Content-Location: http://amse.ru/courses/cpp2/smartptr.css
+Content-Transfer-Encoding: 8bit
+
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	font-family:Tahoma, Geneva, sans-serif;
+	font-size:14px;
+	margin-left:100px;
+	margin-right:100px;
+	margin-bottom:40px;
+	margin-top:40px;
+}
+
+h1 {
+	color:#069;
+}
+
+h2 {
+	color:#06C;
+}
+h3 {
+	color:#06F;
+}
+
+.code {
+	font-family:"Courier New", Courier, monospace;
+}
+
+.codeBlock {
+	font-family:"Courier New", Courier, monospace;
+	background-color:#E6E6FA;
+	padding-left:20px;
+}
+.comment {
+	color:#228B22;
+}
+.syntax {
+	font-family:"Courier New", Courier, monospace;
+	color:#03F;
+}
+
+.output {
+	color:#900;
+}va, sans-serif;
+	font-size:14px;
+	margin-left:100px;
+	margin-right:100px;
+	margin-bottom:40px;
+	margin-top:40px;
+}
+
+h1 {
+	color:#069;
+}
+
+h2 {
+	color:#06C;
+}
+h3 {
+	color:#06F;
+}
+
+.code {
+	font-family:"Courier New", Courier, monospace;
+}
+
+.codeBlock {
+	font-family:"Courier New", Courier, monospace;
+	background-color:#E6E6FA;
+	padding-left:20px;
+}
+.comment {
+	color:#228B22;
+}
+.syntax {
+	font-family:"Courie
+------------yzDYNM1UtlDHWFzHQczmlP
+Content-Disposition: inline; filename=shared_ptr.png
+Content-Type: image/png; name=shared_ptr.png
+Content-Location: http://amse.ru/courses/cpp2/shared_ptr.png
+Content-Transfer-Encoding: Base64
+
+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
+
+------------yzDYNM1UtlDHWFzHQczmlP
+Content-Disposition: inline; filename=linked_ptr.png
+Content-Type: image/png; name=linked_ptr.png
+Content-Location: http://amse.ru/courses/cpp2/linked_ptr.png
+Content-Transfer-Encoding: Base64
+
+iVBORw0KGgoAAAANSUhEUgAAAPcAAACWCAIAAACNRon7AAAAAXNSR0IArs4c6QAA
+AARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAeiSURBVHhe7Z09
+ets4EIbFPUu0RR6fwDmBUuUG21ll3KTbcrs0TikfYatt1j5BfII8LmLfRSHEmGFM
+SQQHAIEZvGrWm+Bn5vteDkcQrTT7/X7FCwVMK/CH6exIDgWcAlAOB/YVgHL7HpMh
+lMOAfQWg3L7HZAjlMGBfASi37zEZQjkM2FcAyu17TIZQDgP2FYBy+x6TIZTDgH0F
+oNy+x2TYWHomsWmaShy15NoCllmjvAb724u5hjQj0k/HElFMlipUASgv1BjCiqgA
+lEcUk6UKVQDKTxtzv22ad1+eC3WOsPwVgPIXrRzTLy/Y9idIw0go/82lq7v9/unm
+8uH6r7aGb3b7/dePb8Y2UuQ1oD2IEcpHhr3582K1enh8Wj1/edc023s34PBj+2qL
+fPvj+9t2wPXa/V8PfD/Y/cl2624MburLRHqfnBcGlI/Uf/7+bbW6fLv+9Rf32/X1
+gyvz+78fPz99/Hp31Q64eTpe6N2029tVO3q3cRMv3Lz93VV3f+CVQwEo/0312/dN
+cyB62KkcsL/6sGlHbnY795+p1+XNJzfsMNEt2TSu/PPKpQCUj/rytvJ6oexp2eEe
+cHgd7fE9V2FYiAJQPq3eoVH/9t21G/fbrk8ftzn///sw+sPDxNv/js+Y3pcRsRSA
+cg8lNzvXVq/bxuOft64V2Xy4enn3ufnkTmTWzfrxom3WX7/cxJ8ty893ox67MSS6
+Aqae+6nkMaZK0ozIOrU8opgsVagCUF6oMYQVUQEojygmSxWqAJQXagxhRVQAyiOK
+yVKFKgDlhRpDWBEVsHaSGFGakpfi9z5nuWOK8lmZM7geBehY6vG63kyhvF7v68kc
+yuvxut5Mobxe7+vJnHef+b0++sV3nKJENKY6yjukEjEke1qwpzxRVBFxUbpURR1L
+9zUU6XzqFpdt0f0ykWxuuozMrFwF5R3fXaVMXS8FsPZTuh9gPfrVVQXlfaVMh/iw
+VxGA3vtKUY+OeLtgFZR3jUQ6xMe3iMC9KOpxWU/rfdxYxaulRrwPLPpG0RcUa6h6
+ov1arhoUinqUq8s45aoR7wymUw8H3TLlBhAfvivl7EWMu1nKLSHeF3XOGWWg26Tc
+HuJ0LzK+u1kGKbeK+KvuhQbGn3trlJtHnKLuD3c/0hTllSBOUZ8Luh3Ka0Ocou7P
+uhHK60Scc0ZP0C1QXjninDNOsq6echAfVvSQxyEnWdE7QDflID4mj0dfxpoophzE
+TxVXHn15pYxWykF8sn+gqOs+LwfxScQ5ZxxKpK+Wg7gn4nx4pLWWg/hcxCnqyp7W
+AnEZ4nx4pKZjAfFAxGv+8EgH5SAeBfFquxcFlIN4RMTrfEua6psqsj/jH/iNKDKw
+NF6QGmOe605CyrNw1uUf4pz261N7/HMJ9hlvn/K5xM8d76Oy/5jw3cNX8I92PDLv
+7qciV9CXB4oeMl3F3OzFu3yVLFPe2Z+xcVrMfkA/L7XZjiWEsIwXhuyOP7yeZSuE
+yDWcm3f3U1mYpXz4peCzLMzrU2BV7rJWd5XOMkgweFoRmWqyWYIEjk7pd/dsWobR
+FhL5LCmo5eflmujLA0vLLKtSDPavanoz9bySU8irZc1zlNuQzwf0bkxpoPvH45Nj
+sUT6pylO4WTHEr53RukDg88b+fCSE0SiruNaoJie68tDtleqdVctBGyJy8yricPr
+UxaGOuX7u6gsXx/lJ959ikHXpXVR7958bDs/Jh0uk7GVeRc1fsYy6Uo3oLQzFnFx
+eZWLZ/oRh8mqW0i+PsFPf/aZsTD4JBBlTGk5lvluOIrU40VSI97uOE15otxYttiu
+Y3lrUlcZKF/eU98dU3vvG0ficQukCeWJPWT5AhSA8gJMIITECkyfscgCCDxRkm06
+nCW+D8pOCcIDHp/2yNbUHr8s6/OzUlGeItZl1tR7ffbXyTJCndpFXF/ShQ3l6bRl
+5VIUoC8vxQniSKcAlKfTlpVLUaBGyrN33qWYX00c1VHeIQ7o1RDuEq2L8iHcgF4P
+6BVRPnwqqKrHoeqh+VSmNZ4k5v3cBOaWV6CiWr68uOxYiAJQXogRhJFQAShPKC5L
+F6IAlBdiBGEkVADKE4rL0oUoAOWFGEEYCRWA8oTisnQhCkB5IUYQRkIFoDyhuCxd
+iAJQXogRhJFQAX2f8Gd/yqrA3/hKCIiJpVVSnpEznoHRiD0di0bXiHmeAlA+Ty9G
+a1QAyjW6RszzFIDyeXoxWqMCUK7RNWKep0BmyrMfC85Ti9E6FchJeSWIV5Jmyfxn
+o3yBf4GgHN0BPa8XeT4VCnRd3adCVV3SeYE+unseyttQxMbn/fRR7/VZIHyLhZSN
+cjHo2SkX3EnEl/RiHNjeKFtf3soqwEWjGSCe3bWclNcDeiXXc3aaTwWQmfJidYkY
+GIhHFFO2FJTLdGOWJgWgXJNbxCpTAMplujFLkwI5TxJlOgWeWMs2Hc6izw7XcOEV
+9FG+sEBsZ0ABOhYDJpLChAJQDiL2FYBy+x6TIZTDgH0FoNy+x2QI5TBgXwEot+8x
+GUI5DNhXAMrte0yGUA4D9hWAcvsekyGUw4B9BaDcvsdkCOUwYF8BKLfvMRlCOQzY
+VwDK7XtMhlAOA/YVgHL7HpMhlMOAfQV+AFo0O5yeY411AAAAAElFTkSuQmCC
+
+------------yzDYNM1UtlDHWFzHQczmlP
+Content-Disposition: inline; filename=inheritance_exmp.png
+Content-Type: image/png; name=inheritance_exmp.png
+Content-Location: http://amse.ru/courses/cpp2/inheritance_exmp.png
+Content-Transfer-Encoding: Base64
+
+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
+XezmAAAAAABJRU5ErkJggg==
+
+------------yzDYNM1UtlDHWFzHQczmlP--

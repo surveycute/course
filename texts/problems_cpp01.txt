@@ -1,0 +1,12 @@
+
+1. #define FOREVER ...
+
+FOREVER
+{
+	if (exit())
+		break;
+}
+
+Что вместо ...
+
+2. 

@@ -1,4 +1,28 @@
-День 4.	 
+﻿День 4.	 
 Шаблоны. Принцип интерфейса и поиск Кёнига.
 Умные указатели. RAII.
+
+#include <iostream>
+#include <typeinfo>
+
+struct SomeStruct
+{
+	template<class T>
+	SomeStruct& operator=(const T& rhs)
+	{
+		std::cout<<"SomeStruct::operator=("<<typeid(T).name()<<")\n";
+		return *this;
+	}
+
+	virtual void a(){}
+
+};
+
+int main()
+{
+	SomeStruct s1, s2;
+	s1 = 13; //ok
+	s2 = s1; //my definition of operator= hasn't been invoked
+	return 0;
+}
 

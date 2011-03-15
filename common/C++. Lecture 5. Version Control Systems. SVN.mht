@@ -1,0 +1,336 @@
+Content-Type: multipart/related; start=<op.mhtml.1300147636557.5dda8d33605fae36@192.168.1.7>; boundary=----------OwLnzqPMgApzlRMzrZE9bA
+Content-Location: http://amse.ru/courses/cpp2/2010_11_01_svn.html
+Subject: =?utf-8?Q?C++.=20Lecture=205.=20Version=20Control=20Systems.=20SVN?=
+MIME-Version: 1.0
+
+------------OwLnzqPMgApzlRMzrZE9bA
+Content-Disposition: inline; filename=2010_11_01_svn.html
+Content-Type: text/html; charset=UTF-8; name=2010_11_01_svn.html
+Content-ID: <op.mhtml.1300147636557.5dda8d33605fae36@192.168.1.7>
+Content-Location: http://amse.ru/courses/cpp2/2010_11_01_svn.html
+Content-Transfer-Encoding: 8bit
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--meta http-equiv="Content-Type" content="text/html; charset=utf-8" /-->
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<title>C++. Lecture 5. Version Control Systems. SVN</title>
+<link rel="stylesheet" href="lecture.css"/>
+</head>
+
+<body>
+	<h1>Лекция 5. Системы контроля версий. SVN</h1>
+	<h2>Система контроля версий (Version Control System, VCS)</h2>
+
+<p>
+<h3>Что это и зачем это нужно?</h3>
+Пусть у нас есть большой проект. При его разработке возникают следующие задачи: координация между собой разных версий программы и организация командной работы (например, разрешение конфликтов при одновременном доступе к одному и тому же файлу). Система контроля версий (VCS) решает эти задачи, т.е. умеет: 1) восстанавливать старые; 2) синхронизировать между собой самые новые версии.<br /><br />
+
+Есть много разных VCS, например, Perforce, Microsoft Visual Sourcesafe (платные), CVS, Subversion (бесплатные). Есть как консольные системы, так и графические (например, Tortoise SVN). Мы будем говорить о Subversion, известной также как svn (по названию программы-клиента для командной строки, входящей в состав программного пакета).<br /><br />
+
+Эта VCS клиент-серверная, т.е. есть сервер (к примеру, svnserve), на котором есть репозиторий (repository) &mdash; база данных, и есть клиентские машины, на которых есть рабочие копии (working copies).<br /><br />
+
+Откуда берутся svn-сервера? Есть два пути: либо поднимать сервер самим и общаться с ним по протоколу svn, либо использовать уже настроенный web-сервер через http или https. Уже готовых серверов есть довольно много (в том числе и платные с закрытым кодом), самые известные из них &mdash; это code.google.com и sourceforge.net. Разница между ними в основном в интерфейсе и в наличии/отсутствии встроенной документации типа wiki.<br /><br />
+
+Как мы можем работать в системе контроля версий?<br /><br />
+
+Способ первый. Блокировка &mdash; изменение &mdash; разблокировка.
+При обращении пользователя к файлу файл блокируется и всем остальным пользователям доступен только для чтения. Это хорошо для бинарных файлов (так как конфликты, возникшие при использовании бинарных файлов, сложно обрабатывать), но плохо для текстовых.<br /><br />
+
+Способ второй. Копирование &mdash; изменение &mdash; слияние.<br /><br />
+Этот способ svn использует по умолчанию, хотя поддерживает оба.<br /><br />
+
+Отсюда ясно, во-первых, что в репозитории следует хранить только исходные тексты (а не произвольные бинарные), и, во-вторых, что положенное в репозиторий должно компилироваться без ошибок и проходить тесты.<br /><br />
+
+
+<h3>Работа в svn.</h3>
+
+Пусть у нас есть Makefile, а также файлы 1.cpp, 2.cpp и main.cpp.
+Как поместить что-либо в репозиторий? Сказать <br />
+
+<pre class="codeBlock">
+<span class="syntax">svn import <адрес, куда помещаем> <адрес, откуда берём></span></pre>
+
+например,
+
+<pre class="codeBlock">
+<span class="syntax">svn import http://mysvn.googlecode.com/svn/trunk</span></pre>
+
+при этом можно настраивать всяческие свойства svn командами <code>svn propdel</code> и <code>svn propadd</code>, например, <code>svn::ignore *.o</code> &mdash; это команда игнорировать файлы с расширением .o.
+
+Теперь надо создать у себя рабочие копии. Скажем 
+<pre class="codeBlock">
+<span class="syntax">svn checkout <адрес, откуда берём копии> <адрес, куда их помещаем>
+</span></pre>
+
+Будем, например, работать в папке /project/test:
+
+<pre class="codeBlock"
+<span class="syntax">svn checkout http://mysvn.googlecode.com/svn/trunk/project/test
+</span></pre>
+
+Что после этой команды окажется в рабочей папке? Скрытая директория с именем .svn и наши исходные файлы: Makefile, 1.cpp, 2.cpp и main.cpp. (Если там есть подпапки, то во всех подпапках тоже окажутся скрытые директории .svn &mdash; в них лежат служебные файлы системы контроля версий.)
+
+Что ещё можно делать? Забирать новые изменения с сервера (командой <code>update</code>) и фиксировать изменения на сервере (командой <code>commit</code>). Таким образом, в папке .svn будет лежать то же, что было на сервере в момент последнего взятия изменений.
+
+Примечание. В таких системах обычно включен контроль доступа, т.е. при подобных действиях запрашиваются логин и пароль.
+
+<p>1. Пусть теперь с svn работает только один пользователь. Пусть ему надо, например, внести изменения в файл 1.cpp, а именно, вместо
+<pre class="codeBlock">
+<span class="syntax">int main()
+  {
+    return 0;
+  }
+<span></pre>
+
+написать
+
+<pre class="codeBlock">
+<span class="syntax">int main()
+  {
+    printf(" ");
+    return 0;
+  }
+</span></pre>
+
+и ещё удалить файл 2.cpp. Что он будет делать? Изменит один файл и скажет
+
+<pre class="codeBlock">
+<span class="syntax">svn del 2.cpp //удалить локальную копию 2.cpp
+</span></pre>
+
+для второго.
+
+Есть ещё аналогичные команды <code>svn add, svn copy</code> и <code>svn move</code>, которые так же работают с локальными копиями. Точнее, если очень хочется, для <code>del, copy</code> и <code>move</code> можно прописать в качестве аргумента полное имя файла на сервере, но так лучше не делать.
+
+Есть ещё команда <code>svn status</code>, которая показывает текущий статус файлов в рабочей копии и в данном случае выведет
+
+<pre class="codeBlock">
+<span class="syntax">M main.cpp //т.е. файл изменён, modified
+D 2.cpp    //т.е. файл удалён</pre></code>
+
+и команда <code>svn diff <имя файла></code>, которая показывает разницу между двумя файлами: текущей версией данного файла в рабочей папке и той, которая лежит в папке .svn. В данном случае <code>svn diff main.cpp</code> выведет что-то вроде
+
+<pre class="codeBlock">
+<span class="syntax">int main()
+  {
+<<<<<<<<<<<<<<<<<<<<<<<
+    printf(" ");
+>>>>>>>>>>>>>>>>>>>>>>>
+    return 0;
+  }
+</span></pre>
+
+В случае графического интерфейса это будут два экранчика &mdash; "до" и "после" соответственно, которые покажут построчное изменение.
+
+Примечание. Если в процессе работы появились всякие ненужные в папке файлы, например, .o или .exe, то <code>svn status</code> выведет их имена с пометкой ?, например,
+
+<pre class="codeBlock">
+<span class="syntax">? a.o</span></pre>
+
+(в случае, если на этот файл не было команды <code>add</code>).
+
+Фиксация новых состояний проекта ведётся через commit-ы. Т.о. она дискретна, и моменты её времени называются ревизиями. Номер ревизии (обозначается Revision 0, Revision 1 и так далее) &mdash; это целое число, которое показывает "глубину изменения" всей системы.<br />
+
+Замечание. Изменения можно маркировать, т.е. говорить
+
+<pre class="codeBlock">
+<span class="syntax">svn commit -m "текстовая строка-комментарий"</span></pre>
+
+тогда строка-комментарий окажется на сервере, и разные изменения будут помечены разными строками.
+
+
+Пример.
+
+<pre class="codeBlock">
+<span class="syntax">1. svn cat --revision<номер ревизии> <имя файла></span></pre>
+
+смотрит содержимое данного файла на ревизии с данным номером. В системе Windows вместо <code>cat</code> нужно говорить <code>type</code>.
+
+<pre class="codeBlock">
+<span class="syntax">2. svn diff --revision<#1:#2> <имя файла> [--verbose]</span></pre>
+
+выдаёт разницу между версиями данного файла с данными номерами.
+
+<pre class="codeBlock">
+<span class="syntax">3. svn log <имя файла></span></pre>
+
+выдаёт историю commit-ов по текстовым строкам-комментариям, а необязательный ключ <code>--verbose</code> дополнительно выдаёт результаты команды <code>diff</code>.
+
+<pre class="codeBlock">
+<span class="syntax">4. svn update [-r] <#></span></pre>
+
+обновляет файлы (с ключом &mdash; до r-той ревизии).
+
+Ключи имеют ещё много команд, в том числе <code>checkout</code>, но за подробной информацией лучше лезть не в конспект, а в руководство, лучше всего в svn-book.
+<br/ >
+Примечание. Разница между <code>update</code> и <code>checkout</code> состоит в том, что первый сверяет файлы, а второй &mdash; скидывает их в новую (пустую) папку.
+
+Есть ещё команды
+
+<pre class="codeBlock">
+<span class="syntax">svn list <адрес каталога на сервере></span></pre>
+
+которая, подобно <code>ls</code> в linux или <code>dir</code> в windows, показывает содержимое каталога, и
+
+<pre class="codeBlock">
+<span class="syntax">svn export <адрес, откуда берём копии> <адрес, куда их помещаем></span></pre>
+
+(с параметрами, как у <code>checkout</code>), которая копирует просто файлы, без служебных файлов системы, и с которой таким образом нельзя делать <code>copy, add</code> и т.д.
+
+
+2. Пусть теперь с svn работает группа пользователей.
+Пусть программист приходит с утра на работу и запускает команду
+
+<pre class="codeBlock">
+<span class="syntax">svn status -u</span></pre>
+
+с ключом <code> -u svn status</code> показывает изменения между последней по времени (не обязательно этого программиста!) ревизией и его рабочей копией. Если в списке файлов появится звёздочка
+
+<pre class="codeBlock">
+<span class="syntax">* main.cpp 56</span></pre>
+
+то это будет значить, что файл main.cpp после 56-й ревизии имеет расхождения, т.е. как минимум двое программистов работали с одним и тем же файлом и вносили в него изменения.
+
+Если звёздочек нет, то теоретически можно сделать <code>commit</code>, но практически это неправильно, т.к. сначала нужно сделать <code>update</code> и забрать себе последнюю версию обновлений.
+
+Дальше может быть одно из двух:
+
+1) либо svn сам смог провести все объединения файлов (если никакие два программиста не трогали одну и ту же строчку текста);
+
+2) либо таки случился конфликт. Тогда svn пишет
+
+<pre class="codeBlock">
+<span class="syntax">main.cpp</span></pre>
+
+и не даёт сделать <code>commit</code>, пока не уберутся все звёздочки.
+
+Разберём пример с файлом main.cpp. Пусть с ним работают user1 и user2, которые изменили одну и ту же строчку, при этом один написал <code>fprintf();</code> , а второй &mdash; <code>scanf();</code> .
+
+
+<pre class="codeBlock">
+<span class="syntax">user1	(B)	user2
+
+svn update	svn update
+
+int main()	int main()
+{		  {
+  fprintf();	    scanf();
+}	(A)	  }
+
+---		svn commit (C)
+
+svn commit	---
+
+svn update 	---
+
+G main.cpp</pre></span>
+
+что после этого окажется в папке у user1? Файлы
+
+<br /><code>main.cpp</code>
+<br /><code>main.cpp.mine (A) </code> &mdash; неудавшийся commit
+<br /><code>main.cpp.r36  (C) </code> &mdash; то, что закоммитил user2 (с номером ревизии)
+<br /><code>main.cpp.r34  (B) </code> &mdash; то, с чего начинали они оба
+
+<p>при этом файл main.cpp будет выглядеть как "два в одном":
+
+<pre class="codeBlock">
+<span class="syntax">int main()
+  {
+<<<<<<<<<<<<<<<<<< mine
+    fprintf();
+>>>>>>>>>>>>>>>>>> 36
+    scanf();
+  }</pre></span>
+
+Теперь user1 должен отредактировать этот файл руками (сам svn принять решение не в состоянии, т.к. работает только с текстом и не может его скомпилировать) и после этого сказать
+
+<pre class="codeBlock">
+<span class="syntax">svn resolved main.cpp</pre></span>
+
+тогда все файлы main.cpp.mine, main.cpp.r36, main.cpp.r34 сотрутся, останется один main.cpp, и его можно будет закоммитить. Тогда все возможные несоответствия и невозможность commit-а будет проблемой user2 :)
+
+
+<h3>О структуре проекта.</h3>
+
+Как правило, проекты очень большие и должны быть как-то структурированы. sourceforge.net, например, создаёт следующую структуру проекта:
+
+<pre class="codeBlock">
+<span class="syntax">ааа\branches
+   \tags
+   \trunk</pre></span>
+
+В первой папке, если надо, возникают побочные ветви проекта. (При этом, к сожалению, ревизии имеют сплошную нумерацию.) Во вторую можно записывать тэги к ревизиям. Третья папка &mdash; это это основная ветвь проекта, там и лежат папки trunk/test и прочие.
+
+Есть сложная команда <code>svn merge</code>, которая делает слияние этих папок.
+<br />
+Замечание. Сейчас становятся популярны DVCS (Distrubutive Version Control System) &mdash; распределённые системы контроля версий (например, Mercurial, git, Bazaar), которые отличаются от обычных VCS тем, что каждый пользователь такой системы имеет своё отдельное локальное хранилище.
+
+</body>
+</html>
+------------OwLnzqPMgApzlRMzrZE9bA
+Content-Disposition: inline; filename=lecture.css
+Content-Type: text/css; charset=utf-8; name=lecture.css
+Content-Location: http://amse.ru/courses/cpp2/lecture.css
+Content-Transfer-Encoding: 8bit
+
+@charset "utf-8";
+/* CSS Document */
+
+body 
+{
+	font-family:Arial;
+	font-size:14px;
+	margin-left:100px;
+	margin-right:100px;
+	margin-bottom:40px;
+	margin-top:40px;
+}
+
+h1 
+{
+	color:#069;
+}
+
+h2 
+{
+	color:#06C;
+}
+
+h3 
+{
+	color:#06F;
+}
+
+.code 
+{
+	font-family:"Courier New", Courier, monospace;
+}
+
+.codeBlock 
+{
+	font-family:"Courier New", Courier, monospace;
+	background-color:#E6E6FA;
+	padding-left:20px;
+}
+
+.comment 
+{
+	font-family:"Courier New", Courier, monospace;
+	color:#228B22;
+}
+
+.syntax 
+{
+	font-family:"Courier New", Courier, monospace;
+	color:#03F;
+}
+
+.output 
+{
+	font-family:"Courier New", Courier, monospace;
+	color:#900;
+}
+------------OwLnzqPMgApzlRMzrZE9bA--
